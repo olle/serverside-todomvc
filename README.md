@@ -12,16 +12,20 @@ With the increasing popularity of client-side or JavaScript-based solutions, it'
 
 In an answer to this question, and as an answer to a calling - we're doing just that! We have cloned the immensely popular [TodoMVC](http://http://todomvc.com) project, to re-build it in an old and familiar way.
 
-__This time, it's server-side__.
+__This time, it's server-side!__
 
 ## Getting Involved
 
-The doors are open. Anyone deeply in love with a server-side framework may join-in, clone-out and pull-out with requests to add to the list of example implementations.
+The doors are open. Anyone deeply in love with a server-side framework may join-in, clone-out and pull-request-away with ideas and contributions for the list of example implementations.
 
-We're also very grateful for suggestions, comments and constructive critisism on how to make each solution present the framework it uses in the best possible idiomatic way. 
+We're also very grateful for suggestions, comments and constructive critisism on how to make each solution present the framework it uses in the best possible idiomatic way.
+
+### Some words on the way
+
+Even though this probably is more of a project for old farts, and of course made with a bit of tongue-in-cheek. I think it's interesting to provide example implementations that still push the envelope of using the most modern _language features_ possible.
 
 ## License
 
-This project is a derivative work of the great [TodoMVC](http://http://todomvc.com) project, so we stay with the MIT License (please see the file LICENSE).
+This project is a derivative work of the great [TodoMVC](http://http://todomvc.com) project, so we stay with the MIT License (please see the LICENSE file for more detailed information).
 
 We also whish to aknowledge the [authors](https://github.com/tastejs/todomvc/blob/gh-pages/readme.md#team) and [contributors](https://github.com/tastejs/todomvc/graphs/contributors) of the original project.
