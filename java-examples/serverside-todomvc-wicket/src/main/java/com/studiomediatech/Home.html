@@ -1,0 +1,48 @@
+<!doctype html>
+<html xmlns:wicket="http://wicket.apache.org" lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Wicket • TodoMVC</title>
+  </head>
+  <body>
+    <section id="todoapp">
+      <header id="header">
+        <h1>todos</h1>
+        <form wicket:id="form" id="form">
+          <input wicket:id="todo" id="new-todo" placeholder="What needs to be done?" autocomplete="off">
+        </form>
+      </header>
+      <section wicket:id="main" id="main">
+        <input wicket:id="toggleAll" id="toggle-all" type="checkbox">
+        <label for="toggle-all">Mark all as complete</label>
+        <ul id="todo-list">
+          <!-- List items should get the class `editing` when editing and `completed` when marked as completed -->
+          <li wicket:id="todos">
+            <div class="view">
+              <input wicket:id="toggle" class="toggle" type="checkbox" checked="checked">
+              <label wicket:id="todo">Create a TodoMVC template</label>
+              <button wicket:id="destroy" class="destroy"></button>
+            </div>
+            <form wicket:id="todoForm">
+            <input wicket:id="todo" class="edit" value="Create a TodoMVC template">
+            </form>          
+          </li>
+        </ul>
+      </section>
+      <!-- This footer should hidden by default and shown when there are todos -->
+      <footer wicket:id="footer" id="footer">
+        <!-- This should be `0 items left` by default -->
+        <span id="todo-count"><strong wicket:id="count">1</strong> <wicket:container wicket:id="countText">item left</wicket:container></span>
+        <!-- Hidden if no completed items are left ↓ -->
+        <button wicket:id="clearCompleted" id="clear-completed">Clear completed (<wicket:container wicket:id="completed">1</wicket:container>)</button>
+      </footer>
+    </section>
+    <footer id="info">
+      <p>Double-click to edit a todo</p>
+      <p>Created by <a href="https://github.com/olle">Olle Törnström</a></p>
+      <p>Sort of a part of <a href="http://todomvc.com">TodoMVC</a>, but this time it's <strong>server-side!</strong></p>
+    </footer>
+    <wicket:container wicket:id="foot" />    
+  </body>
+</html>
