@@ -8,31 +8,31 @@ import org.junit.Test;
 public class StorageTest {
 
   @Test(expected = IllegalStateException.class)
-  public void callingDeleteThrowsWhenStorageNotSelectedForKey() {
-    new Storage<Entity>().delete((List<Entity>) null);
+  public void calling_delete_throws_exception_when_storage_not_selected_for_key() {
+    new GuavaCacheStore<Entity>().delete((List<Entity>) null);
   }
 
   @Test(expected = IllegalStateException.class)
-  public void callingDeleteOneThrowsWhenStorageNotSelectedForKey() {
-    new Storage<Entity>().delete((Entity) null);
+  public void calling_delete_one_throws_when_storage_not_selected_for_key() {
+    new GuavaCacheStore<Entity>().delete((Entity) null);
   }
 
   @Test(expected = IllegalStateException.class)
-  public void callingFindAllThrowsWhenStorageNotSelectedForKey() {
-    new Storage<Entity>().findAll();
+  public void calling_find_all_throws_when_storage_not_selected_for_key() {
+    new GuavaCacheStore<Entity>().findAll();
   }
 
   @Test(expected = IllegalStateException.class)
-  public void callingSaveThrowsWhenStorageNotSelectedForKey() {
-    new Storage<Entity>().save((Entity) null);
+  public void calling_save_throws_when_storage_not_selected_for_key() {
+    new GuavaCacheStore<Entity>().save((Entity) null);
   }
 
   @Test
-  public void defaultStorageConstructorCreatesEmptyStorage() {
-    Storage<Entity> storage = new Storage<Entity>();
-    Storage<Entity> forKey1 = storage.forKey("key1");
+  public void default_storage_constructor_creates_empty_storage() {
+    Storage<Entity> storage = new GuavaCacheStore<Entity>();
+    Repository<Entity> forKey1 = storage.forKey("key1");
     Assert.assertFalse("Default storage for key1 had entries.", forKey1.findAll().iterator().hasNext());
-    Storage<Entity> forKey2 = storage.forKey("key2");
+    Repository<Entity> forKey2 = storage.forKey("key2");
     Assert.assertFalse("Default storage for key2 had entries.", forKey2.findAll().iterator().hasNext());
   }
 
@@ -42,5 +42,4 @@ public class StorageTest {
       return null;
     }
   }
-
 }

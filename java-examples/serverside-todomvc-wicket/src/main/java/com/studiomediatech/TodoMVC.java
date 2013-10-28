@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import com.studiomediatech.serverside.todomvc.common.storage.GuavaCacheStore;
 import com.studiomediatech.serverside.todomvc.common.storage.Storage;
 
 import org.apache.wicket.Session;
@@ -20,7 +21,7 @@ public class TodoMVC extends WebApplication {
   private final Storage<Todo> storage;
 
   public TodoMVC() {
-    this.storage = new Storage<Todo>(new Callable<List<Todo>>() {
+    this.storage = new GuavaCacheStore<Todo>(new Callable<List<Todo>>() {
       @Override
       public List<Todo> call() throws Exception {
         ArrayList<Todo> todos = new ArrayList<Todo>();

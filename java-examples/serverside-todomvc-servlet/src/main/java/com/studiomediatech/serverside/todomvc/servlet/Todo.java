@@ -2,16 +2,14 @@ package com.studiomediatech.serverside.todomvc.servlet;
 
 import com.studiomediatech.serverside.todomvc.common.storage.Identifiable;
 
-public class Todo implements Identifiable {
+public class Todo implements Identifiable<String> {
 
-  private final String id;
-
-  public Todo(String id) {
-    this.id = id;
+  public Todo() {
+    // OK
   }
 
   @Override
   public String getId() {
-    return this.id;
+    return Integer.toString(hashCode());
   }
 }
