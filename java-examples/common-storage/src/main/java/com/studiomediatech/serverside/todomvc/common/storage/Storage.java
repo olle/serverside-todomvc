@@ -2,25 +2,18 @@ package com.studiomediatech.serverside.todomvc.common.storage;
 
 import java.io.Serializable;
 
-/**
- * Interface that defines a storage that can provide a specific repository based
- * on a key token.
- * 
- * @author Olle Törnström <olle@studiomediatech.com>
- * 
- * @param <K> type of the repository identifier key
- * 
- * @see Identifiable
- * @see Repository
- */
-public interface Storage<K extends Serializable> {
+public abstract class Storage<T extends Identifiable<ID>, ID extends Serializable> implements Repository<T, ID> {
 
   /**
-   * Returns the repository specified by the the given key.
+   * Returns the store specified by the the given key.
    * 
    * @param key identifying the repository
    * 
    * @return a repository instance, never {@code null}
    */
-  <T extends Identifiable<ID>, ID extends Serializable> Repository<V<T>, ID> forKey(K key);
+  public abstract Repository<T, ID> forKey(Serializable key);
+
+  public static <T extends Identifiable<ID>, ID extends Serializable> Storage<T, ID> newGuavaCacheStorage() {
+    return new GuavaCacheStorage<>();
+  }
 }

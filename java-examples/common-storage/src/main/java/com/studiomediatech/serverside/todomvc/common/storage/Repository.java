@@ -3,13 +3,13 @@ package com.studiomediatech.serverside.todomvc.common.storage;
 import java.io.Serializable;
 
 /**
- * Interface for repository operations on entities, or objects, of a certain
- * given type, with a specific type of identifiers.
+ * Interface for storage operations available on entities of a certain given
+ * type with a specific identifier.
  * 
  * @author Olle Törnström <olle@studiomediatech.com>
  * 
- * @param <T> the type of the entities in the repository
- * @param <ID> the type of entity identifier
+ * @param <T> the type of the entities that can be managed
+ * @param <ID> type of the entity identifier
  * 
  * @see Identifiable
  */

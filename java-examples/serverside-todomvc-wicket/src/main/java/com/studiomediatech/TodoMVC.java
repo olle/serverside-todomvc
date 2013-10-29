@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-import com.studiomediatech.serverside.todomvc.common.storage.GuavaCacheStore;
+import com.studiomediatech.serverside.todomvc.common.storage.GuavaCacheStorage;
 import com.studiomediatech.serverside.todomvc.common.storage.Storage;
+import com.studiomediatech.serverside.todomvc.common.storage.Store;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -18,10 +19,12 @@ public class TodoMVC extends WebApplication {
 
   public static final String JS_BUCKET = "foot";
 
-  private final Storage<Todo> storage;
+  private Storage<Todo, String> storage;
 
   public TodoMVC() {
-    this.storage = new GuavaCacheStore<Todo>(new Callable<List<Todo>>() {
+    this.storage = Storage.<Todo, String> newGuavaCacheStorage();
+
+    this.storage = new GuavaCacheStorage<Todo>(new Callable<List<Todo>>() {
       @Override
       public List<Todo> call() throws Exception {
         ArrayList<Todo> todos = new ArrayList<Todo>();
@@ -34,11 +37,11 @@ public class TodoMVC extends WebApplication {
     });
   }
 
-  public static Storage<Todo> getStorage(Session session) {
+  public static Store<Todo> getStorage(Session session) {
     return ((TodoMVC) get()).getSessionStorage(session);
   }
 
-  private Storage<Todo> getSessionStorage(Session session) {
+  private Store<Todo> getSessionStorage(Session session) {
     return this.storage.forKey(session.getId());
   }
 

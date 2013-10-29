@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.studiomediatech.serverside.todomvc.common.storage.GuavaCacheStore;
 import com.studiomediatech.serverside.todomvc.common.storage.Storage;
 
 public final class TodoMVC extends HttpServlet {
@@ -17,15 +16,15 @@ public final class TodoMVC extends HttpServlet {
   private final Storage<Todo, String> storage;
 
   public TodoMVC() {
-    this.storage = new GuavaCacheStore<>();
+    this.storage = Storage.<Todo, String> newGuavaCacheStorage();
   }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
     System.out.println(req);
     String sessionId = req.getSession(true).getId();
-    req.setAttribute("todos", null);
+    Iterable<Todo> todos = this.storage.forKey(sessionId).findAll();
+    req.setAttribute("todos", todos);
     forwardToView(req, resp);
   }
 

@@ -21,32 +21,34 @@ import com.google.common.cache.CacheBuilder;
  * </p>
  * 
  * @author Olle Törnström <olle@studiomediatech.com>
+ * 
+ * @see Storage
  */
-public class GuavaCacheStore<K extends Serializable, T extends Identifiable<ID>, ID extends Serializable> implements Storage<K> {
+public final class GuavaCacheStorage<T extends Identifiable<ID>, ID extends Serializable> extends Storage<T, ID> {
 
-  private Cache<K, Collection<T>> repositories;
+  private Cache<Serializable, Collection<T>> repositories;
 
   private Collection<T> store;
 
-  public GuavaCacheStore() {
+  public GuavaCacheStorage() {
     this.repositories = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
   }
 
-  private GuavaCacheStore(Collection<T> store) {
+  private GuavaCacheStorage(Collection<T> store) {
     this.store = store;
   }
 
   @Override
-  public <T extends Identifiable<ID>, ID extends Serializable> Repository<T, ID> forKey(K key) {
+  public Repository<T, ID> forKey(Serializable key) {
     try {
-      Callable<Collection<T>> loadAsEmptyByDefault = new Callable<Collection<T>>() {
+      Callable<Collection<T>> orEmptyNew = new Callable<Collection<T>>() {
         @Override
         public Collection<T> call() throws Exception {
           return new ArrayList<>();
         }
       };
-      this.repositories.get(key, loadAsEmptyByDefault);
-      return new GuavaCacheStore<>(repositoryForKey);
+      Collection<T> store = this.repositories.get(key, orEmptyNew);
+      return new GuavaCacheStorage<>(store);
     }
     catch (ExecutionException e) {
       throw new IllegalStateException(e);
@@ -128,5 +130,71 @@ public class GuavaCacheStore<K extends Serializable, T extends Identifiable<ID>,
   // IllegalStateException("Storage must be selected using `forKey' before issuing CRUD operations.");
   // }
   // }
+
+  @Override
+  public long count() {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+  @Override
+  public Iterable<T> findAll() {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Iterable<T> findAll(Iterable<ID> ids) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public T findOne(ID id) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public T save(T entity) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public Iterable<T> save(Iterable<? extends T> entities) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public void delete(T entity) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void delete(ID id) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void delete(Iterable<? extends T> entities) {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void deleteAll() {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public boolean exists(ID id) {
+    // TODO Auto-generated method stub
+    return false;
+  }
 
 }
