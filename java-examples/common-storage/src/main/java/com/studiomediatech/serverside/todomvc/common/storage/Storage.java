@@ -2,7 +2,7 @@ package com.studiomediatech.serverside.todomvc.common.storage;
 
 import java.io.Serializable;
 
-public abstract class Storage<T extends Identifiable<ID>, ID extends Serializable> implements Repository<T, ID> {
+public abstract class Storage<T extends Identifiable<ID>, ID extends Serializable> {
 
   /**
    * Returns the store specified by the the given key.
