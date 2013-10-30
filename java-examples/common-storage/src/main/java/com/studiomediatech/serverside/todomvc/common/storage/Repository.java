@@ -3,13 +3,13 @@ package com.studiomediatech.serverside.todomvc.common.storage;
 import java.io.Serializable;
 
 /**
- * Interface for storage operations available on entities of a certain given
- * type with a specific identifier.
+ * Interface for repository operations available on entities of a given type
+ * with a specific identifier type.
  * 
  * @author Olle Törnström <olle@studiomediatech.com>
  * 
- * @param <T> the type of the entities that can be managed
- * @param <ID> type of the entity identifier
+ * @param <T> the type of the entities that are managed by the repository
+ * @param <ID> type of identifier for entities
  * 
  * @see Identifiable
  */
@@ -47,11 +47,13 @@ public interface Repository<T extends Identifiable<ID>, ID extends Serializable>
 
   /**
    * Saves the given entity in the repository, overwriting any previously saved
-   * version.
+   * version and <strong>returning a new, possibly modified copy of the saved
+   * entity</strong>.
    * 
    * @param entity to save
    * 
-   * @return the saved entity or {@code null} if saving failed
+   * @return a new, saved and <strong>possibly modified</strong>, entity or
+   *         {@code null} if saving failed
    */
   T save(T entity);
 
