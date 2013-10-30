@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.studiomediatech.serverside.todomvc.common.storage.Identifiable;
 
-public class Todo implements Serializable, Identifiable {
+public class Todo implements Serializable, Identifiable<String> {
   private static final long serialVersionUID = 1L;
 
   public enum Status {

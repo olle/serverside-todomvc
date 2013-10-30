@@ -11,7 +11,7 @@
 
   <artifactId>serverside-todomvc-wicket</artifactId>
   <packaging>war</packaging>
-  <name>Server-Side TodoMVC - Wicket</name>
+  <name>Server-Side TodoMVC Example - Wicket</name>
 
   <properties>
     <wicket.version>6.10.0</wicket.version>

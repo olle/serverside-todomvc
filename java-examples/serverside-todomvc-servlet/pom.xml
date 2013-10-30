@@ -11,7 +11,7 @@
 
   <artifactId>serverside-todomvc-servlet</artifactId>
   <packaging>war</packaging>
-  <name>Server-Side TodoMVC - Servlet</name>
+  <name>Server-Side TodoMVC Example - Servlet</name>
 
   <properties>
     <jetty.version>9.0.6.v20130930</jetty.version>
