@@ -1,6 +1,8 @@
 package com.studiomediatech.serverside.todomvc.common.storage;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -28,12 +30,16 @@ public final class GuavaCacheStorage<T extends Identifiable<ID>, ID extends Seri
   private Callable<Repository<T, ID>> loader;
 
   public GuavaCacheStorage() {
+    this(Collections.<T> emptyList());
+  }
+
+  public GuavaCacheStorage(final Collection<T> values) {
     this.repositories = CacheBuilder.newBuilder().expireAfterAccess(1, TimeUnit.MINUTES).build();
     this.loader = new Callable<Repository<T, ID>>() {
 
       @Override
       public Repository<T, ID> call() throws Exception {
-        return new HashMapRepository<>();
+        return new HashMapRepository<>(values);
       }
     };
   }

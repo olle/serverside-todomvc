@@ -1,6 +1,7 @@
 package com.studiomediatech.serverside.todomvc.common.storage;
 
 import java.io.Serializable;
+import java.util.List;
 
 public abstract class Storage<T extends Identifiable<ID>, ID extends Serializable> {
 
@@ -15,5 +16,9 @@ public abstract class Storage<T extends Identifiable<ID>, ID extends Serializabl
 
   public static <T extends Identifiable<ID>, ID extends Serializable> Storage<T, ID> newGuavaCacheStorage() {
     return new GuavaCacheStorage<>();
+  }
+
+  public static <T extends Identifiable<ID>, ID extends Serializable> Storage<T, ID> newGuavaCacheStorage(List<T> values) {
+    return new GuavaCacheStorage<>(values);
   }
 }
