@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import com.google.common.collect.Lists;
+
 /**
  * A shameless map based repository implementation, for just the simplest
  * possible in-memory storage solution.
@@ -40,7 +42,7 @@ public final class HashMapRepository<T extends Identifiable<ID>, ID extends Seri
       return null;
     }
     else {
-      return this.repository.values();
+      return Lists.newArrayList(this.repository.values());
     }
   }
 

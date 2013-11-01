@@ -2,6 +2,7 @@ package com.studiomediatech.serverside.todomvc.common.storage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 
 import com.google.common.collect.Lists;
@@ -161,5 +162,22 @@ public class HashMapRepositoryTest {
     Assert.assertNotNull("Missing foo", filledRepo.findOne("foo"));
     Assert.assertNotNull("Missing bar", filledRepo.findOne("bar"));
     Assert.assertNotNull("Missing baz", filledRepo.findOne("baz"));
+  }
+
+  @Test
+  public void ensure_find_all_iterable_is_modification_safe() throws Exception {
+    Entity foo = new Entity("foo");
+    Entity bar = new Entity("bar");
+    Entity baz = new Entity("baz");
+    HashMapRepository<Entity, String> repo = new HashMapRepository<>(Arrays.asList(foo, bar, baz));
+    Iterable<Entity> all = repo.findAll();
+    try {
+      for (Entity e : all) {
+        repo.delete(e);
+      }
+    }
+    catch (ConcurrentModificationException e) {
+      Assert.fail("Collection not detached. " + e);
+    }
   }
 }
