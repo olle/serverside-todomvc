@@ -15,7 +15,6 @@ public class HashMapRepositoryTest {
   private static final class Entity implements Identifiable<String> {
 
     private final String id;
-    private String name;
 
     private Entity(String id) {
       this.id = id;
@@ -24,14 +23,6 @@ public class HashMapRepositoryTest {
     @Override
     public String getId() {
       return this.id;
-    }
-
-    public String getName() {
-      return this.name;
-    }
-
-    public void setName(String name) {
-      this.name = name;
     }
   }
 
@@ -159,5 +150,16 @@ public class HashMapRepositoryTest {
     Assert.assertFalse("Contains foo", justOneList.contains(foo));
     Assert.assertTrue("Missing bar", justOneList.contains(bar));
     Assert.assertFalse("Contains baz", justOneList.contains(baz));
+  }
+
+  @Test
+  public void intial_values_from_list_are_inserted_at_creation() throws Exception {
+    HashMapRepository<Entity, String> filledRepo = new HashMapRepository<>(Arrays.asList(new Entity("foo"),
+                                                                                         new Entity("bar"),
+                                                                                         new Entity("baz")));
+    Assert.assertEquals("Not correct count.", 3, filledRepo.count());
+    Assert.assertNotNull("Missing foo", filledRepo.findOne("foo"));
+    Assert.assertNotNull("Missing bar", filledRepo.findOne("bar"));
+    Assert.assertNotNull("Missing baz", filledRepo.findOne("baz"));
   }
 }

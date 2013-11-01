@@ -1,6 +1,6 @@
 # Server-side TodoMVC
 
-## Helping you remember, or select, an MV\* server-side framework.
+## Helping you to select an MVC server-side framework.
 
 __INCUBATING PROJECT:__ Currently mostly structure, but templates and couple of first implementations are on the way. I'm leaving this open here, in case anyone cares to join in.
 
@@ -14,6 +14,14 @@ In an answer to this question, and as an answer to a calling - we're doing just 
 
 __This time, it's server-side!__
 
+## Our goal with this project
+
+Choosing a framework or a set of tools is probably more about the subjective _feeling_ that we get (at least more than we care to admit) than it is about making an objective decision.
+
+What we would like to do here is to provide a large set of code examples, that show how each framework goes about doing the same thing.
+
+We're hoping that this can provide a base of reference when discussing more subjective feelings and veiws on which tool is the best for the task at hand. A suggestion is to couple this with other, more objective evaluations. For example the very interesting [Web Frameworks Benchmark](https://github.com/TechEmpower/FrameworkBenchmarks).
+
 ## Getting Involved
 
 The doors are open. Anyone deeply in love with a server-side framework may join-in, clone-out and pull-request-away with ideas and contributions for the list of example implementations.
@@ -22,7 +30,7 @@ We're also very grateful for suggestions, comments and constructive critisism on
 
 ### Some words on the way
 
-Even though this probably is more of a project for old farts, and of course made with a bit of tongue-in-cheek. I think it's interesting to provide example implementations that still push the envelope of using the most modern _language features_ possible.
+Even though this probably is more of a project for old farts, and of course made with a bit of tongue-in-cheek. I think it's interesting to provide example implementations that still push the envelope of using the most modern _language features_ possible - for example using helper libraries for collections, maps, JSON serialization or simplified file-I/O. Go nuts!
 
 ## License
 

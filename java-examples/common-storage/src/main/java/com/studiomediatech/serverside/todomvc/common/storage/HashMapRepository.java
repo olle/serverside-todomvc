@@ -3,6 +3,7 @@ package com.studiomediatech.serverside.todomvc.common.storage;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -18,7 +19,14 @@ public final class HashMapRepository<T extends Identifiable<ID>, ID extends Seri
   private final HashMap<ID, T> repository;
 
   public HashMapRepository() {
+    this(Collections.<T> emptyList());
+  }
+
+  public HashMapRepository(Collection<T> values) {
     this.repository = new HashMap<>();
+    for (T value : values) {
+      this.repository.put(value.getId(), value);
+    }
   }
 
   @Override

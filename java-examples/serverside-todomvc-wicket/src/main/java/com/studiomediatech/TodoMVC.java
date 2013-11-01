@@ -1,9 +1,9 @@
 package com.studiomediatech;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.Callable;
 
+import com.studiomediatech.serverside.todomvc.common.storage.Repository;
 import com.studiomediatech.serverside.todomvc.common.storage.Storage;
 
 import org.apache.wicket.Session;
@@ -17,27 +17,19 @@ public class TodoMVC extends WebApplication {
 
   public static final String JS_BUCKET = "foot";
 
-  private final Storage<Todo> storage;
+  private final Storage<Todo, String> storage;
 
   public TodoMVC() {
-    this.storage = new Storage<Todo>(new Callable<List<Todo>>() {
-      @Override
-      public List<Todo> call() throws Exception {
-        ArrayList<Todo> todos = new ArrayList<Todo>();
-        Todo todo = new Todo("Implement TodoMVC in a new framework");
-        // TODO: Solve some other way!
-        // todo.setId(Integer.toString(todo.hashCode()));
-        todos.add(todo);
-        return todos;
-      }
-    });
+    Todo intialTodo = new Todo("Implement TodoMVC in a new framework");
+    List<Todo> defaults = Arrays.asList(intialTodo);
+    this.storage = Storage.newGuavaCacheStorage(defaults);
   }
 
-  public static Storage<Todo> getStorage(Session session) {
+  public static Repository<Todo, String> getStorage(Session session) {
     return ((TodoMVC) get()).getSessionStorage(session);
   }
 
-  private Storage<Todo> getSessionStorage(Session session) {
+  private Repository<Todo, String> getSessionStorage(Session session) {
     return this.storage.forKey(session.getId());
   }
 
