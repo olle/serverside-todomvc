@@ -151,6 +151,10 @@ body {
 	border-top: 1px dotted #adadad;
 }
 
+#main.empty-true {
+	display: none;
+}
+
 label[for='toggle-all'] {
 	display: none;
 }
@@ -232,7 +236,7 @@ label[for='toggle-all'] {
 	text-shadow: 0 -1px 0 #bfbfbf;
 }
 
-#todo-list li .toggle:checked:after {
+#todo-list li.completed .toggle:after {
 	color: #85ada7;
 	text-shadow: 0 1px 0 #669991;
 	bottom: 1px;
@@ -326,6 +330,10 @@ label[for='toggle-all'] {
 				0 7px 1px -3px rgba(0, 0, 0, 0.3),
 				0 43px 0 -6px rgba(255, 255, 255, 0.8),
 				0 44px 2px -6px rgba(0, 0, 0, 0.2);
+}
+
+#footer.empty-true {
+	display: none;
 }
 
 #todo-count {
