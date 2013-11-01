@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page contentType="text/html; charset=UTF-8" %>
 <!doctype html>
 <html lang="en">
@@ -12,7 +13,7 @@
 		<header id="header">
 			<h1>todos</h1>
 			<form method="post" action="new.do">
-				<input id="new-todo" placeholder="What needs to be done?" autofocus>
+				<input id="new-todo" name="new-todo" placeholder="What needs to be done?" autofocus>
 			</form>
 		</header>
 		<!-- This section should be hidden by default and shown when there are todos -->
@@ -29,13 +30,14 @@
 						<button class="destroy"></button>
 					</div> <input class="edit" value="Create a TodoMVC template">
 				</li>
+				<c:forEach items="${todos}" var="todo">
 				<li>
 					<div class="view">
-						<input class="toggle" type="checkbox"> <label>Rule
-							the web</label>
+						<input class="toggle" type="checkbox"> <label><c:out value="${todo}" /></label>
 						<button class="destroy"></button>
 					</div> <input class="edit" value="Rule the web">
 				</li>
+				</c:forEach>
 			</ul>
 		</section>
 		<!-- This footer should hidden by default and shown when there are todos -->

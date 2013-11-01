@@ -1,5 +1,8 @@
 package com.studiomediatech;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.studiomediatech.serverside.todomvc.common.storage.Repository;
 import com.studiomediatech.serverside.todomvc.common.storage.Storage;
 
@@ -17,12 +20,9 @@ public class TodoMVC extends WebApplication {
   private final Storage<Todo, String> storage;
 
   public TodoMVC() {
-    this.storage = Storage.newGuavaCacheStorage();
-
-    // TODO: Provide a way to pass default values to storage.
-    // ArrayList<Todo> todos = new ArrayList<Todo>();
-    // Todo todo = new Todo("Implement TodoMVC in a new framework");
-    // todos.add(todo);
+    Todo intialTodo = new Todo("Implement TodoMVC in a new framework");
+    List<Todo> defaults = Arrays.asList(intialTodo);
+    this.storage = Storage.newGuavaCacheStorage(defaults);
   }
 
   public static Repository<Todo, String> getStorage(Session session) {
