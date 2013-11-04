@@ -32,6 +32,12 @@ We're also very grateful for suggestions, comments and constructive critisism on
 
 Even though this probably is more of a project for old farts, and of course made with a bit of tongue-in-cheek. I think it's interesting to provide example implementations that still push the envelope of using the most modern _language features_ possible - for example using helper libraries for collections, maps, JSON serialization or simplified file-I/O. Go nuts!
 
+## Building, testing and running
+
+Currently `make` is your friend - there's even a default target that guides you into setting up your development environment, building, testing and running the examples. Just try it out:
+
+    make <help>
+
 ## License
 
 This project is a derivative work of the great [TodoMVC](http://http://todomvc.com) project, so we stay with the MIT License (please see the LICENSE file for more detailed information).
