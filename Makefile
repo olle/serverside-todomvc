@@ -1,4 +1,4 @@
-.PHONY: help setup all java-examples run-tests
+.PHONY: help setup all java-examples test
 
 ## Helper target that displays some information.
 help:
@@ -12,16 +12,18 @@ setup:
 	@echo " Let's see if you have Node.js and npm installed?"
 	@which npm || (echo " Ouch, too bad. Start by installing that first please."; exit 1)
 	@echo " Oh, great."
-	@echo "\n Now let's install [jquerygo] with it's dependencies...."
-	@npm install jquerygo
-	@echo "\n Now let's install [async] "
-	@npm install async
-	@echo "\n Good, all done. Now move along!"
+	@echo "\n Now let's install [zombie]\n"
+	@npm install zombie
+	@echo "\n Now let's install [mocha]\n"
+	@npm install mocha
+	@echo "\n Now let's install [assert]\n"
+	@npm install assert
+	@echo "\n Good, all done. Now move along!\n"
 
 ## Build __all__ the examples!
 all: \
 java-examples \
-run-tests \
+test
 
 ## Builds the Java based examples using Maven
 java-examples:
@@ -29,7 +31,7 @@ java-examples:
 	@echo "=========================="
 	@mvn -f java-examples/pom.xml clean verify
 
-run-tests:
-	@echo "PREPARING TESTS"
+test:
+	@echo "RUNNING TESTS"
 	@echo "==============="
-	@echo " Do preparation stuff here..."
+	@./node_modules/.bin/mocha --reporter list
