@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>${Language} ${Framework} • Server-side TodoMVC</title>
+    <link rel="stylesheet" href="css/new-style.css" />
+  </head>
+  <body class="pocket grey-plaid modern">
+
+    <section id="serverside-todomvc">
+
+
+      <header>
+        <h1>Todos</h1>
+        <h2 class="is-hidden">Create a new task</h2>
+        <form method="post" class="items-create-new">
+          <input type="hidden" name="action" value="new" />
+          <input type="text" name="new-item" placeholder="What needs to be done?" autofocus="autofocus" autocomplete="off"  class="text-input"/>
+          <button class="is-hidden"><span>Create new todo</span></button>
+        </form>
+      </header>
+
+
+      <section class="primary">
+      
+        <h3 class="is-hidden">Mark as completed</h3>
+        <form method="post" class="items-mark-all-completed">
+          <input type="hidden" name="action" value="complete" />
+          <input type="hidden" name="item-id" value="all" />
+          <button class="icon checkbox"><span>Mark all as completed</span></button>
+        </form>
+        
+        <h2 class="is-hidden">List of ${current-filter} tasks:</h2>
+        <ul class="items-list">
+          <li>foo</li>
+          <li>bar</li>
+        </ul>
+        
+      </section>
+
+
+      <section class="secondary">
+
+        <h3 class="is-hidden">Current status</h3>
+        <p class="items-active-count"><strong>${count}</strong> ${'item|s'} left</p>
+        
+        <h3 class="is-hidden">Filter task list</h3>
+        <ul class="items-filter-selection">
+          <li><a href="?filter=all" class="is-selected">All</a></li>
+          <li><a href="?filter=active">Active</a></li>
+          <li><a href="?filter=completed">Completed</a></li>
+        </ul>
+
+        <h3 class="is-hidden">Clear completed tasks</h3>
+        <form method="post" class="items-clear-completed is-inline">
+          <input type="hidden" name="action" value="clear" />
+          <button class="button embossed"><span>Clear completed (${count})</span></button>
+        </form>
+      </section>
+
+    </section>
+
+    <footer>
+      <h4 class="is-hidden">Help</h4>
+      <p>Click on the text to edit a todo.</p>
+      
+      <h4 class="is-hidden">About the Server-side TodoMVC application</h4>
+      
+      <p>
+        Original template by <a href="http://github.com/sindresorhus">Sindre Sorhus</a><br />
+        Modified for Server-side TodoMVC by <a href="http://github.com/olle">Olle Törnström</a>
+      </p>
+      
+      <p>Created by <a href="http://todomvc.com">you</a></p>
+      <p>Part of <a href="http://github.com/olle/serverside-todomvc">Server-side TodoMVC</a></p>
+    </footer>
+
+    <!-- Look mom, no JavaScript! -->
+  </body>
+</html>
