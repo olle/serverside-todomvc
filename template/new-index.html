@@ -32,8 +32,21 @@
         
         <h2 class="is-hidden">List of ${current-filter} tasks:</h2>
         <ul class="items-list">
-          <li>foo</li>
-          <li>bar</li>
+          <li>
+            <div class="item active">
+              <form method="post" class="item-mark-completed is-inline">
+                <input type="hidden" name="action" value="complete" />
+                <input type="hidden" name="item-id" value"${item-id}" />
+                <button class="icon checkbox" /><span>Mark as completed</span></button>
+              </form>
+              <span class="item-text">[this is a todo item]</span>
+            </div>
+          </li>
+          <li>
+            <div class="item active">
+              <span class="item-text">[this is a todo item]</span>
+            </div>
+          </li>
         </ul>
         
       </section>

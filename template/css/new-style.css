@@ -263,9 +263,9 @@ button.embossed:hover {
   content: '✔';
 }
 
-/* ----------------- */
-/* APP WIDGET STYLES */
-/* ----------------- */
+/* ------------------------------ */
+/* ITEMS COLLECTION WIDGET STYLES */
+/* ------------------------------ */
 
 /* --------------- */
 /* Create new item */
@@ -295,8 +295,8 @@ button.embossed:hover {
   text-align: center;
 }
 
-.items-mark-all-completed .icon.checkbox:after {
-  content: '';
+.items-mark-all-completed .checkbox.checkbox:after {
+  content: none;
 }
 
 .items-mark-all-completed .icon.checkbox:before {
@@ -373,4 +373,40 @@ button.embossed:hover {
   font-size: 11px;
   float: right;
   position: relative;
+}
+
+/* ------------------------- */
+/* SINGLE ITEM WIDGET STYLES */
+/* ------------------------- */
+
+.item {
+  font-size: 24px;
+}
+
+.item-mark-completed {
+  float: left;
+}
+
+.item-mark-completed .icon span {
+  position: relative;
+  top: 6px;
+}
+
+.item-mark-completed .icon span {
+  font-size: 1px;
+  line-height: 1px;
+  display: none;
+}
+
+.item-text {
+  word-break: break-word;
+  padding: 15px;
+  margin-left: 45px;
+  display: block;
+  line-height: 1.2;
+  -webkit-transition: color 0.4s;
+  -moz-transition: color 0.4s;
+  -ms-transition: color 0.4s;
+  -o-transition: color 0.4s;
+  transition: color 0.4s;
 }
