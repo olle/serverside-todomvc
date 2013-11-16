@@ -164,9 +164,8 @@ footer {
   display: none;
 }
 
-.is-selected {
+.is-active {
   /* TODO: Arrange and override for specific widgets too */
-  
 }
 
 .is-inline {
@@ -261,6 +260,13 @@ button.embossed:hover {
 
 .icon.checkbox:after {
   content: '✔';
+}
+
+.icon.checkbox.is-active:after {
+  color: #85ada7;
+  text-shadow: 0 1px 0 #669991;
+  bottom: 1px;
+  position: relative;
 }
 
 /* ------------------------------ */
@@ -360,7 +366,7 @@ button.embossed:hover {
   text-decoration: none;
 }
 
-.items-filter-selection .is-selected {
+.items-filter-selection .is-active {
   font-weight: bold;
 }
 
@@ -379,26 +385,41 @@ button.embossed:hover {
 /* SINGLE ITEM WIDGET STYLES */
 /* ------------------------- */
 
+/* -------------------- */
+/* The todo item widget */
+/* -------------------- */
 .item {
-  font-size: 24px;
+  
 }
 
-.item-mark-completed {
+.item.completed {
+  color: #a9a9a9;
+  text-decoration: line-through;
+}
+
+/* --------------------- */
+/* Mark one as completed */
+/* --------------------- */
+.item-toggle-completed {
   float: left;
 }
 
-.item-mark-completed .icon span {
-  position: relative;
-  top: 6px;
+.item-toggle-completed .icon {
+  width: 40px;
+  padding: 6px;
 }
 
-.item-mark-completed .icon span {
+.item-toggle-completed .icon span {
   font-size: 1px;
   line-height: 1px;
   display: none;
 }
 
+/* --------- */
+/* Item text */
+/* --------- */
 .item-text {
+  font-size: 24px;
   word-break: break-word;
   padding: 15px;
   margin-left: 45px;
