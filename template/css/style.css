@@ -1,20 +1,56 @@
-/* RESETS */
-
-html,
-body {
-	margin: 0;
-	padding: 0;
+/* ------------- */
+/* SIMPLE RESETS */
+/* ------------- */
+html,body {
+  margin: 0;
+  padding: 0;
 }
 
-/* GLOBAL ELEMENT STYLES */
+ul {
+  list-style: none;
+}
 
+a {
+  color: inherit;
+}
+
+/* ------------------------ */
+/* SEMANTIC ELEMENT STYLES  */
+/* ------------------------ */
+h1 {
+  position: absolute;
+  top: -120px;
+  width: 100%;
+  font-size: 70px;
+  font-weight: bold;
+  text-align: center;
+  text-transform: lowercase;
+  color: #b3b3b3;
+  color: rgba(255, 255, 255, 0.3);
+  text-shadow: -1px -1px rgba(0, 0, 0, 0.2);
+  -webkit-text-rendering: optimizeLegibility;
+  -moz-text-rendering: optimizeLegibility;
+  -ms-text-rendering: optimizeLegibility;
+  -o-text-rendering: optimizeLegibility;
+  text-rendering: optimizeLegibility;
+}
+
+/* --------------- */
+/* PAGE BODY STYLE */
+/* --------------- */
 body {
+  margin: 0 auto;
+  width: 550px;
+}
+
+.grey-plaid-bg {
+  background: #eaeaea url('../img/bg.png') top left;
+  color: #4d4d4d;
+}
+
+.modern-font {
   font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.4em;
-  background: #eaeaea url('../img/bg.png');
-  color: #4d4d4d;
-  width: 550px;
-  margin: 0 auto;
   -webkit-font-smoothing: antialiased;
   -moz-font-smoothing: antialiased;
   -ms-font-smoothing: antialiased;
@@ -22,116 +58,67 @@ body {
   font-smoothing: antialiased;
 }
 
-button {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	background: none;
-	font-size: 100%;
-	vertical-align: baseline;
-	font-family: inherit;
-	color: inherit;
-	-webkit-appearance: none;
-	/*-moz-appearance: none;*/
-	-ms-appearance: none;
-	-o-appearance: none;
-	appearance: none;
+/* -------------- */
+/* MAIN CONTAINER */
+/* -------------- */
+#serverside-todomvc {
+  background: #fff;
+  background: rgba(255, 255, 255, 0.9);
+  margin: 130px 0 40px 0;
+  border: 1px solid #ccc;
+  position: relative;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2), 0 25px 50px 0 rgba(0, 0, 0, 0.15);
 }
 
-hr {
-  margin: 20px 0;
-  border: 0;
-  border-top: 1px dashed #C5C5C5;
-  border-bottom: 1px dashed #F7F7F7;
+#serverside-todomvc:before {
+  content: '';
+  border-left: 1px solid #f5d6d6;
+  border-right: 1px solid #f5d6d6;
+  width: 2px;
+  position: absolute;
+  top: 0;
+  left: 40px;
+  height: 100%;
 }
 
-/* APPLICATION WRAPPER */
-
-#todoapp {
-	background: #fff;
-	background: rgba(255, 255, 255, 0.9);
-	margin: 130px 0 40px 0;
-	border: 1px solid #ccc;
-	position: relative;
-	border-top-left-radius: 2px;
-	border-top-right-radius: 2px;
-	box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2),
-				0 25px 50px 0 rgba(0, 0, 0, 0.15);
+/* ----------------------------------------------- */
+/* STRUCTURE: header, .primary, .secondary, footer */
+/* ----------------------------------------------- */
+header {
+  padding-top: 15px;
+  border-radius: inherit;
 }
 
-#todoapp:before {
-	content: '';
-	border-left: 1px solid #f5d6d6;
-	border-right: 1px solid #f5d6d6;
-	width: 2px;
-	position: absolute;
-	top: 0;
-	left: 40px;
-	height: 100%;
+header:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 15px;
+  z-index: 2;
+  border-bottom: 1px solid #6c615c;
+  background: #8d7d77;
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(132, 110, 100, 0.8)), to(rgba(101, 84, 76, 0.8)));
+  background: -webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: -moz-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: -o-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: -ms-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  background: linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0, StartColorStr='#9d8b83', EndColorStr='#847670');
+  border-top-left-radius: 1px;
+  border-top-right-radius: 1px;
 }
 
-#todoapp input::-webkit-input-placeholder {
-	font-style: italic;
+.primary {
+  position: relative;
+  z-index: 2;
+  border-top: 1px dotted #adadad;
 }
 
-#todoapp input::-moz-placeholder {
-	font-style: italic;
-	color: #a9a9a9;
-}
-
-#todoapp h1 {
-	position: absolute;
-	top: -120px;
-	width: 100%;
-	font-size: 70px;
-	font-weight: bold;
-	text-align: center;
-	text-transform: lowercase;
-	color: #b3b3b3;
-	color: rgba(255, 255, 255, 0.3);
-	text-shadow: -1px -1px rgba(0, 0, 0, 0.2);
-	-webkit-text-rendering: optimizeLegibility;
-	-moz-text-rendering: optimizeLegibility;
-	-ms-text-rendering: optimizeLegibility;
-	-o-text-rendering: optimizeLegibility;
-	text-rendering: optimizeLegibility;
-}
-
-/* STRUCTURE: header, main, footer, info */
-
-#header {
-	padding-top: 15px;
-	border-radius: inherit;
-}
-
-#header:before {
-	content: '';
-	position: absolute;
-	top: 0;
-	right: 0;
-	left: 0;
-	height: 15px;
-	z-index: 2;
-	border-bottom: 1px solid #6c615c;
-	background: #8d7d77;
-	background: -webkit-gradient(linear, left top, left bottom, from(rgba(132, 110, 100, 0.8)),to(rgba(101, 84, 76, 0.8)));
-	background: -webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
-	background: -moz-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
-	background: -o-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
-	background: -ms-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
-	background: linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));
-	filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,StartColorStr='#9d8b83', EndColorStr='#847670');
-	border-top-left-radius: 1px;
-	border-top-right-radius: 1px;
-}
-
-#main {
-	position: relative;
-	z-index: 2;
-	border-top: 1px dotted #adadad;
-}
-
-#footer {
+.secondary {
   color: #777;
   padding: 0 15px;
   position: absolute;
@@ -141,9 +128,10 @@ hr {
   height: 20px;
   z-index: 1;
   text-align: center;
+  padding: 0 15px;
 }
 
-#footer:before {
+.secondary:before {
   content: '';
   position: absolute;
   right: 0;
@@ -151,14 +139,10 @@ hr {
   left: 0;
   height: 50px;
   z-index: -1;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3),
-        0 6px 0 -3px rgba(255, 255, 255, 0.8),
-        0 7px 1px -3px rgba(0, 0, 0, 0.3),
-        0 43px 0 -6px rgba(255, 255, 255, 0.8),
-        0 44px 2px -6px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3), 0 6px 0 -3px rgba(255, 255, 255, 0.8), 0 7px 1px -3px rgba(0, 0, 0, 0.3), 0 43px 0 -6px rgba(255, 255, 255, 0.8), 0 44px 2px -6px rgba(0, 0, 0, 0.2);
 }
 
-#info {
+footer {
   margin: 65px auto 0;
   color: #a6a6a6;
   font-size: 12px;
@@ -166,14 +150,62 @@ hr {
   text-align: center;
 }
 
-#info a {
-  color: inherit;
+/* ------------------ */
+/* BEHAVIOURAL STYLES */
+/* ------------------ */
+.is-hidden {
+  display: none;
 }
 
+.is-active {
+  /* TODO: Arrange and override for specific widgets too */
+  
+}
 
-/* INPUT FIELDS */
+.is-inline {
+  display: inline;
+}
 
-.inline-input {
+/* --------------------- */
+/* ELEMENT WIDGET STYLES */
+/* --------------------- */
+
+/* ------------ */
+/* Form buttons */
+/* ------------ */
+.button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 100%;
+  vertical-align: baseline;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  color: inherit;
+  -webkit-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+}
+
+.button.embossed {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 0 10px;
+  border-radius: 3px;
+  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.2);
+}
+
+button.embossed:hover {
+  background: rgba(0, 0, 0, 0.15);
+  box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.3);
+}
+
+/* --------------- */
+/* Form text input */
+/* --------------- */
+.text-input {
   position: relative;
   margin: 0;
   width: 100%;
@@ -198,7 +230,72 @@ hr {
   font-smoothing: antialiased;
 }
 
-.inline-input.primary {
+.text-input::-webkit-input-placeholder {
+  font-style: italic;
+}
+
+.text-input::-moz-placeholder {
+  font-style: italic;
+  color: #a9a9a9;
+}
+
+/* ---- */
+/* Icon */
+/* ---- */
+.icon {
+  line-height: 43px; /* 40 + a couple of pixels visual adjustment */
+  font-size: 24px;
+  color: #d9d9d9;
+  text-shadow: 0 -1px 0 #bfbfbf;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+.icon::-moz-focus-inner {
+  border: none;
+}
+
+.icon:active:after {
+  color: #aeaeae;
+}
+
+.icon.check:after {
+  content: '✔';
+}
+
+.icon.angle-double:after {
+  content: '»';
+}
+
+.icon.cross:after {
+  content: '✖';
+}
+
+.icon.is-active:after {
+  color: #85ada7;
+  text-shadow: 0 1px 0 #669991;
+  bottom: 1px;
+  position: relative;
+}
+
+.icon.is-active:active:after {
+  color: #546d69;
+}
+
+.icon.down {
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+
+/* ------------------------------ */
+/* ITEMS COLLECTION WIDGET STYLES */
+/* ------------------------------ */
+
+/* --------------- */
+/* Create new item */
+/* --------------- */
+.items-create-new .text-input {
   padding: 16px 16px 16px 60px;
   border: none;
   background: rgba(0, 0, 0, 0.02);
@@ -206,232 +303,217 @@ hr {
   box-shadow: none;
 }
 
-label[for='toggle-all'] {
-	display: none;
+/* --------------------- */
+/* Mark all as completed */
+/* --------------------- */
+.items-mark-all-completed {
+  position: absolute;
+  width: 65px;
+  height: 41px;
+  top: -56px;
+  left: -10px;
+  text-align: center;
+  -webkit-appearance: none;
+  appearance: none;
+  text-align: center;
 }
 
-.toggle {
-	text-decoration: none;
+/* ---------- */
+/* Items list */
+/* ---------- */
+.items-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-
-.toggle.all {
-	position: absolute;
-	top: -42px;
-	left: -4px;
-	width: 40px;
-	text-align: center;
-	border: none; /* Mobile Safari */
+.items-list li {
+  width: 548px;
+  border-bottom: 1px dotted #ccc;
 }
 
-.toggle.all:before {
-	content: '»';
-	font-size: 28px;
-	color: #d9d9d9;
-	padding: 0 25px 7px;
+.items-list li:last-child {
+  border: none;
 }
 
-.toggle.all:checked:before {
-	color: #737373;
+/* -------------------- */
+/* Active items counter */
+/* -------------------- */
+.items-active-count {
+  float: left;
+  text-align: left;
+  margin: 0;
+  padding: 0;
 }
 
-#todo-list {
-	margin: 0;
-	padding: 0;
-	list-style: none;
+/* ---------------- */
+/* Filter selection */
+/* ---------------- */
+.items-filter-selection {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: absolute;
+  right: 0;
+  left: 0;
+  text-decoration: none;
 }
 
-#todo-list li {
-	position: relative;
-	font-size: 24px;
-	border-bottom: 1px dotted #ccc;
+.items-filter-selection li {
+  display: inline;
 }
 
-#todo-list li:last-child {
-	border-bottom: none;
+.items-filter-selection a {
+  color: #83756f;
+  margin: 2px;
+  text-decoration: none;
 }
 
-#todo-list li.editing {
-	border-bottom: none;
-	padding: 0;
+.items-filter-selection .is-active {
+  font-weight: bold;
 }
 
-#todo-list li.editing .edit {
-	display: block;
-	width: 506px;
-	padding: 13px 17px 12px 17px;
-	margin: 0 0 0 43px;
+/* --------------------- */
+/* Clear completed items */
+/* --------------------- */
+.items-clear-completed {
+  line-height: 20px;
+  font-size: 11px;
+  float: right;
+  position: relative;
 }
 
-#todo-list li.editing .view {
-	display: none;
+/* ------------------------- */
+/* SINGLE ITEM WIDGET STYLES */
+/* ------------------------- */
+
+/* -------------------- */
+/* The todo item widget */
+/* -------------------- */
+.item {
+  /* OK */
+  
 }
 
-#todo-list li .toggle {
-	text-align: center;
-	width: 40px;
-	/* auto, since non-WebKit browsers doesn't support input styling */
-	height: auto;
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	margin: auto 0;
-	border: none; /* Mobile Safari */
-	-webkit-appearance: none;
-	/*-moz-appearance: none;*/
-	-ms-appearance: none;
-	-o-appearance: none;
-	appearance: none;
+/* --------------------- */
+/* Mark one as completed */
+/* --------------------- */
+.item-toggle-completed {
+  display: inline-block;
+  width: 40px;
+  height: 59px;
+  vertical-align: top;
+  margin: 0;
+  padding: 0;
 }
 
-#todo-list li .toggle:after {
-	content: '✔';
-	line-height: 43px; /* 40 + a couple of pixels visual adjustment */
-	font-size: 20px;
-	color: #d9d9d9;
-	text-shadow: 0 -1px 0 #bfbfbf;
+.item-toggle-completed .icon {
+  display: inline-block;
+  margin: 0;
+  padding: 10px 10px 6px 10px;
 }
 
-#todo-list li .toggle:after {
-	color: #85ada7;
-	text-shadow: 0 1px 0 #669991;
-	bottom: 1px;
-	position: relative;
+/* --------------- */
+/* Delete one item */
+/* --------------- */
+.item-delete {
+  display: inline-block;
+  width: 40px;
+  height: 59px;
+  margin: 0;
+  padding: 0;
 }
 
-#todo-list li label {
-	word-break: break-word;
-	padding: 15px;
-	margin-left: 45px;
-	display: block;
-	line-height: 1.2;
-	-webkit-transition: color 0.4s;
-	-moz-transition: color 0.4s;
-	-ms-transition: color 0.4s;
-	-o-transition: color 0.4s;
-	transition: color 0.4s;
+.item-delete .icon {
+  display: inline-block;
+  visibility: hidden;
+  margin: 0;
+  padding: 10px 10px 6px 10px;
+  color: #a88a8a;
 }
 
-#todo-list li.completed label {
-	color: #a9a9a9;
-	text-decoration: line-through;
+.item:hover .item-delete .icon {
+  visibility: visible;
 }
 
-#todo-list li .destroy {
-	display: none;
-	position: absolute;
-	top: 0;
-	right: 10px;
-	bottom: 0;
-	width: 40px;
-	height: 40px;
-	margin: auto 0;
-	font-size: 22px;
-	color: #a88a8a;
-	-webkit-transition: all 0.2s;
-	-moz-transition: all 0.2s;
-	-ms-transition: all 0.2s;
-	-o-transition: all 0.2s;
-	transition: all 0.2s;
+.item-delete .icon:hover {
+  text-shadow: 0 0 1px #000, 0 0 10px rgba(199, 107, 107, 0.8);
+  -webkit-transform: scale(1.3);
+  -moz-transform: scale(1.3);
+  -ms-transform: scale(1.3);
+  -o-transform: scale(1.3);
+  transform: scale(1.3);
 }
 
-#todo-list li .destroy:hover {
-	text-shadow: 0 0 1px #000,
-				 0 0 10px rgba(199, 107, 107, 0.8);
-	-webkit-transform: scale(1.3);
-	-moz-transform: scale(1.3);
-	-ms-transform: scale(1.3);
-	-o-transform: scale(1.3);
-	transform: scale(1.3);
+/* --------- */
+/* Item text */
+/* --------- */
+.item-text {
+  display: inline-block;
+  vertical-align: top;
+  width: 430px;
+  margin: 0;
+  padding: 15px;
+  text-decoration: none;
+  font-size: 24px;
+  word-break: break-word;
+  line-height: 1.2;
+  -webkit-transition: color 0.4s;
+  -moz-transition: color 0.4s;
+  -ms-transition: color 0.4s;
+  -o-transition: color 0.4s;
+  transition: color 0.4s;
 }
 
-#todo-list li .destroy:after {
-	content: '✖';
+* --------------- * /
+  /* Completed items */
+  /* --------------- */        
+.item.completed {
+  /* OK */
 }
 
-#todo-list li:hover .destroy {
-	display: block;
+.item.completed .item-text {
+  color: #a9a9a9;
+  text-decoration: line-through;
 }
 
-#todo-list li .edit {
-	display: none;
+/* ----------------- */
+/* Item being edited */
+/* ----------------- */
+.item.editing {
+  /* OK */
+  
 }
 
-#todo-list li.editing:last-child {
-	margin-bottom: -1px;
+.item.editing .item-text {
+  width: 450px;
+  margin-left: 53px;
 }
 
-#todo-count {
-	float: left;
-	text-align: left;
+/* ----- */
+/* HACKS */
+/* ----- */
+
+/* ------------------ */
+/* Infamous, clearfix */
+/* ------------------ */
+.clearfix:after {
+  content: ".";
+  display: block;
+  clear: both;
+  visibility: hidden;
+  line-height: 0;
+  height: 0;
 }
 
-#filters {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	position: absolute;
-	right: 0;
-	left: 0;
+.clearfix {
+  display: inline-block;
 }
 
-#filters li {
-	display: inline;
+html[xmlns] .clearfix {
+  display: block;
 }
 
-#filters li a {
-	color: #83756f;
-	margin: 2px;
-	text-decoration: none;
-}
-
-#filters li a.selected {
-	font-weight: bold;
-}
-
-.clear {
-	float: right;
-	position: relative;
-	line-height: 20px;
-	text-decoration: none;
-	background: rgba(0, 0, 0, 0.1);
-	font-size: 11px;
-	padding: 0 10px;
-	border-radius: 3px;
-	box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.2);
-}
-
-.clear:hover {
-	background: rgba(0, 0, 0, 0.15);
-	box-shadow: 0 -1px 0 0 rgba(0, 0, 0, 0.3);
-}
-
-/*
-	Hack to remove background from Mobile Safari.
-	Can't use it globally since it destroys checkboxes in Firefox and Opera
-*/
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-	.toggle.all,
-	#todo-list li .toggle {
-		background: none;
-	}
-
-	#todo-list li .toggle {
-		height: 40px;
-	}
-
-	.toggle.all {
-		top: -56px;
-		left: -15px;
-		width: 65px;
-		height: 41px;
-		-webkit-transform: rotate(90deg);
-		transform: rotate(90deg);
-		-webkit-appearance: none;
-		appearance: none;
-	}
-}
-
-.hidden {
-	display:none;
+* html .clearfix {
+  height: 1%;
 }
