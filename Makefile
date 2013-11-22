@@ -1,4 +1,11 @@
-.PHONY: help setup all java-examples test
+### 
+### Hi, this is the big fat `Makefile` of the Server-side TodoMVC project.
+###
+### General design is that we can `build` and `test`. Building is supposed
+### to create a packaged artifact, that can be run using some type of web
+### server.
+.PHONY: help setup test all \
+java-examples
 
 ## Helper target that displays some information.
 help:
@@ -12,26 +19,22 @@ setup:
 	@echo " Let's see if you have Node.js and npm installed?"
 	@which npm || (echo " Ouch, too bad. Start by installing that first please."; exit 1)
 	@echo " Oh, great."
-	@echo "\n Now let's install [zombie]\n"
-	@npm install zombie
-	@echo "\n Now let's install [mocha]\n"
-	@npm install mocha
-	@echo "\n Now let's install [assert]\n"
-	@npm install assert
-	@echo "\n Good, all done. Now move along!\n"
+	@echo "\n Now let's make sure zombie is installed...\n"
+	@npm update zombie
+	@echo "\nGood!\n Now let's make sure mocha is installed...\n"
+	@npm update mocha
+	@echo "\nGood!\n Now let's make sure assert is installed...\n"
+	@npm update assert
+	@echo "\nVery good!\n All done. Now move along!\n"
 
 ## Build __all__ the examples!
 all: \
-java-examples \
-test
+java-examples
 
-## Builds the Java based examples using Maven
+## Tests the java examples
 java-examples:
-	@echo "BUILDING ALL JAVA EXAMPLES"
-	@echo "=========================="
-	@mvn -f java-examples/pom.xml clean verify
+	$(MAKE) -C $@ all
 
+## Run acceptance tests aginst some URL
 test:
-	@echo "RUNNING TESTS"
-	@echo "==============="
-	@./node_modules/.bin/mocha --reporter list
+	@env URL=${URL} ./node_modules/.bin/mocha --reporter list
