@@ -1,24 +1,17 @@
 package com.studiomediatech;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-import com.google.common.collect.Lists;
 import com.studiomediatech.Todo.Status;
+import com.studiomediatech.model.TodoListModel;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.head.CssHeaderItem;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.filter.HeaderResponseContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -30,19 +23,19 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
-public class Home extends WebPage {
-  private static final long serialVersionUID = 1L;
+public class HomePage extends BasePage {
 
-  public Home() {
+  private static final long serialVersionUID = -8474930871026680132L;
 
+  private final TodoListModel todos;
+
+  public HomePage() {
     super();
+    this.todos = new TodoListModel();
 
-    getSession().bind();
-
-    add(new HeaderResponseContainer(TodoMVC.JS_BUCKET, TodoMVC.JS_BUCKET));
+    add(createTodoList());
 
     final Form<Todo> form;
-
     add(form = new Form<Todo>("form", new CompoundPropertyModel<Todo>(new Todo())) {
       private static final long serialVersionUID = 1L;
 
@@ -51,7 +44,7 @@ public class Home extends WebPage {
         super.onSubmit();
         TodoMVC.getStorage(getSession()).save(getModelObject());
         setModelObject(new Todo());
-        setResponsePage(new Home());
+        setResponsePage(new HomePage());
       }
     });
 
@@ -207,45 +200,11 @@ public class Home extends WebPage {
     clear.add(new Label("completed", completedCountModel));
 
     footer.add(clear);
+
   }
 
-  /**
-   * @return Todo list for this session.
-   */
-  public Collection<Todo> getAllTodos() {
-    Iterable<Todo> all = TodoMVC.getStorage(getSession()).findAll();
-    return all != null ? Lists.newArrayList(all) : new ArrayList<Todo>();
-  }
-
-  /**
-   * @return not yet completed todos
-   */
-  public Collection<Todo> getTodos() {
-    return Collections2.filter(getAllTodos(), new Predicate<Todo>() {
-
-      @Override
-      public boolean apply(Todo todo) {
-        return todo.getStatus() == Status.ACTIVE || todo.getStatus() == Status.EDITING;
-      }
-    });
-  }
-
-  /**
-   * @return all completed todos
-   */
-  public Collection<Todo> getCompleted() {
-    return Collections2.filter(getAllTodos(), new Predicate<Todo>() {
-
-      @Override
-      public boolean apply(Todo todo) {
-        return todo.getStatus() == Status.COMPLETED;
-      }
-    });
-  }
-
-  @Override
-  public void renderHead(IHeaderResponse response) {
-    super.renderHead(response);
-    response.render(CssHeaderItem.forUrl("css/style.css"));
+  private Component createTodoList() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

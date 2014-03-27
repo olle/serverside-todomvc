@@ -4,9 +4,7 @@ import java.io.Serializable;
 
 /**
  * Interface for repository operations available on entities of a given type
- * with a specific identifier type. This interface should mimic a JPA CRUD
- * repository, for the optional switcheroo, when and if someone gets the hots
- * for testing out the apps with a real storage backend.
+ * with a specific identifier type.
  * 
  * @author Olle Törnström <olle@studiomediatech.com>
  * 

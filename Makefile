@@ -4,8 +4,7 @@
 ### General design is that we can `build` and `test`. Building is supposed
 ### to create a packaged artifact, that can be run using some type of web
 ### server.
-.PHONY: help setup test all \
-java-examples
+.PHONY: help setup all examples clean
 
 ## Helper target that displays some information.
 help:
@@ -28,13 +27,20 @@ setup:
 	@echo "\nVery good!\n All done. Now move along!\n"
 
 ## Build __all__ the examples!
-all: \
-java-examples
+all: examples
 
-## Tests the java examples
-java-examples:
-	$(MAKE) -C $@ all
+## Build the examples
+examples:
+	$(MAKE) -C serverside-todomvc-java-servlet
+	$(MAKE) -C serverside-todomvc-java-wicket
 
+## Clean out all the examples, duh!
+clean:
+	$(MAKE) -C serverside-todomvc-java-servlet $@
+	$(MAKE) -C serverside-todomvc-java-wicket $@
+
+## TODO: This should be considered again, perhaps it's better
+##       to create explicit test setup too?
 ## Run acceptance tests aginst some URL
-test:
-	@env URL=${URL} ./node_modules/.bin/mocha --reporter list
+##test:
+##	@env URL=${URL} ./node_modules/.bin/mocha --reporter list

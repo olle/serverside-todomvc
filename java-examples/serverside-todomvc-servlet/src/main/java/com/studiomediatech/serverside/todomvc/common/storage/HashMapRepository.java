@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 
 /**
  * A shameless map based repository implementation, for just the simplest
- * possible in-memory storage solution - ever.
+ * possible in-memory storage solution.
  * 
  * @author Olle Törnström <olle@studiomediatech.com>
  */
