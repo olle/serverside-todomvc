@@ -14,7 +14,7 @@ public class Start {
     connector.setAcceptQueueSize(1);
 
     WebAppContext context = new WebAppContext();
-    context.setContextPath("/serverside-todomvc-servlet");
+    context.setContextPath("/serverside-todomvc-java-servlet");
     context.setResourceBase("src/main/webapp");
     server.setHandler(context);
 
