@@ -22,12 +22,24 @@ public class Todo implements Serializable {
     this.todo = todoEntity;
   }
 
-  /**
-   * Saves this todo.
-   */
   public void save() {
     TodoMVC.getTodoService().save(this.todo);
   }
+
+  public void toggleComplete() {
+    if (this.todo.getStatus() == Status.COMPLETED) {
+      this.todo.setStatus(Status.ACTIVE);
+    }
+    else {
+      this.todo.setStatus(Status.COMPLETED);
+    }
+  }
+
+  public void delete() {
+    TodoMVC.getTodoService().delete(this.todo);
+  }
+
+  // DELEGATE METHODS
 
   public String getTodo() {
     return this.todo.getTodo();
@@ -37,24 +49,17 @@ public class Todo implements Serializable {
     this.todo.setTodo(todo);
   }
 
-  public boolean isActive() {
-    return this.todo.isActive();
+  public Status getStatus() {
+    return this.todo.getStatus();
   }
 
-  public void setActive() {
-    this.todo.setActive();
+  public void setStatus(Status status) {
+    this.todo.setStatus(status);
   }
 
-  public boolean isCompleted() {
-    return this.todo.isCompleted();
-  }
-
-  public void setCompleted(boolean completed) {
-    this.todo.setCompleted(completed);
-  }
-
-  public boolean isEditing() {
-    return this.todo.isEditing();
+  @Override
+  public String toString() {
+    return this.todo.toString();
   }
 
 }

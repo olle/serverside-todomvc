@@ -20,7 +20,6 @@ public class TodoListModel extends LoadableDetachableModel<List<Todo>> {
 
   @Override
   protected List<Todo> load() {
-
     return TodoMVC.getTodoService().findAll();
   }
 

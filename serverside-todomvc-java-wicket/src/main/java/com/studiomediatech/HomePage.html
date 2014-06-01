@@ -24,8 +24,7 @@
       <header>
         <h1>Todos</h1>
         <h2 class="is-hidden">Create a new task</h2>
-        <form wicket:id="new" method="post" class="items-create-new">
-          <input type="hidden" name="action" value="create" />
+        <form wicket:id="new" class="items-create-new">
           <!--
             TODO: Remove `autofocus="autofocus"` attribute if the page is
                   currently in the mode of editing a todo item.
@@ -38,35 +37,19 @@
       <section class="primary" wicket:enclosure="todos">
 
         <h3 class="is-hidden">Mark as completed</h3>
-        <!--
-          TODO: If this form is posted, then all, not yet completed tasks,
-                must be marked as completed. 
-         -->
-        <form method="post" class="items-mark-all-completed">
-          <input type="hidden" name="action" value="complete" />
-          <input type="hidden" name="item-id" value="all" />
+        <form wicket:id="completeAll" class="items-mark-all-completed">
           <button class="icon angle-double down"><span class="is-hidden">Mark all as completed</span></button>
         </form>
         
+        <!--
+          TODO: replace the variable with the name of the currently
+                active filter.
+         -->
         <h2 class="is-hidden">List of ${current-filter} tasks:</h2>
         <ul class="items-list">
-
-          <!--
-            TODO: Mark the list element as `item` if not completed or being
-                  edited.
-           -->
           <li wicket:id="todos" class="item clearfix">
-            <!--
-              TODO: Posting this form must toggle the completed state of the
-                    todo item, identified by the given id.
-             -->
-            <form method="post" class="item-toggle-completed">
-              <input type="hidden" name="action" value="toggle" />
-              <input type="hidden" name="item-id" value="${item-id}" />
-              <!--
-                TODO: Replace `${completed}` with current item completed state (completed/active).
-               -->
-              <button class="icon check"><span class="is-hidden">Mark as ${completed}</span></button>
+            <form wicket:id="toggleComplete" class="item-toggle-completed">
+              <button wicket:id="toggleButton" class="icon check"><span class="is-hidden">Mark as <wicket:container wicket:id="invertedStatusCaption">${completed}</wicket:container></span></button>
             </form>
             <!--
               TODO: Clicking the link, should create a page where the todo,
@@ -75,31 +58,7 @@
                     See last list element in the template.
              -->
             <a wicket:id="link" class="item-text"><wicket:container wicket:id="text">${item-text}</wicket:container></a>
-            <!--
-              TODO: Posting this form should delete the todo item, identified
-                    by the given id.
-             -->
-            <form method="post" class="item-delete">
-              <input type="hidden" name="action" value="delete" />
-              <input type="hidden" name="item-id" value="${item-id}" />
-              <button class="icon cross"><span class="is-hidden">Delete</span></button>
-            </form>
-          </li>
-
-          <!--
-            TODO: Mark the list item as `completed` for todo items that are
-                  done. 
-           -->
-          <li class="item completed clearfix">
-            <form method="post" class="item-toggle-completed">
-              <input type="hidden" name="action" value="toggle" />
-              <input type="hidden" name="item-id" value="${item-id}" />
-              <button class="icon check is-active"><span class="is-hidden">Mark as ${active}</span></button>
-            </form>
-            <span  class="item-text">${todo-item-text}</span>
-            <form method="post" class="item-delete">
-              <input type="hidden" name="action" value="delete" />
-              <input type="hidden" name="item-id" value="${item-id}" />
+            <form wicket:id="delete" class="item-delete">
               <button class="icon cross"><span class="is-hidden">Delete</span></button>
             </form>
           </li>
@@ -133,11 +92,10 @@
       <section class="secondary" wicket:enclosure="todos">
 
         <h3 class="is-hidden">Current status</h3>
-        <!--
-          TODO: Provide a count and properly pluralized label of how many active
-                todo items there are left. 
-         -->
-        <p class="items-active-count"><strong wicket:id="count">${count}</strong> ${'item|s'} left</p>
+        <p class="items-active-count">
+          <strong wicket:id="count">${count}</strong>
+          <wicket:container wicket:id="caption">${'item|s'} left</wicket:container>
+        </p>
         
         <h3 class="is-hidden">Filter task list</h3>
         <ul class="items-filter-selection">
@@ -152,13 +110,8 @@
         </ul>
 
         <h3 class="is-hidden">Clear completed tasks</h3>
-        <!--
-          TODO: Posting this form must delete all todo items that are already
-                marked as being completed.
-         -->
-        <form method="post" class="items-clear-completed is-inline">
-          <input type="hidden" name="action" value="clear" />
-          <button class="button embossed"><span>Clear completed (${count})</span></button>
+        <form wicket:id="clearCompleted" class="items-clear-completed is-inline">
+          <button class="button embossed"><span>Clear completed (<wicket:container wicket:id="completedCount">${count}</wicket:container>)</span></button>
         </form>
       </section>
 
@@ -169,21 +122,6 @@
       <p>Click on the text to edit a todo.</p>
       
       <h4 class="is-hidden">About the Server-side TodoMVC application</h4>
-      
-      <!--
-        TODO: Remove the paragraph below. 
-       -->
-      <p>
-        Original template by <a href="http://github.com/sindresorhus">Sindre Sorhus</a><br />
-        Reworked by <a href="http://github.com/olle">Olle Törnström</a>
-      </p>
-      
-      <!--
-        TODO: Properly replace the paragraph below with a link to you or your
-              organization. 
-       -->
-      <p>Created by <a href="http://todomvc.com">you</a></p>
-
       <p>Part of <a href="http://github.com/olle/serverside-todomvc">Server-side TodoMVC</a></p>
     </footer>
 

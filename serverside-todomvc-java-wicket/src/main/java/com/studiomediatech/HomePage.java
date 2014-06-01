@@ -2,12 +2,17 @@ package com.studiomediatech;
 
 import java.util.List;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.studiomediatech.domain.Status;
 import com.studiomediatech.domain.Todo;
 import com.studiomediatech.model.TodoListModel;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -19,6 +24,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 
 /**
  * The home page displays the list of todos and allows adding, deleting and
@@ -33,6 +39,7 @@ public class HomePage extends WebPage {
   private final IModel<Integer> count;
   private final IModel<Todo> newTodo;
   private final IModel<Todo> editTodo;
+  private final IModel<Integer> completedCount;
 
   public HomePage() {
 
@@ -40,17 +47,35 @@ public class HomePage extends WebPage {
 
     // Models
     this.todos = new TodoListModel();
-    this.count = new PropertyModel<>(this.todos, "size");
+    this.count = new PropertyModel<Integer>(this.todos, "size");
     this.newTodo = Model.of(new Todo());
     this.editTodo = Model.of();
+    this.completedCount = new Model<Integer>() {
+
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      public Integer getObject() {
+
+        return FluentIterable.<Todo> from(HomePage.this.todos.getObject()).filter(new Predicate<Todo>() {
+
+          public boolean apply(Todo input) {
+            return input.getStatus() == Status.COMPLETED;
+          }
+        }).size();
+      }
+    };
 
     // Components
-    add(newTodoForm());
+    add(newTodo());
+    add(completeAll());
     add(todoList());
     add(count());
+    add(countCaption());
+    add(clearCompleted());
   }
 
-  private Component newTodoForm() {
+  private Component newTodo() {
 
     Form<Todo> form = new Form<Todo>("new", new CompoundPropertyModel<Todo>(this.newTodo)) {
 
@@ -64,6 +89,21 @@ public class HomePage extends WebPage {
     };
 
     form.add(new TextField<String>("todo").setRequired(true));
+
+    return form;
+  }
+
+  private Component completeAll() {
+
+    Form<Void> form = new Form<Void>("completeAll") {
+
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      protected void onSubmit() {
+        TodoMVC.getTodoService().markAllCompleted();
+      }
+    };
 
     return form;
   }
@@ -82,7 +122,81 @@ public class HomePage extends WebPage {
 
       @Override
       protected void populateItem(ListItem<Todo> item) {
+        item.add(toggleComplete(item.getModel()));
+        item.add(delete(item.getModel()));
         item.add(todoLink(item.getModel()));
+        item.add(new AttributeAppender("class", new PropertyModel<String>(item.getModel(), "status")).setSeparator(" "));
+      }
+
+      private Component toggleComplete(final IModel<Todo> model) {
+
+        Form<Todo> form = new Form<Todo>("toggleComplete", model) {
+
+          private static final long serialVersionUID = 1L;
+
+          @Override
+          protected void onSubmit() {
+            getModelObject().toggleComplete();
+          }
+
+        };
+
+        form.add(toggleButton(model));
+
+        return form;
+      }
+
+      private Component toggleButton(final IModel<Todo> model) {
+
+        WebMarkupContainer button = new WebMarkupContainer("toggleButton");
+
+        button.add(new AttributeAppender("class", new Model<String>() {
+
+          private static final long serialVersionUID = 1L;
+
+          @Override
+          public String getObject() {
+            if (model.getObject().getStatus() == Status.COMPLETED) {
+              return "is-active";
+            }
+
+            return "";
+          }
+        }).setSeparator(" "));
+
+        button.add(new Label("invertedStatusCaption", new Model<String>() {
+
+          private static final long serialVersionUID = 1L;
+
+          @Override
+          public String getObject() {
+            if (model.getObject().getStatus() == Status.COMPLETED) {
+              return getString(Status.ACTIVE.name());
+            }
+            else {
+              return getString(Status.COMPLETED.name());
+            }
+          }
+
+        }));
+
+        return button;
+      }
+
+      private Component delete(IModel<Todo> model) {
+
+        Form<Todo> form = new Form<Todo>("delete", model) {
+
+          private static final long serialVersionUID = 1L;
+
+          @Override
+          protected void onSubmit() {
+            getModelObject().delete();
+            HomePage.this.todos.detach();
+          }
+        };
+
+        return form;
       }
 
       private Component todoLink(IModel<Todo> model) {
@@ -97,7 +211,7 @@ public class HomePage extends WebPage {
           }
         };
 
-        link.add(new Label("text", new PropertyModel<>(model, "todo")));
+        link.add(new Label("text", new PropertyModel<String>(model, "todo")));
 
         return link;
       }
@@ -107,7 +221,34 @@ public class HomePage extends WebPage {
   }
 
   private Component count() {
+
     return new Label("count", this.count);
+  }
+
+  private Component countCaption() {
+
+    return new Label("caption", new StringResourceModel("todos.count.remaining",
+                                                        HomePage.this,
+                                                        null,
+                                                        new Object[]{ this.count }));
+  }
+
+  private Component clearCompleted() {
+
+    Form<Void> form = new Form<Void>("clearCompleted") {
+
+      private static final long serialVersionUID = 1L;
+
+      @Override
+      protected void onSubmit() {
+        TodoMVC.getTodoService().clearCompleted();
+        HomePage.this.todos.detach();
+      }
+    };
+
+    form.add(new Label("completedCount", this.completedCount));
+
+    return form;
   }
 
   @Override
