@@ -2,82 +2,59 @@ package com.studiomediatech.domain;
 
 import java.io.Serializable;
 
+import com.studiomediatech.TodoMVC;
+
 public class Todo implements Serializable {
 
-  private static final long serialVersionUID = -9118514027306307895L;
+  private static final long serialVersionUID = -7124778236879155131L;
 
-  public enum Status {
-    ACTIVE(""),
-    COMPLETED("completed"),
-    EDITING("editing");
-
-    private final String css;
-
-    Status(String css) {
-      this.css = css;
-    }
-
-    @Override
-    public String toString() {
-      return this.css;
-    };
-  }
-
-  private String todo;
-  private Status status;
+  private final TodoEntity todo;
 
   public Todo() {
-    // OK
+    this.todo = new TodoEntity();
   }
 
   public Todo(String todo) {
-    this.todo = todo;
-    this.status = Status.ACTIVE;
+    this.todo = new TodoEntity(todo);
   }
 
-  public String getTodo() {
-    return this.todo;
-  }
-
-  public void setTodo(String todo) {
-    this.todo = todo;
-  }
-
-  public boolean isActive() {
-    return this.status == Status.ACTIVE;
-  }
-
-  public void setActive() {
-    this.status = Status.ACTIVE;
-  }
-
-  public boolean isCompleted() {
-    return this.status == Status.COMPLETED;
-  }
-
-  public void setCompleted(boolean completed) {
-    if (completed) {
-      this.status = Status.COMPLETED;
-    }
-    else {
-      this.status = Status.ACTIVE;
-    }
-  }
-
-  public boolean isEditing() {
-    return this.status == Status.EDITING;
-  }
-
-  @Override
-  public String toString() {
-    return this.todo;
+  public Todo(TodoEntity todoEntity) {
+    this.todo = todoEntity;
   }
 
   /**
    * Saves this todo.
    */
   public void save() {
-    // TODO Auto-generated method stub
-
+    TodoMVC.getTodoService().save(this.todo);
   }
+
+  public String getTodo() {
+    return this.todo.getTodo();
+  }
+
+  public void setTodo(String todo) {
+    this.todo.setTodo(todo);
+  }
+
+  public boolean isActive() {
+    return this.todo.isActive();
+  }
+
+  public void setActive() {
+    this.todo.setActive();
+  }
+
+  public boolean isCompleted() {
+    return this.todo.isCompleted();
+  }
+
+  public void setCompleted(boolean completed) {
+    this.todo.setCompleted(completed);
+  }
+
+  public boolean isEditing() {
+    return this.todo.isEditing();
+  }
+
 }

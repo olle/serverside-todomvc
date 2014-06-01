@@ -8,7 +8,7 @@ import org.apache.wicket.protocol.http.WebApplication;
  */
 public class TodoMVC extends WebApplication {
 
-  static final String JS_BUCKET = "foot";
+  private static final TodoService todoService = new TodoService();
 
   public TodoMVC() {
     super();
@@ -23,5 +23,9 @@ public class TodoMVC extends WebApplication {
   public void init() {
     super.init();
     getMarkupSettings().setStripWicketTags(true);
+  }
+
+  public static TodoService getTodoService() {
+    return TodoMVC.todoService;
   }
 }

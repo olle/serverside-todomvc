@@ -1,16 +1,16 @@
 package com.studiomediatech.model;
 
-import java.util.Collections;
 import java.util.List;
 
+import com.studiomediatech.TodoMVC;
 import com.studiomediatech.domain.Todo;
 
-import org.apache.wicket.model.AbstractReadOnlyModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 
 /**
  * A simple list model for todos.
  */
-public class TodoListModel extends AbstractReadOnlyModel<List<Todo>> {
+public class TodoListModel extends LoadableDetachableModel<List<Todo>> {
 
   private static final long serialVersionUID = -5811128247181974532L;
 
@@ -19,8 +19,9 @@ public class TodoListModel extends AbstractReadOnlyModel<List<Todo>> {
   }
 
   @Override
-  public List<Todo> getObject() {
-    return Collections.emptyList();
+  protected List<Todo> load() {
+
+    return TodoMVC.getTodoService().findAll();
   }
 
 }
