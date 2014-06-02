@@ -1,12 +1,15 @@
 package com.studiomediatech;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import com.google.common.base.Function;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.studiomediatech.domain.Filter;
 import com.studiomediatech.domain.Status;
 import com.studiomediatech.domain.Todo;
 import com.studiomediatech.domain.TodoEntity;
@@ -22,18 +25,25 @@ public class TodoService {
     this.todos = new HashMap<String, TodoEntity>();
   }
 
-  public List<Todo> findAll() {
+  public List<Todo> findAll(final Filter filter) {
 
-    return Lists.newArrayList(Iterables.transform(this.todos.values(), new Function<TodoEntity, Todo>() {
+    Collection<TodoEntity> allTodos = this.todos.values();
+
+    Iterable<TodoEntity> filteredTodos = Iterables.filter(allTodos, new Predicate<TodoEntity>() {
+
+      public boolean apply(TodoEntity todo) {
+        return filter.getStatus().contains(todo.getStatus());
+      }
+    });
+
+    Iterable<Todo> transformedTodos = Iterables.transform(filteredTodos, new Function<TodoEntity, Todo>() {
 
       public Todo apply(TodoEntity todoEntity) {
-        Todo todo = new Todo(todoEntity);
-        // TODO: Remove
-        System.out.println(todo.toString());
-        return todo;
+        return new Todo(todoEntity);
       }
+    });
 
-    }));
+    return Lists.newArrayList(transformedTodos);
   }
 
   public void save(TodoEntity todo) {

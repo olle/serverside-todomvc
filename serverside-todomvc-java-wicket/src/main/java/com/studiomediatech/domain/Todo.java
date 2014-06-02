@@ -33,6 +33,7 @@ public class Todo implements Serializable {
     else {
       this.todo.setStatus(Status.COMPLETED);
     }
+    TodoMVC.getTodoService().save(this.todo);
   }
 
   public void delete() {

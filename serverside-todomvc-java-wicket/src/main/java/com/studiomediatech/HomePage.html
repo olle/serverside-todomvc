@@ -1,16 +1,3 @@
-<!--
-  This is the template for any Server-side TodoMVC example implementation. It's
-  a good option to get going fast. Comes with ready baked styling and HTML, that
-  is sort of adapted to be more semantic and correct for our server-side
-  purposes.
-  
-  You can just take this file, read through and build handlers for the `TODO:`
-  notes (no pun intended). It should be pretty easy.  
-  
-  NOTE: Any `${foobar}` placeholder, is not a specific variable but rather only
-        a hint that it must be replaced with some suitable properties. For
-        example `${todo-id}` is typically the primary key of a todo item.
- -->
 <!doctype html>
 <html xmlns:wicket="http://wicket.apache.org" lang="en">
   <head>
@@ -18,9 +5,7 @@
     <title>Java Wicket • Server-side TodoMVC</title>
   </head>
   <body class="grey-plaid-bg modern-font">
-
     <section id="serverside-todomvc">
-
       <header>
         <h1>Todos</h1>
         <h2 class="is-hidden">Create a new task</h2>
@@ -33,19 +18,12 @@
           <button class="is-hidden"><span class="is-hidden">Create new todo</span></button>
         </form>
       </header>
-
       <section class="primary" wicket:enclosure="todos">
-
         <h3 class="is-hidden">Mark as completed</h3>
         <form wicket:id="completeAll" class="items-mark-all-completed">
           <button class="icon angle-double down"><span class="is-hidden">Mark all as completed</span></button>
         </form>
-        
-        <!--
-          TODO: replace the variable with the name of the currently
-                active filter.
-         -->
-        <h2 class="is-hidden">List of ${current-filter} tasks:</h2>
+        <h2 class="is-hidden">List of <wicket:container wicket:id="filter">${current-filter}</wicket:container> tasks:</h2>
         <ul class="items-list">
           <li wicket:id="todos" class="item clearfix">
             <form wicket:id="toggleComplete" class="item-toggle-completed">
@@ -89,42 +67,32 @@
         
       </section>
 
-      <section class="secondary" wicket:enclosure="todos">
-
+      <section class="secondary">
         <h3 class="is-hidden">Current status</h3>
         <p class="items-active-count">
-          <strong wicket:id="count">${count}</strong>
-          <wicket:container wicket:id="caption">${'item|s'} left</wicket:container>
+          <strong wicket:id="activeCount">${count}</strong>
+          <wicket:container wicket:id="activeCountCaption">${'item|s'} left</wicket:container>
         </p>
-        
         <h3 class="is-hidden">Filter task list</h3>
         <ul class="items-filter-selection">
-          <!--
-            TODO: Allow to see todo items based on filters `active` (only the
-                  active) and `completed` (only the completed items) - as well
-                  as showing `all`, which is selected by default. 
-           -->
-          <li><a href="?filter=all" class="is-selected">All</a></li>
-          <li><a href="?filter=active">Active</a></li>
-          <li><a href="?filter=completed">Completed</a></li>
+          <li><a wicket:id="filterAll">All</a></li>
+          <li><a wicket:id="filterActive">Active</a></li>
+          <li><a wicket:id="filterCompleted">Completed</a></li>
         </ul>
-
+        <wicket:enclosure child="clearCompleted">
         <h3 class="is-hidden">Clear completed tasks</h3>
         <form wicket:id="clearCompleted" class="items-clear-completed is-inline">
           <button class="button embossed"><span>Clear completed (<wicket:container wicket:id="completedCount">${count}</wicket:container>)</span></button>
         </form>
+        </wicket:enclosure>
       </section>
-
     </section>
-
     <footer>
       <h4 class="is-hidden">Help</h4>
       <p>Click on the text to edit a todo.</p>
-      
       <h4 class="is-hidden">About the Server-side TodoMVC application</h4>
       <p>Part of <a href="http://github.com/olle/serverside-todomvc">Server-side TodoMVC</a></p>
     </footer>
-
     <!-- Look mom, no JavaScript! -->
   </body>
 </html>
