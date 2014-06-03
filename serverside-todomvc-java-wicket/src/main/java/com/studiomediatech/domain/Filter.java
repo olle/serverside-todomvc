@@ -53,4 +53,8 @@ public class Filter implements Serializable {
     })).toString();
   }
 
+  public boolean apply(Todo todo) {
+    return this.status.contains(todo.getStatus());
+  }
+
 }

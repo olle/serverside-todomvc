@@ -38,6 +38,6 @@ public class TodoEntity implements Serializable {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this).add("todo", this.todo).add("status", this.status).toString();
+    return Objects.toStringHelper(this).add("todo", this.todo).add("status", this.status.name()).toString();
   }
 }

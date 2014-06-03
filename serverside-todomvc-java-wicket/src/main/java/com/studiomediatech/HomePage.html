@@ -62,12 +62,9 @@
                 <input type="text" name="item-text" placeholder="${todo-item-text}" autofocus="autofocus" autocomplete="off" class="item-text" />
               </form>
           </li>
-
         </ul>
-        
       </section>
-
-      <section class="secondary">
+      <section wicket:id="controls" class="secondary">
         <h3 class="is-hidden">Current status</h3>
         <p class="items-active-count">
           <strong wicket:id="activeCount">${count}</strong>
