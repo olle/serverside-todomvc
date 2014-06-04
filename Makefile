@@ -1,9 +1,14 @@
-### 
+###
 ### Hi, this is the big fat `Makefile` of the Server-side TodoMVC project.
 ###
 ### General design is that we can `build` and `test`. Building is supposed
 ### to create a packaged artifact, that can be run using some type of web
-### server.
+### server. Testing is aimed at asserting or validating the completeness of
+### a built example, by running some high level web-test on it.
+###
+### Also, my Makefile-foo is not so strong, so bare with me. Any
+### improvements are welcome.
+###
 .PHONY: help setup all examples clean
 
 ## Helper target that displays some information.
