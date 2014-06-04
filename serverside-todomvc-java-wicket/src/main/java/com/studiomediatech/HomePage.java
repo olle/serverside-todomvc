@@ -33,6 +33,7 @@ import org.apache.wicket.model.StringResourceModel;
 @SuppressWarnings("serial")
 public class HomePage extends WebPage {
 
+  private static final String TOGGLE_ALL_BUTTON_ID = "toggleAllButton";
   private static final String IS_ACTIVE_CLASS = "is-active";
   private static final String CLASS_ATTRIBUTE = "class";
   private static final String FILTER_COMPLETED_ID = "filterCompleted";
@@ -62,6 +63,7 @@ public class HomePage extends WebPage {
   private final IModel<List<Todo>> completed;
   private final IModel<List<Todo>> filtered;
   private final IModel<Todo> newTodo;
+  private final IModel<Boolean> toggleAllCompleted;
 
   public HomePage() {
     super();
@@ -73,6 +75,7 @@ public class HomePage extends WebPage {
     this.completed = new FilteredTodoListModel(this.all, Model.of(new Filter(Status.COMPLETED)));
     this.filtered = new FilteredTodoListModel(this.all, this.filter);
     this.newTodo = Model.of(new Todo());
+    this.toggleAllCompleted = Model.of(true);
 
     // Components
     add(newTodo());
@@ -99,13 +102,27 @@ public class HomePage extends WebPage {
   }
 
   private Component toggleAll() {
-    return new Form<Void>(TOGGLE_ALL_ID) {
+    Form<Boolean> form = new Form<Boolean>(TOGGLE_ALL_ID, this.toggleAllCompleted) {
       @Override
       protected void onSubmit() {
-        TodoMVC.getTodoService().markAllCompleted();
+        Boolean toCompletedStatus = getModelObject();
+        TodoMVC.getTodoService().toggleAllCompleted(toCompletedStatus);
+        setModelObject(!toCompletedStatus);
         HomePage.this.all.detach();
       }
     };
+
+    form.add(new WebMarkupContainer(TOGGLE_ALL_BUTTON_ID).add(new AttributeAppender(CLASS_ATTRIBUTE,
+                                                                                    new Model<String>() {
+                                                                                      @Override
+                                                                                      public String getObject() {
+                                                                                        return HomePage.this.toggleAllCompleted.getObject()
+                                                                                                                                           ? ""
+                                                                                                                                           : IS_ACTIVE_CLASS;
+                                                                                      }
+                                                                                    }).setSeparator(" ")));
+
+    return form;
   }
 
   private Component filter() {

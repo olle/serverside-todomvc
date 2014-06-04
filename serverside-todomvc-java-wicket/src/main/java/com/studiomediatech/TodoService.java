@@ -35,12 +35,6 @@ public class TodoService {
     this.todos.put(todo.getTodo(), todo);
   }
 
-  public void markAllCompleted() {
-    for (TodoEntity entity : this.todos.values()) {
-      entity.setStatus(Status.COMPLETED);
-    }
-  }
-
   public void clearCompleted() {
     Iterator<TodoEntity> it = this.todos.values().iterator();
     while (it.hasNext()) {
@@ -53,5 +47,22 @@ public class TodoService {
 
   public void delete(TodoEntity todo) {
     this.todos.remove(todo.getTodo());
+  }
+
+  public void toggleAllCompleted(Boolean isCompleted) {
+    if (isCompleted) {
+      setStatuOnAll(Status.COMPLETED);
+    }
+    else {
+      setStatuOnAll(Status.ACTIVE);
+    }
+  }
+
+  private void setStatuOnAll(Status status) {
+    Iterator<TodoEntity> it = this.todos.values().iterator();
+    while (it.hasNext()) {
+      TodoEntity entity = it.next();
+      entity.setStatus(status);
+    }
   }
 }

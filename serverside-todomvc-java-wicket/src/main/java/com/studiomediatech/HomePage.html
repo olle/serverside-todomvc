@@ -21,7 +21,7 @@
       <section class="primary" wicket:enclosure="todos">
         <h3 class="is-hidden">Mark as completed</h3>
         <form wicket:id="completeAll" class="items-mark-all-completed">
-          <button class="icon angle-double down"><span class="is-hidden">Mark all as completed</span></button>
+          <button wicket:id="toggleAllButton" class="icon angle-double down"><span class="is-hidden">Mark all as completed</span></button>
         </form>
         <h2 class="is-hidden">List of <wicket:container wicket:id="filter">${current-filter}</wicket:container> tasks:</h2>
         <ul class="items-list">
