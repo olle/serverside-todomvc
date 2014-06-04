@@ -1,8 +1,9 @@
 package com.studiomediatech;
 
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
@@ -16,14 +17,14 @@ import com.studiomediatech.domain.TodoEntity;
  */
 public class TodoService {
 
-  private final HashMap<String, TodoEntity> todos;
+  private final Set<TodoEntity> todos;
 
   public TodoService() {
-    this.todos = new HashMap<String, TodoEntity>();
+    this.todos = new LinkedHashSet<TodoEntity>();
   }
 
   public List<Todo> findAll() {
-    return Lists.newArrayList(Iterables.transform(this.todos.values(), new Function<TodoEntity, Todo>() {
+    return Lists.newArrayList(Iterables.transform(this.todos, new Function<TodoEntity, Todo>() {
 
       public Todo apply(TodoEntity todoEntity) {
         return new Todo(todoEntity);
@@ -32,11 +33,11 @@ public class TodoService {
   }
 
   public void save(TodoEntity todo) {
-    this.todos.put(todo.getTodo(), todo);
+    this.todos.add(todo);
   }
 
   public void clearCompleted() {
-    Iterator<TodoEntity> it = this.todos.values().iterator();
+    Iterator<TodoEntity> it = this.todos.iterator();
     while (it.hasNext()) {
       TodoEntity entity = it.next();
       if (entity.getStatus() == Status.COMPLETED) {
@@ -46,7 +47,7 @@ public class TodoService {
   }
 
   public void delete(TodoEntity todo) {
-    this.todos.remove(todo.getTodo());
+    this.todos.remove(todo);
   }
 
   public void toggleAllCompleted(Boolean isCompleted) {
@@ -59,7 +60,7 @@ public class TodoService {
   }
 
   private void setStatuOnAll(Status status) {
-    Iterator<TodoEntity> it = this.todos.values().iterator();
+    Iterator<TodoEntity> it = this.todos.iterator();
     while (it.hasNext()) {
       TodoEntity entity = it.next();
       entity.setStatus(status);

@@ -10,6 +10,8 @@ import com.studiomediatech.model.TodoListModel;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -33,9 +35,16 @@ import org.apache.wicket.model.StringResourceModel;
 @SuppressWarnings("serial")
 public class HomePage extends WebPage {
 
-  private static final String TOGGLE_ALL_BUTTON_ID = "toggleAllButton";
+  private static final Filter ALL = new Filter(Status.ACTIVE, Status.COMPLETED);
+  private static final Filter ACTIVE = new Filter(Status.ACTIVE);
+  private static final Filter COMPLETED = new Filter(Status.COMPLETED);
+
   private static final String IS_ACTIVE_CLASS = "is-active";
+
   private static final String CLASS_ATTRIBUTE = "class";
+  private static final String AUTOFOCUS_ATTRIBUTE = "autofocus";
+
+  private static final String TOGGLE_ALL_BUTTON_ID = "toggleAllButton";
   private static final String FILTER_COMPLETED_ID = "filterCompleted";
   private static final String FILTER_ACTIVE_ID = "filterActive";
   private static final String FILTER_ALL_ID = "filterAll";
@@ -63,6 +72,7 @@ public class HomePage extends WebPage {
   private final IModel<List<Todo>> completed;
   private final IModel<List<Todo>> filtered;
   private final IModel<Todo> newTodo;
+  private final IModel<Todo> editTodo;
   private final IModel<Boolean> toggleAllCompleted;
 
   public HomePage() {
@@ -70,11 +80,12 @@ public class HomePage extends WebPage {
 
     // Models
     this.all = new TodoListModel();
-    this.filter = Model.of(new Filter(Status.ACTIVE, Status.COMPLETED));
-    this.active = new FilteredTodoListModel(this.all, Model.of(new Filter(Status.ACTIVE)));
-    this.completed = new FilteredTodoListModel(this.all, Model.of(new Filter(Status.COMPLETED)));
+    this.filter = Model.of(ALL);
+    this.active = new FilteredTodoListModel(this.all, Model.of(ACTIVE));
+    this.completed = new FilteredTodoListModel(this.all, Model.of(COMPLETED));
     this.filtered = new FilteredTodoListModel(this.all, this.filter);
     this.newTodo = Model.of(new Todo());
+    this.editTodo = Model.of();
     this.toggleAllCompleted = Model.of(true);
 
     // Components
@@ -96,7 +107,19 @@ public class HomePage extends WebPage {
     };
 
     // NOTE: Property binding
-    form.add(new TextField<String>("todo").setRequired(true));
+    TextField<String> todoField = new TextField<String>("todo") {
+      @Override
+      protected void onComponentTag(ComponentTag tag) {
+        super.onComponentTag(tag);
+        if (HomePage.this.editTodo.getObject() != null) {
+          tag.remove(AUTOFOCUS_ATTRIBUTE);
+        }
+      }
+    };
+
+    todoField.setRequired(true);
+
+    form.add(todoField);
 
     return form;
   }
@@ -105,9 +128,9 @@ public class HomePage extends WebPage {
     Form<Boolean> form = new Form<Boolean>(TOGGLE_ALL_ID, this.toggleAllCompleted) {
       @Override
       protected void onSubmit() {
-        Boolean toCompletedStatus = getModelObject();
-        TodoMVC.getTodoService().toggleAllCompleted(toCompletedStatus);
-        setModelObject(!toCompletedStatus);
+        Boolean toCompleted = getModelObject();
+        TodoMVC.getTodoService().toggleAllCompleted(toCompleted);
+        setModelObject(!toCompleted);
         HomePage.this.all.detach();
       }
     };
@@ -130,6 +153,7 @@ public class HomePage extends WebPage {
   }
 
   private Component todoList() {
+
     ListView<Todo> list = new ListView<Todo>(TODO_LIST_ID, this.filtered) {
       @Override
       protected void onConfigure() {
@@ -137,11 +161,31 @@ public class HomePage extends WebPage {
       }
 
       @Override
-      protected void populateItem(ListItem<Todo> item) {
-        item.add(toggleComplete(item.getModel()));
-        item.add(delete(item.getModel()));
-        item.add(editLink(item.getModel()));
-        item.add(new AttributeAppender(CLASS_ATTRIBUTE, new PropertyModel<String>(item.getModel(), "status")).setSeparator(" "));
+      protected void populateItem(final ListItem<Todo> item) {
+
+        IModel<Todo> model = item.getModel();
+
+        final Behavior invisibleWhenEditing = new Behavior() {
+          @Override
+          public void onConfigure(Component component) {
+            component.setVisible(!item.getModelObject().equals(HomePage.this.editTodo.getObject()));
+          }
+        };
+
+        item.add(toggleComplete(model).add(invisibleWhenEditing));
+        item.add(delete(model).add(invisibleWhenEditing));
+        item.add(edit(model).add(invisibleWhenEditing));
+        item.add(editTodo(model));
+
+        item.add(new AttributeAppender(CLASS_ATTRIBUTE, new Model<String>() {
+          @Override
+          public String getObject() {
+            if (item.getModelObject().equals(HomePage.this.editTodo.getObject())) {
+              return Status.EDITING.toString();
+            }
+            return item.getModelObject().getStatus().toString();
+          }
+        }).setSeparator(" "));
       }
 
       private Component toggleComplete(final IModel<Todo> model) {
@@ -151,9 +195,7 @@ public class HomePage extends WebPage {
             getModelObject().toggleComplete();
           }
         };
-
         form.add(toggleButton(model));
-
         return form;
       }
 
@@ -166,7 +208,6 @@ public class HomePage extends WebPage {
             if (model.getObject().getStatus() == Status.COMPLETED) {
               return IS_ACTIVE_CLASS;
             }
-
             return "";
           }
         }).setSeparator(" "));
@@ -182,7 +223,6 @@ public class HomePage extends WebPage {
             }
           }
         }));
-
         return button;
       }
 
@@ -196,18 +236,36 @@ public class HomePage extends WebPage {
         };
       }
 
-      private Component editLink(IModel<Todo> model) {
+      private Component edit(IModel<Todo> model) {
         Link<Todo> link = new Link<Todo>(EDIT_LINK_ID, model) {
           @Override
           public void onClick() {
-            System.out.println("TODO: Set edit model: " + getDefaultModelObjectAsString());
+            HomePage.this.editTodo.setObject(getModelObject());
+          }
+        };
+        link.add(new Label(TODO_TEXT_ID, new PropertyModel<String>(model, "todo")));
+        return link;
+      }
+
+      private Component editTodo(IModel<Todo> model) {
+        Form<Todo> form = new Form<Todo>("editTodo", new CompoundPropertyModel<Todo>(model)) {
+          @Override
+          protected void onSubmit() {
+            HomePage.this.editTodo.setObject(null);
+            HomePage.this.all.detach();
+          }
+
+          @Override
+          protected void onConfigure() {
+            setVisible(getModelObject().equals(HomePage.this.editTodo.getObject()));
           }
         };
 
-        link.add(new Label(TODO_TEXT_ID, new PropertyModel<String>(model, "todo")));
+        form.add(new TextField<String>("todo").setRequired(true));
 
-        return link;
+        return form;
       }
+
     };
 
     return list;
@@ -253,6 +311,8 @@ public class HomePage extends WebPage {
       @Override
       protected void onSubmit() {
         TodoMVC.getTodoService().clearCompleted();
+        HomePage.this.toggleAllCompleted.setObject(true);
+        HomePage.this.editTodo.setObject(null);
         HomePage.this.all.detach();
       }
     };
@@ -263,15 +323,15 @@ public class HomePage extends WebPage {
   }
 
   private Component filterAll() {
-    return filterLink(FILTER_ALL_ID, new Filter(Status.ACTIVE, Status.COMPLETED));
+    return filterLink(FILTER_ALL_ID, ALL);
   }
 
   private Component filterActive() {
-    return filterLink(FILTER_ACTIVE_ID, new Filter(Status.ACTIVE));
+    return filterLink(FILTER_ACTIVE_ID, ACTIVE);
   }
 
   private Component filterCompleted() {
-    return filterLink(FILTER_COMPLETED_ID, new Filter(Status.COMPLETED));
+    return filterLink(FILTER_COMPLETED_ID, COMPLETED);
   }
 
   private Component filterLink(String id, final Filter filter) {
