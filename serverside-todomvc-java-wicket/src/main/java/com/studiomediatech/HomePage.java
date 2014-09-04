@@ -2,6 +2,9 @@ package com.studiomediatech;
 
 import java.util.List;
 
+import com.studiomediatech.component.FilterLabel;
+import com.studiomediatech.component.ItemsLeftCountLabel;
+import com.studiomediatech.component.TodoTextLabel;
 import com.studiomediatech.domain.Filter;
 import com.studiomediatech.domain.Status;
 import com.studiomediatech.domain.Todo;
@@ -26,7 +29,6 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 
 /**
  * The home page displays the list of todos and allows adding, deleting and
@@ -62,18 +64,20 @@ public class HomePage extends WebPage {
   private static final String NEW_TODO_ID = "new";
   private static final String ACTIVE_COUNT_ID = "activeCount";
   private static final String ACTIVE_COUNT_CAPTION_ID = "activeCountCaption";
+  private static final String COMPLETED_COUNT_ID = "completedCount";
 
   private static final long serialVersionUID = -8474930871026680132L;
 
   // All state is encapsulated by models
   private final IModel<Filter> filter;
   private final IModel<List<Todo>> all;
-  private final IModel<List<Todo>> active;
-  private final IModel<List<Todo>> completed;
   private final IModel<List<Todo>> filtered;
   private final IModel<Todo> newTodo;
   private final IModel<Todo> editTodo;
   private final IModel<Boolean> toggleAllCompleted;
+
+  private final IModel<Integer> activeCount;
+  private final IModel<Integer> completedCount;
 
   public HomePage() {
     super();
@@ -81,8 +85,10 @@ public class HomePage extends WebPage {
     // Models
     this.all = new TodoListModel();
     this.filter = Model.of(ALL);
-    this.active = new FilteredTodoListModel(this.all, Model.of(ACTIVE));
-    this.completed = new FilteredTodoListModel(this.all, Model.of(COMPLETED));
+    FilteredTodoListModel active = new FilteredTodoListModel(this.all, Model.of(ACTIVE));
+    this.activeCount = new PropertyModel<Integer>(active, "size");
+    FilteredTodoListModel completed = new FilteredTodoListModel(this.all, Model.of(COMPLETED));
+    this.completedCount = new PropertyModel<Integer>(completed, "size");
     this.filtered = new FilteredTodoListModel(this.all, this.filter);
     this.newTodo = Model.of(new Todo());
     this.editTodo = Model.of();
@@ -91,7 +97,7 @@ public class HomePage extends WebPage {
     // Components
     add(newTodo());
     add(toggleAll());
-    add(filter());
+    add(new FilterLabel(FILTER_CAPTION_ID, this.filter));
     add(todoList());
     add(controls());
   }
@@ -137,19 +143,15 @@ public class HomePage extends WebPage {
 
     form.add(new WebMarkupContainer(TOGGLE_ALL_BUTTON_ID).add(new AttributeAppender(CLASS_ATTRIBUTE,
                                                                                     new Model<String>() {
-                                                                                      @Override
-                                                                                      public String getObject() {
-                                                                                        return HomePage.this.toggleAllCompleted.getObject()
-                                                                                                                                           ? ""
-                                                                                                                                           : IS_ACTIVE_CLASS;
-                                                                                      }
-                                                                                    }).setSeparator(" ")));
+      @Override
+      public String getObject() {
+        return HomePage.this.toggleAllCompleted.getObject()
+            ? ""
+            : IS_ACTIVE_CLASS;
+      }
+    }).setSeparator(" ")));
 
     return form;
-  }
-
-  private Component filter() {
-    return new Label(FILTER_CAPTION_ID, this.filter);
   }
 
   private Component todoList() {
@@ -243,7 +245,7 @@ public class HomePage extends WebPage {
             HomePage.this.editTodo.setObject(getModelObject());
           }
         };
-        link.add(new Label(TODO_TEXT_ID, new PropertyModel<String>(model, "todo")));
+        link.add(new TodoTextLabel(TODO_TEXT_ID, model));
         return link;
       }
 
@@ -279,8 +281,9 @@ public class HomePage extends WebPage {
       }
     };
 
-    controls.add(activeCount());
-    controls.add(activeCountCaption());
+    controls.add(new Label(ACTIVE_COUNT_ID, this.activeCount));
+    controls.add(new ItemsLeftCountLabel(ACTIVE_COUNT_CAPTION_ID, this.activeCount));
+
     controls.add(clearCompleted());
     controls.add(filterAll());
     controls.add(filterActive());
@@ -289,23 +292,11 @@ public class HomePage extends WebPage {
     return controls;
   }
 
-  private Component activeCount() {
-    return new Label(ACTIVE_COUNT_ID, new PropertyModel<Integer>(this.active, "size"));
-  }
-
-  private Component activeCountCaption() {
-    return new Label(ACTIVE_COUNT_CAPTION_ID,
-                     new StringResourceModel("todos.count.active",
-                                             HomePage.this,
-                                             null,
-                                             new Object[]{ new PropertyModel<Integer>(this.active, "size") }));
-  }
-
   private Component clearCompleted() {
     Form<Void> form = new Form<Void>(CLEAR_COMPLETED_ID) {
       @Override
       protected void onConfigure() {
-        setVisible(HomePage.this.completed.getObject().size() > 0);
+        setVisible(HomePage.this.completedCount.getObject() > 0);
       }
 
       @Override
@@ -317,7 +308,7 @@ public class HomePage extends WebPage {
       }
     };
 
-    form.add(new Label("completedCount", new PropertyModel<Integer>(this.completed, "size")));
+    form.add(new Label(COMPLETED_COUNT_ID, this.completedCount));
 
     return form;
   }
@@ -342,14 +333,12 @@ public class HomePage extends WebPage {
         setResponsePage(getPage());
       }
     };
-
     link.add(new AttributeAppender(CLASS_ATTRIBUTE, new Model<String>() {
       @Override
       public String getObject() {
         return HomePage.this.filter.getObject().equals(filter) ? IS_ACTIVE_CLASS : "";
       }
     }).setSeparator(" "));
-
     return link;
   }
 
