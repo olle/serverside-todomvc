@@ -9,9 +9,7 @@ import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.thymeleaf.spring4.SpringTemplateEngine;
@@ -25,9 +23,6 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
 
   private static final String MESSAGE_SOURCE = "/WEB-INF/i18n/messages";
   private static final String VIEWS = "/WEB-INF/views/";
-
-  private static final String RESOURCES_HANDLER = "/resources/";
-  private static final String RESOURCES_LOCATION = RESOURCES_HANDLER + "**";
 
   @Override
   public RequestMappingHandlerMapping requestMappingHandlerMapping() {
@@ -71,24 +66,19 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
   }
 
   @Override
-  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    registry.addResourceHandler(RESOURCES_HANDLER).addResourceLocations(RESOURCES_LOCATION);
-  }
-
-  @Override
   public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
     configurer.enable();
   }
 
-  /**
-   * Handles favicon.ico requests assuring no <code>404 Not Found</code> error
-   * is returned.
-   */
-  @Controller
-  static class FaviconController {
-    @RequestMapping("favicon.ico")
-    String favicon() {
-      return "forward:/resources/images/favicon.ico";
-    }
-  }
+  // /**
+  // * Handles favicon.ico requests assuring no <code>404 Not Found</code> error
+  // * is returned.
+  // */
+  // @Controller
+  // static class FaviconController {
+  // @RequestMapping("favicon.ico")
+  // String favicon() {
+  // return "forward:/favicon.ico";
+  // }
+  // }
 }
