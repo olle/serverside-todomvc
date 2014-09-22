@@ -1,35 +1,30 @@
 package com.studiomediatech.todomvc;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.studiomediatech.todomvc.domain.Status;
-import com.studiomediatech.todomvc.domain.TodoEntity;
+import com.google.common.collect.Lists;
+import com.studiomediatech.todomvc.domain.Todo;
 
 import org.springframework.stereotype.Service;
 
 @Service
 public class TodoService {
 
-  private static final Set<TodoEntity> todos = new HashSet<>();
+  private static final Set<Todo> todos = new LinkedHashSet<>();
 
-  public List<TodoEntity> findAll() {
+  public List<Todo> findAll() {
 
-    TodoEntity todo = new TodoEntity();
-    todo.setStatus(Status.ACTIVE);
-    todo.setTodo("Make more todos");
-
-    return Arrays.asList(todo);
+    return Lists.newArrayList(todos);
   }
 
-  public TodoEntity newTodo() {
+  public Todo newTodo() {
 
-    return new TodoEntity();
+    return new Todo();
   }
 
-  public void save(TodoEntity todo) {
+  public void save(Todo todo) {
     TodoService.todos.add(todo);
   }
 }

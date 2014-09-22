@@ -2,21 +2,19 @@ package com.studiomediatech.todomvc.domain;
 
 import com.google.common.base.Objects;
 
-public class TodoEntity {
+public class Todo {
 
   private String todo;
   private Status status;
 
   private final long id;
 
-  public TodoEntity() {
-
+  public Todo() {
     this.status = Status.ACTIVE;
     this.id = System.currentTimeMillis();
   }
 
-  public TodoEntity(String todo) {
-
+  public Todo(String todo) {
     this.todo = todo;
     this.status = Status.ACTIVE;
     this.id = System.currentTimeMillis();
@@ -34,12 +32,18 @@ public class TodoEntity {
     return this.status;
   }
 
+  public String getStatusClass() {
+    if (this.status.equals(Status.ACTIVE)) {
+      return "item";
+    }
+    return this.status.toString();
+  }
+
   public void setStatus(Status status) {
     this.status = status;
   }
 
   public long getId() {
-
     return this.id;
   }
 
@@ -55,13 +59,11 @@ public class TodoEntity {
 
   @Override
   public int hashCode() {
-
     return Objects.hashCode(this.id);
   }
 
   @Override
   public boolean equals(Object obj) {
-
     if (this == obj) {
       return true;
     }
@@ -74,7 +76,7 @@ public class TodoEntity {
       return false;
     }
 
-    TodoEntity other = (TodoEntity) obj;
+    Todo other = (Todo) obj;
     return Objects.equal(other.id, this.id);
   }
 

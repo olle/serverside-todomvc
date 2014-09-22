@@ -2,7 +2,7 @@ package com.studiomediatech.todomvc.domain;
 
 public enum Status {
 
-  ACTIVE(""),
+  ACTIVE("item"),
   COMPLETED("completed"),
   EDITING("editing");
 

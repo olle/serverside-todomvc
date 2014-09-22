@@ -6,16 +6,10 @@
     <link rel="stylesheet" href="../../css/style.css" th:href="@{/css/style.css}" />
   </head>
   <body class="grey-plaid-bg modern-font">
-
     <section id="serverside-todomvc">
-
       <header>
         <h1>Todos</h1>
         <h2 class="is-hidden">Create a new task</h2>
-        <!--
-          TODO: When this form is posted, a new todo should be created and
-                persisted.
-         -->
         <form th:action="@{/saveTodo}" th:object="${newTodo}" method="post" class="items-create-new">
           <!--
             TODO: Remove `autofocus="autofocus"` attribute if the page is
@@ -31,7 +25,6 @@
               items to show at all. 
        -->
       <section class="primary" th:unless="${#lists.isEmpty(allTodos)}">
-      
         <h3 class="is-hidden">Mark as completed</h3>
         <!--
           TODO: If this form is posted, then all, not yet completed tasks,
@@ -50,7 +43,7 @@
             TODO: Mark the list element as `item` if not completed or being
                   edited.
            -->
-          <li th:each="todo : ${allTodos}" class="item clearfix">
+          <li th:each="todo : ${allTodos}" class="clearfix" th:classappend="${todo.statusClass}">
             <!--
               TODO: Posting this form must toggle the completed state of the
                     todo item, identified by the given id.
