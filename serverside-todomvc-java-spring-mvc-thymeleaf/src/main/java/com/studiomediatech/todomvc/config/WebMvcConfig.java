@@ -1,14 +1,13 @@
 package com.studiomediatech.todomvc.config;
 
-import com.studiomediatech.todomvc.TodoMVC;
+import com.studiomediatech.todomvc.TodoMVCApp;
 
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
@@ -18,10 +17,9 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 @Configuration
-@ComponentScan(basePackageClasses = TodoMVC.class, includeFilters = @Filter(Controller.class), useDefaultFilters = false)
+@ComponentScan(basePackageClasses = TodoMVCApp.class, includeFilters = @Filter(Controller.class), useDefaultFilters = false)
 class WebMvcConfig extends WebMvcConfigurationSupport {
 
-  private static final String MESSAGE_SOURCE = "/WEB-INF/i18n/messages";
   private static final String VIEWS = "/WEB-INF/views/";
 
   @Override
@@ -30,14 +28,6 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
     requestMappingHandlerMapping.setUseSuffixPatternMatch(false);
     requestMappingHandlerMapping.setUseTrailingSlashMatch(false);
     return requestMappingHandlerMapping;
-  }
-
-  @Bean(name = "messageSource")
-  public MessageSource messageSource() {
-    ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-    messageSource.setBasename(MESSAGE_SOURCE);
-    messageSource.setCacheSeconds(5);
-    return messageSource;
   }
 
   @Bean
@@ -70,15 +60,15 @@ class WebMvcConfig extends WebMvcConfigurationSupport {
     configurer.enable();
   }
 
-  // /**
-  // * Handles favicon.ico requests assuring no <code>404 Not Found</code> error
-  // * is returned.
-  // */
-  // @Controller
-  // static class FaviconController {
-  // @RequestMapping("favicon.ico")
-  // String favicon() {
-  // return "forward:/favicon.ico";
-  // }
-  // }
+  /**
+   * Handles favicon.ico requests assuring no <code>404 Not Found</code> error
+   * is returned.
+   */
+  @Controller
+  static class FaviconController {
+    @RequestMapping("favicon.ico")
+    String favicon() {
+      return "forward:/favicon.ico";
+    }
+  }
 }

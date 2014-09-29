@@ -1,5 +1,5 @@
 package com.studiomediatech.todomvc;
 
-public interface TodoMVC {
+public interface TodoMVCApp {
   // Ok
 }

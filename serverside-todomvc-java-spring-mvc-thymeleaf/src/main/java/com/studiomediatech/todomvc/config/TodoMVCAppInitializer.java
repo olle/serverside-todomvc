@@ -6,7 +6,7 @@ import javax.servlet.ServletRegistration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
+public class TodoMVCAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
   @Override
   protected String[] getServletMappings() {

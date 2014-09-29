@@ -6,8 +6,8 @@ public class Todo {
 
   private String todo;
   private Status status;
-
-  private final long id;
+  private Status lastStatus;
+  private long id;
 
   public Todo() {
     this.status = Status.ACTIVE;
@@ -32,9 +32,23 @@ public class Todo {
     return this.status;
   }
 
+  public boolean isCompleted() {
+    return this.status.equals(Status.COMPLETED);
+  }
+
+  public boolean isEditing() {
+    return this.status.equals(Status.EDITING);
+  }
+
   public String getStatusClass() {
     if (this.status.equals(Status.ACTIVE)) {
       return "item";
+    }
+    if (this.status.equals(Status.COMPLETED)) {
+      return "item completed";
+    }
+    if (this.status.equals(Status.EDITING)) {
+      return "item editing";
     }
     return this.status.toString();
   }
@@ -45,6 +59,10 @@ public class Todo {
 
   public long getId() {
     return this.id;
+  }
+
+  public void setId(long id) {
+    this.id = id;
   }
 
   @Override
@@ -80,4 +98,22 @@ public class Todo {
     return Objects.equal(other.id, this.id);
   }
 
+  public void toggleCompleted() {
+    if (this.status == Status.COMPLETED) {
+      this.status = Status.ACTIVE;
+    }
+    else {
+      this.status = Status.COMPLETED;
+    }
+  }
+
+  public void beginEditing() {
+    this.lastStatus = this.status;
+    this.status = Status.EDITING;
+  }
+
+  public void endEditing() {
+    this.status = this.lastStatus;
+    this.lastStatus = null;
+  }
 }
