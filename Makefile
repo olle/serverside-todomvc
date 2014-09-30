@@ -36,15 +36,15 @@ all: examples
 
 ## Build the examples
 examples:
-	$(MAKE) -C serverside-todomvc-java-servlet
-	$(MAKE) -C serverside-todomvc-java-wicket
-	$(MAKE) -C serverside-todomvc-java-spring-mvc-thymeleaf
+	$(MAKE) -C examples-java-servlet
+	$(MAKE) -C examples-java-wicket
+	$(MAKE) -C examples-java-spring-mvc-thymeleaf
 
 ## Clean out all the examples, duh!
 clean:
-	$(MAKE) -C serverside-todomvc-java-servlet $@
-	$(MAKE) -C serverside-todomvc-java-wicket $@
-	$(MAKE) -C serverside-todomvc-java-spring-mvc-thymeleaf
+	$(MAKE) -C examples-java-servlet $@
+	$(MAKE) -C examples-java-wicket $@
+	$(MAKE) -C examples-java-spring-mvc-thymeleaf
 
 ## TODO: This should be considered again, perhaps it's better
 ##       to create explicit test setup too?
