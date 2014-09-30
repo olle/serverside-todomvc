@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.studiomediatech.serverside-todomvc</groupId>
-  <artifactId>serverside-todomvc-java-wicket</artifactId>
+  <artifactId>examples-java-wicket</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
@@ -57,7 +57,7 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-    
+
   </dependencies>
 
   <build>

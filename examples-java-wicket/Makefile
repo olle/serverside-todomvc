@@ -6,7 +6,7 @@ build:
 clean:
 	@mvn clean
 
-##THIS="serverside-todomvc-java-wicket"
+##THIS="examples-java-wicket"
 ##HERE=`pwd`
 ##THERE="${HERE}/../"
 ##export URL="http://localhost:8080/${THIS}/"

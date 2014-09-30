@@ -50,7 +50,7 @@ public class Start {
 
     WebAppContext bb = new WebAppContext();
     bb.setServer(server);
-    bb.setContextPath("/serverside-todomvc-wicket");
+    bb.setContextPath("/examples-java-wicket");
     bb.setWar("src/main/webapp");
 
     // START JMX SERVER
