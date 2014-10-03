@@ -1,204 +1,76 @@
-<!--
-  This is the template for any Server-side TodoMVC example implementation. It's
-  a good option to get going fast. Comes with ready baked styling and HTML, that
-  is sort of adapted to be more semantic and correct for our server-side
-  purposes.
-
-  You can just take this file, read through and build handlers for the `TODO:`
-  notes (no pun intended). It should be pretty easy.
-
-  NOTE: Any `${foobar}` placeholder, is not a specific variable but rather only
-        a hint that it must be replaced with some suitable properties. For
-        example `${todo-id}` is typically the primary key of a todo item.
- -->
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <title>Java Spark Mustache • Server-side TodoMVC</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body class="grey-plaid-bg modern-font">
-
     <section id="serverside-todomvc">
-
       <header>
         <h1>Todo</h1>
         <h2 class="is-hidden">Create a new task</h2>
-        <!--
-          TODO: When this form is posted, a new todo should be created and
-                persisted.
-         -->
-        <form method="post" class="items-create-new">
-          <input type="hidden" name="action" value="create" />
-          <!--
-            TODO: Remove `autofocus="autofocus"` attribute if the page is
-                  currently in the mode of editing a todo item.
-           -->
-          <input type="text" name="item-text" placeholder="What needs to be done?" autofocus="autofocus" autocomplete="off" class="text-input"/>
+        <form action="/new-todo" method="post" class="items-create-new">
+          <input type="text" name="todo" placeholder="What needs to be done?" {{^editing}}autofocus="autofocus"{{/editing}} autocomplete="off" class="text-input"/>
           <button class="is-hidden"><span class="is-hidden">Create new todo</span></button>
         </form>
       </header>
-
-      <!--
-        TODO: This section must only be visible (exist) if there are any todo
-              items to show at all.
-       -->
+      {{#hasFilteredTodos}}
       <section class="primary">
-
         <h3 class="is-hidden">Mark as completed</h3>
-        <!--
-          TODO: If this form is posted, then all, not yet completed tasks,
-                must be marked as completed.
-         -->
-        <form method="post" class="items-mark-all-completed">
-          <input type="hidden" name="action" value="complete" />
-          <input type="hidden" name="item-id" value="all" />
+        <form action="/toggle-all-completed" method="post" class="items-mark-all-completed">
           <button class="icon angle-double down"><span class="is-hidden">Mark all as completed</span></button>
         </form>
-
-        <h2 class="is-hidden">List of ${current-filter} tasks:</h2>
+        <h2 class="is-hidden">List of {{filter.name}} tasks:</h2>
         <ul class="items-list">
-
-          <!--
-            TODO: Mark the list element as `item` if not completed or being
-                  edited.
-           -->
-          <li class="item clearfix">
-            <!--
-              TODO: Posting this form must toggle the completed state of the
-                    todo item, identified by the given id.
-             -->
-            <form method="post" class="item-toggle-completed">
-              <input type="hidden" name="action" value="toggle" />
-              <input type="hidden" name="item-id" value="${item-id}" />
-              <!--
-                TODO: Replace `${completed}` with current item completed state (completed/active).
-               -->
-              <button class="icon check"><span class="is-hidden">Mark as ${completed}</span></button>
+          {{#todos}}
+          <li class="{{status}} clearfix">
+            {{#editing}}
+            <form action="/update" method="post" class="item-edit">
+              <input type="hidden" name="id" value="{{id}}" />
+              <input type="text" name="todo" value="{{todo}}" autofocus="autofocus" autocomplete="off" class="item-text" />
             </form>
-            <!--
-              TODO: Clicking the link, should create a page where the todo,
-                    identified by the given id, is rendered in edit-mode.
-
-                    See last list element in the template.
-             -->
-            <a href="?action=edit&item-id=${item-id}" class="item-text">${item-text}</a>
-            <!--
-              TODO: Posting this form should delete the todo item, identified
-                    by the given id.
-             -->
-            <form method="post" class="item-delete">
-              <input type="hidden" name="action" value="delete" />
-              <input type="hidden" name="item-id" value="${item-id}" />
+            {{/editing}}
+            {{^editing}}
+            <form action="/toggle-status" method="post" class="item-toggle-completed">
+              <input type="hidden" name="id" value="{{id}}" />
+              <button class="icon check {{checked}}"><span class="is-hidden">Mark as {{inverse}}</span></button>
+            </form>
+            <a href="/edit/{{id}}" class="item-text">{{todo}}</a>
+            <form action="/delete" method="post" class="item-delete">
+              <input type="hidden" name="id" value="{{id}}" />
               <button class="icon cross"><span class="is-hidden">Delete</span></button>
             </form>
+            {{/editing}}
           </li>
-
-          <!--
-            TODO: Mark the list item as `completed` for todo items that are
-                  done.
-           -->
-          <li class="item completed clearfix">
-            <form method="post" class="item-toggle-completed">
-              <input type="hidden" name="action" value="toggle" />
-              <input type="hidden" name="item-id" value="${item-id}" />
-              <button class="icon check is-active"><span class="is-hidden">Mark as ${active}</span></button>
-            </form>
-            <span  class="item-text">${todo-item-text}</span>
-            <form method="post" class="item-delete">
-              <input type="hidden" name="action" value="delete" />
-              <input type="hidden" name="item-id" value="${item-id}" />
-              <button class="icon cross"><span class="is-hidden">Delete</span></button>
-            </form>
-          </li>
-
-          <!--
-            TODO: Mark the list item as `editing` for a todo item that is
-                  currently being edited.
-           -->
-          <li class="item editing clearfix">
-              <!--
-                TODO: Posting this form must save the changes made to the todo
-                      item, identified by the given id.
-               -->
-              <form method="post" class="item-edit">
-                <input type="hidden" name="action" value="update" />
-                <input type="hidden" name="item-id" value="${item-id}" />
-                <!--
-                  NOTE: This should be the only element with the `autofocus`
-                        attribute set.
-
-                        Check the create-form on the top.
-                 -->
-                <input type="text" name="item-text" placeholder="${todo-item-text}" autofocus="autofocus" autocomplete="off" class="item-text" />
-              </form>
-          </li>
-
+          {{/todos}}
         </ul>
-
       </section>
-
-      <!--
-        TODO: This section must only be visible if there are todo items to show.
-       -->
+      {{/hasFilteredTodos}}
+      {{#hasTodos}}
       <section class="secondary">
-
         <h3 class="is-hidden">Current status</h3>
-        <!--
-          TODO: Provide a count and properly pluralized label of how many active
-                todo items there are left.
-         -->
-        <p class="items-active-count"><strong>${count}</strong> ${'item|s'} left</p>
-
+        <p class="items-active-count"><strong>{{active.count}}</strong> {{active.label}} left</p>
         <h3 class="is-hidden">Filter task list</h3>
         <ul class="items-filter-selection">
-          <!--
-            TODO: Allow to see todo items based on filters `active` (only the
-                  active) and `completed` (only the completed items) - as well
-                  as showing `all`, which is selected by default.
-           -->
-          <li><a href="?filter=all" class="is-active">All</a></li>
-          <li><a href="?filter=active">Active</a></li>
-          <li><a href="?filter=completed">Completed</a></li>
+          <li><a href="/?filter=all"       {{#filter.all}}class="is-active"{{/filter.all}}>All</a></li>
+          <li><a href="/?filter=active"    {{#filter.active}}class="is-active"{{/filter.active}}>Active</a></li>
+          <li><a href="/?filter=completed" {{#filter.completed}}class="is-active"{{/filter.completed}}>Completed</a></li>
         </ul>
-
         <h3 class="is-hidden">Clear completed tasks</h3>
-        <!--
-          TODO: Posting this form must delete all todo items that are already
-                marked as being completed.
-         -->
-        <form method="post" class="items-clear-completed is-inline">
-          <input type="hidden" name="action" value="clear" />
-          <button class="button embossed"><span>Clear completed (${count})</span></button>
+        <form action="/clear-completed" method="post" class="items-clear-completed is-inline">
+          <button class="button embossed"><span>Clear completed ({{completed.count}})</span></button>
         </form>
       </section>
-
+      {{/hasTodos}}
     </section>
-
     <footer>
       <h4 class="is-hidden">Help</h4>
       <p>Click on the text to edit a todo.</p>
-
       <h4 class="is-hidden">About the Server-side TodoMVC application</h4>
-
-      <!--
-        TODO: Remove the paragraph below.
-       -->
-      <p>
-        Original template by <a href="http://github.com/sindresorhus">Sindre Sorhus</a><br />
-        Reworked by <a href="http://github.com/olle">Olle Törnström</a>
-      </p>
-
-      <!--
-        TODO: Properly replace the paragraph below with a link to you or your
-              organization.
-       -->
-      <p>Created by <a href="http://todomvc.com">you</a></p>
-
+      <p>Created by <a href="http://github.com/olle">Olle Törnström</a></p>
       <p>Part of <a href="http://github.com/olle/serverside-todomvc">Server-side TodoMVC</a></p>
     </footer>
-
     <!-- Look ma no JavaScript! -->
   </body>
 </html>
