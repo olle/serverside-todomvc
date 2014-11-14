@@ -52,7 +52,7 @@
       </section>
       <section class="secondary">
         <h3 class="is-hidden">Current status</h3>
-        <p class="items-active-count"><strong><?= $_active ?></strong> <?= $_active > 1 ? 'items' : 'item' ?> left</p>
+        <p class="items-active-count"><strong>${todos?size}</strong> <#if todos?size gt 1>items<#else>item</#if> left</p>
         <h3 class="is-hidden">Filter task list</h3>
         <ul class="items-filter-selection">
           <li><a href="?filter=all" class="<?= $_filter === 'all' ? 'is-active' : '' ?>">All</a></li>
