@@ -17,15 +17,15 @@ public class InMemoryTodoService implements TodoService {
   private static final Map<String, Todo> todos = new LinkedHashMap<>();
 
   @Override
-  public void create(Todo t) {
+  public void create(Todo todo) {
 
-    t.setId("" + System.currentTimeMillis());
+    todo.setId("" + System.currentTimeMillis());
 
-    todos.put(t.getId(), t);
+    todos.put(todo.getId(), todo);
   }
 
   @Override
-  public List<Todo> list() {
+  public List<Todo> list(String filter) {
 
     return Lists.newArrayList(todos.values());
   }

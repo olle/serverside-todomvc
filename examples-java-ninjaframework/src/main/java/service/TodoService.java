@@ -8,5 +8,5 @@ public interface TodoService {
 
   void create(Todo todo);
 
-  List<Todo> list();
+  List<Todo> list(String filter);
 }

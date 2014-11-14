@@ -55,9 +55,9 @@
         <p class="items-active-count"><strong>${todos?size}</strong> <#if todos?size gt 1>items<#else>item</#if> left</p>
         <h3 class="is-hidden">Filter task list</h3>
         <ul class="items-filter-selection">
-          <li><a href="?filter=all" class="<?= $_filter === 'all' ? 'is-active' : '' ?>">All</a></li>
-          <li><a href="?filter=active" class="<?= $_filter === 'active' ? 'is-active' : '' ?>">Active</a></li>
-          <li><a href="?filter=completed" class="<?= $_filter === 'completed' ? 'is-active' : '' ?>">Completed</a></li>
+          <li><a href="?filter=all"       class="<#if session.filter == 'all'       >is-active</#if>">All</a></li>
+          <li><a href="?filter=active"    class="<#if session.filter == 'active'    >is-active</#if>">Active</a></li>
+          <li><a href="?filter=completed" class="<#if session.filter == 'completed' >is-active</#if>">Completed</a></li>
         </ul> 
         <#if false>
         <h3 class="is-hidden">Clear completed tasks</h3>
