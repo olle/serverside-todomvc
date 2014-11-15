@@ -4,13 +4,15 @@ public class Todo {
 
   private String id;
   private String todo;
+  private String status;
 
   public Todo() {
+    this.status = "active";
   }
 
   public String getId() {
 
-    return id;
+    return this.id;
   }
 
   public void setId(String id) {
@@ -20,11 +22,30 @@ public class Todo {
 
   public String getTodo() {
 
-    return todo;
+    return this.todo;
   }
 
   public void setTodo(String todo) {
 
     this.todo = todo;
+  }
+
+  public String getStatus() {
+    return this.status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
+  public String getToggle() {
+    if (this.status.equals("active")) {
+      return "completed";
+    }
+    return "active";
+  }
+
+  public void toggleStatus() {
+    this.status = getToggle();
   }
 }

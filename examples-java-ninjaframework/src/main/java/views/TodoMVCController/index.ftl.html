@@ -11,59 +11,56 @@
         <h1>Todos</h1>
         <h2 class="is-hidden">Create a new task</h2>
         <form method="post" action="todos" class="items-create-new">
-          <input type="text" name="todo" placeholder="What needs to be done?" <#if !_edit?has_content>autofocus="autofocus"</#if> autocomplete="off" class="text-input"/>
+          <input type="text" name="todo" placeholder="What needs to be done?" <#if !session.edit?has_content>autofocus="autofocus"</#if> autocomplete="off" class="text-input"/>
           <button class="is-hidden"><span class="is-hidden">Create new todo</span></button>
         </form>
       </header>
       <#if todos?has_content>
       <section class="primary">
-        <h3 class="is-hidden">Mark as <?= $_status ?></h3>
-        <form method="post" class="items-mark-all-completed">
-          <input type="hidden" name="action" value="toggle-all" />
-          <button class="icon angle-double down <?= $_status === 'active' ? 'is-active' : '' ?>"><span class="is-hidden">Mark all as <?= $_status ?></span></button>
+        <h3 class="is-hidden">Mark all completed</h3>
+        <form method="post" action="complete" class="items-mark-all-completed">
+          <button class="icon angle-double down <#if allCompleted>is-active</#if>"><span class="is-hidden">Mark all completed</span></button>
         </form>
-        <h2 class="is-hidden">List of <?= $filter ?> tasks:</h2>
+        <h2 class="is-hidden">List of ${session.filter} tasks:</h2>
         <ul class="items-list">
-          <#list todos as item>
-          <li class="item <?= $todo !== $_edit ? $status : 'editing' ?> clearfix">
-            <#if true>
-            <form method="post" class="item-toggle-completed">
-              <input type="hidden" name="action" value="toggle" />
-              <input type="hidden" name="item-text" value="<?= $todo ?>" />
-              <input type="hidden" name="item-status" value="<?= $status ?>" />
-              <button class="icon check <?= $status === 'completed' ? 'is-active' : '' ?>"><span class="is-hidden">Mark as <?= $status ?></span></button>
+        <#list todos as item>
+          <#if session.edit != item.id>
+          <li class="item clearfix">
+            <form method="post" action="todos/${item.id}/toggle" class="item-toggle-completed">
+              <button class="icon check <#if item.status == 'completed'>is-active</#if>"><span class="is-hidden">Mark as ${item.toggle}</span></button>
             </form>
-            <a href="?action=edit&item-text=<?= urlencode($todo) ?>" class="item-text">${item.todo}</a>
-            <form method="post" class="item-delete">
-              <input type="hidden" name="action" value="delete" />
-              <input type="hidden" name="item-text" value="<?= $todo ?>" />
+            <a href="?edit=${item.id}" class="item-text">${item.todo}</a>
+            <form method="post" action="todos/${item.id}/delete" class="item-delete">
               <button class="icon cross"><span class="is-hidden">Delete</span></button>
             </form>
-            <#else>
-            <form method="post" class="item-edit">
-              <input type="hidden" name="action" value="update" />
-              <input type="hidden" name="item-text" value="<?= $todo ?>" />
-              <input type="text" name="new-text" value="<?= $todo ?>" autofocus="autofocus" autocomplete="off" class="item-text" />
-            </form>
-            </#if>
           </li>
-          </#list>
+          <#else>
+          <li class="item editing clearfix">
+            <form method="post" action="todos" class="item-edit">
+              <input type="hidden" name="id" value="${item.id}" />
+              <input type="hidden" name="status" value="${item.status}" />
+              <input type="text" name="todo" value="${item.todo}" autofocus="autofocus" autocomplete="off" class="item-text" />
+            </form>
+          </li>
+          </#if>
+        </#list>
         </ul>
       </section>
+      </#if>
+      <#if hasTodos>
       <section class="secondary">
         <h3 class="is-hidden">Current status</h3>
-        <p class="items-active-count"><strong>${todos?size}</strong> <#if todos?size gt 1>items<#else>item</#if> left</p>
+        <p class="items-active-count"><strong>${activeCount}</strong> <#if activeCount gt 1>items<#else>item</#if> left</p>
         <h3 class="is-hidden">Filter task list</h3>
         <ul class="items-filter-selection">
           <li><a href="?filter=all"       class="<#if session.filter == 'all'       >is-active</#if>">All</a></li>
           <li><a href="?filter=active"    class="<#if session.filter == 'active'    >is-active</#if>">Active</a></li>
           <li><a href="?filter=completed" class="<#if session.filter == 'completed' >is-active</#if>">Completed</a></li>
         </ul> 
-        <#if false>
+        <#if completedCount gt 0>
         <h3 class="is-hidden">Clear completed tasks</h3>
-        <form method="post" class="items-clear-completed is-inline">
-          <input type="hidden" name="action" value="clear" />
-          <button class="button embossed"><span>Clear completed (<?= $_completed ?>)</span></button>
+        <form method="post" action="clear" class="items-clear-completed is-inline">
+          <button class="button embossed"><span>Clear completed (${completedCount})</span></button>
         </form>
         </#if>
       </section>
