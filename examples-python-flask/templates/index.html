@@ -45,7 +45,7 @@
           <li class="item {{item.status}} clearfix">
             <form method="post" action="toggle" class="item-toggle-completed">
               <input type="hidden" name="id" value="{{id}}" />
-              <button class="icon check {% if item.status == 'completed' %}is-active{% endif %}"><span class="is-hidden">Mark as {% if item.status == 'active' %}completed{% else %}active{% endif %}</span></button>
+              <button class="icon check {% if item.completed %}is-active{% endif %}"><span class="is-hidden">Mark as {% if item.completed %}active{% else %}completed{% endif %}</span></button>
             </form>
             <!--
               TODO: Clicking the link, should create a page where the todo,
@@ -53,30 +53,16 @@
 
                     See last list element in the template.
              -->
+            {% if item.completed %}
+            <span class="item-text">{{item.task}}</span>
+            {% else %}
             <a href="?action=edit&item-id=${item-id}" class="item-text">{{item.task}}</a>
+            {% endif %}
             <form method="post" action="delete" class="item-delete">
               <input type="hidden" name="id" value="{{id}}" />
               <button class="icon cross"><span class="is-hidden">Delete</span></button>
             </form>
           </li>
-
-          <!--
-            TODO: Mark the list item as `completed` for todo items that are
-                  done.
-          <li class="item completed clearfix">
-            <form method="post" class="item-toggle-completed">
-              <input type="hidden" name="action" value="toggle" />
-              <input type="hidden" name="item-id" value="${item-id}" />
-              <button class="icon check is-active"><span class="is-hidden">Mark as ${active}</span></button>
-            </form>
-            <span class="item-text">${todo-item-text}</span>
-            <form method="post" class="item-delete">
-              <input type="hidden" name="action" value="delete" />
-              <input type="hidden" name="item-id" value="${item-id}" />
-              <button class="icon cross"><span class="is-hidden">Delete</span></button>
-            </form>
-          </li>
-        -->
 
           <!--
             TODO: Mark the list item as `editing` for a todo item that is

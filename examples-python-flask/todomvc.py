@@ -2,16 +2,19 @@ from flask import Flask, render_template, request, redirect, url_for
 import uuid
 
 class Task:
-    def __init__(self, task, status='active'):
+    def __init__(self, task):
         self.id = uuid.uuid1().hex
         self.task = task
-        self.status = status
+        self.status = 'active'
+        self.completed = False
 
     def toggle(self):
         if self.status == 'active':
             self.status = 'completed'
+            self.completed = True
         else:
             self.status = 'active'
+            self.completed = False
 
 # Global state, yay!
 tasks = {}
