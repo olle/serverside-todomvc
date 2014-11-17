@@ -41,19 +41,11 @@
 
         <h2 class="is-hidden">List of ${current-filter} tasks:</h2>
         <ul class="items-list">
-        {% for id, task in tasks.iteritems() %}
-          <li class="item clearfix">
-            <!--
-              TODO: Posting this form must toggle the completed state of the
-                    todo item, identified by the given id.
-             -->
-            <form method="post" class="item-toggle-completed">
-              <input type="hidden" name="action" value="toggle" />
-              <input type="hidden" name="item-id" value="${item-id}" />
-              <!--
-                TODO: Replace `${completed}` with current item completed state (completed/active).
-               -->
-              <button class="icon check"><span class="is-hidden">Mark as ${completed}</span></button>
+        {% for id, item in tasks.iteritems() %}
+          <li class="item {{item.status}} clearfix">
+            <form method="post" action="toggle" class="item-toggle-completed">
+              <input type="hidden" name="id" value="{{id}}" />
+              <button class="icon check {% if item.status == 'completed' %}is-active{% endif %}"><span class="is-hidden">Mark as {% if item.status == 'active' %}completed{% else %}active{% endif %}</span></button>
             </form>
             <!--
               TODO: Clicking the link, should create a page where the todo,
@@ -61,7 +53,7 @@
 
                     See last list element in the template.
              -->
-            <a href="?action=edit&item-id=${item-id}" class="item-text">{{task}}</a>
+            <a href="?action=edit&item-id=${item-id}" class="item-text">{{item.task}}</a>
             <form method="post" action="delete" class="item-delete">
               <input type="hidden" name="id" value="{{id}}" />
               <button class="icon cross"><span class="is-hidden">Delete</span></button>
@@ -77,7 +69,7 @@
               <input type="hidden" name="item-id" value="${item-id}" />
               <button class="icon check is-active"><span class="is-hidden">Mark as ${active}</span></button>
             </form>
-            <span  class="item-text">${todo-item-text}</span>
+            <span class="item-text">${todo-item-text}</span>
             <form method="post" class="item-delete">
               <input type="hidden" name="action" value="delete" />
               <input type="hidden" name="item-id" value="${item-id}" />
