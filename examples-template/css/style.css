@@ -159,7 +159,7 @@ footer {
 
 .is-active {
   /* TODO: Arrange and override for specific widgets too */
-  
+
 }
 
 .is-inline {
@@ -230,12 +230,12 @@ button.embossed:hover {
   font-smoothing: antialiased;
 }
 
-.text-input::-webkit-input-placeholder {
-  font-style: italic;
+.text-input::-webkit-input-placeholder,
+.text-input::-moz-placeholder {
+    font-style: italic;
 }
 
 .text-input::-moz-placeholder {
-  font-style: italic;
   color: #a9a9a9;
 }
 
@@ -321,18 +321,18 @@ button.embossed:hover {
 /* ---------- */
 /* Items list */
 /* ---------- */
-.items-list {
+.items {
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.items-list li {
+.items > li {
   width: 548px;
   border-bottom: 1px dotted #ccc;
 }
 
-.items-list li:last-child {
+.items > li:last-child {
   border: none;
 }
 
@@ -392,7 +392,7 @@ button.embossed:hover {
 /* -------------------- */
 .item {
   /* OK */
-  
+
 }
 
 /* --------------------- */
@@ -465,9 +465,9 @@ button.embossed:hover {
   transition: color 0.4s;
 }
 
-* --------------- * /
-  /* Completed items */
-  /* --------------- */        
+/* --------------- * /
+/* Completed items */
+/* --------------- */
 .item.completed {
   /* OK */
 }
@@ -482,7 +482,7 @@ button.embossed:hover {
 /* ----------------- */
 .item.editing {
   /* OK */
-  
+
 }
 
 .item.editing .item-text {
