@@ -9,7 +9,7 @@
 ### Also, my Makefile-foo is not so strong, so bare with me. Any
 ### improvements are welcome.
 ###
-.PHONY: help setup all examples clean
+.PHONY: help setup all build clean test run-test
 
 ## Helper target that displays some information.
 help:
@@ -28,22 +28,14 @@ setup:
 	@echo "\nVery good!\n All done. Now move along!\n"
 
 ## Build __all__ the examples!
-all: examples
+all: build
 
-## Build the examples
-examples:
-	$(MAKE) -C examples-java-servlet
-	$(MAKE) -C examples-java-wicket
-	$(MAKE) -C examples-java-spring-mvc-thymeleaf
-
-## Clean out all the examples, duh!
-clean:
+## Examples should build, clean or test.
+build clean test:
 	$(MAKE) -C examples-java-servlet $@
 	$(MAKE) -C examples-java-wicket $@
-	$(MAKE) -C examples-java-spring-mvc-thymeleaf
+	$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
 
-## TODO: This should be considered again, perhaps it's better
-##       to create explicit test setup too?
-## Run acceptance tests aginst some URL
-##test:
-##	@env URL=${URL} ./node_modules/.bin/mocha --reporter list
+## Executes the acceptance tests, assuming a correct ${URL} is set
+run-test:
+	@npm test
