@@ -23,12 +23,8 @@ setup:
 	@echo " Let's see if you have Node.js and npm installed?"
 	@which npm || (echo " Ouch, too bad. Start by installing that first please."; exit 1)
 	@echo " Oh, great."
-	@echo "\n Now let's make sure zombie is installed...\n"
-	@npm update zombie
-	@echo "\nGood!\n Now let's make sure mocha is installed...\n"
-	@npm update mocha
-	@echo "\nGood!\n Now let's make sure assert is installed...\n"
-	@npm update assert
+	@echo "\n Now let's make sure everything is installed properly...\n"
+	@npm install
 	@echo "\nVery good!\n All done. Now move along!\n"
 
 ## Build __all__ the examples!

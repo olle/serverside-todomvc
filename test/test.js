@@ -1,30 +1,30 @@
-var Browser = require('zombie'),
-    assert  = require('assert');
+'use strict';
 
-var site =  process.env.URL || "http://localhost:8080/";
+var
+  Browser = require('zombie'),
+  expect = require('chai').expect,
+  site = process.env.URL || "http://localhost:8080/";
 
-if (site.slice(-1) != '/') {
-	site += '/';
-}
-
-describe('Server-side Todo MVC', function () {
+describe('Server-side Todo MVC', function() {
 
   var browser = new Browser();
 
-  describe('load', function () {
+  describe('page', function() {
 
-    before(function (done) {
+    before(function(done) {
       browser
         .visit(site)
         .then(done, done);
     });
 
-    it('should display the page with the heading text', function () {
-      assert.equal(browser.text('h1'), 'todos');
+    after(function() {
       browser.close();
+    });
+
+    it('should display correct heading text', function() {
+      expect(browser.text('h1')).to.equal('todos');
     });
 
   });
 
 });
-
