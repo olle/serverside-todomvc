@@ -8,7 +8,7 @@
   <body class="grey-plaid-bg modern-font">
     <section id="serverside-todomvc">
       <header>
-        <h1>Todos</h1>
+        <h1>todos</h1>
         <h2 class="is-hidden">Create a new task</h2>
         <form th:action="@{/create-new}" method="post" class="items-create-new">
           <input type="text" name="todo" placeholder="What needs to be done?" th:attr="autofocus=${editTodo == null}" autocomplete="off" class="text-input"/>
@@ -20,14 +20,14 @@
         <h3 class="is-hidden">Mark as completed</h3>
         <!--
           TODO: If this form is posted, then all, not yet completed tasks,
-                must be marked as completed. 
+                must be marked as completed.
          -->
         <form method="post" class="items-mark-all-completed">
           <input type="hidden" name="action" value="complete" />
           <input type="hidden" name="item-id" value="all" />
           <button class="icon angle-double down"><span class="is-hidden">Mark all as completed</span></button>
         </form>
-        
+
         <h2 class="is-hidden">List of ${current-filter} tasks:</h2>
         <ul class="items-list">
 
@@ -35,14 +35,14 @@
 
             <!--
               TODO: Posting this form must save the changes made to the todo
-                    item, identified by the given id. 
+                    item, identified by the given id.
              -->
             <form th:if="*{todo.editing}" th:action="@{/save-edit}" class="item-edit" method="post">
               <input type="hidden" name="action" value="update" />
               <input type="hidden" name="item-id" value="${item-id}" />
               <input type="text" name="item-text" th:value="*{todo.todo}" autofocus="autofocus" autocomplete="off" class="item-text" />
-            </form>          
-          
+            </form>
+
             <form th:unless="*{todo.editing}" th:action="@{/toggle-completed}" method="post" class="item-toggle-completed">
               <input type="hidden" th:value="*{todo.id}" name="id" />
               <button class="icon check" th:classappend="*{todo.completed}? 'is-active'"><span class="is-hidden" th:text="'Mark as ' + #{home.toggle.completed}">Mark as ${inverse:status}</span></button>
@@ -61,7 +61,7 @@
 
           <!--
             TODO: Mark the list item as `completed` for todo items that are
-                  done. 
+                  done.
            -->
           <li class="item completed clearfix">
             <form method="post" class="item-toggle-completed">
@@ -78,27 +78,27 @@
           </li>
 
         </ul>
-        
+
       </section>
 
       <!--
-        TODO: This section must only be visible if there are todo items to show. 
+        TODO: This section must only be visible if there are todo items to show.
        -->
       <section class="secondary">
 
         <h3 class="is-hidden">Current status</h3>
         <!--
           TODO: Provide a count and properly pluralized label of how many active
-                todo items there are left. 
+                todo items there are left.
          -->
         <p class="items-active-count"><strong>${count}</strong> ${'item|s'} left</p>
-        
+
         <h3 class="is-hidden">Filter task list</h3>
         <ul class="items-filter-selection">
           <!--
             TODO: Allow to see todo items based on filters `active` (only the
                   active) and `completed` (only the completed items) - as well
-                  as showing `all`, which is selected by default. 
+                  as showing `all`, which is selected by default.
            -->
           <li><a href="?filter=all" class="is-active">All</a></li>
           <li><a href="?filter=active">Active</a></li>
@@ -121,20 +121,20 @@
     <footer>
       <h4 class="is-hidden">Help</h4>
       <p>Click on the text to edit a todo.</p>
-      
+
       <h4 class="is-hidden">About the Server-side TodoMVC application</h4>
-      
+
       <!--
-        TODO: Remove the paragraph below. 
+        TODO: Remove the paragraph below.
        -->
       <p>
         Original template by <a href="http://github.com/sindresorhus">Sindre Sorhus</a><br />
         Reworked by <a href="http://github.com/olle">Olle Törnström</a>
       </p>
-      
+
       <!--
         TODO: Properly replace the paragraph below with a link to you or your
-              organization. 
+              organization.
        -->
       <p>Created by <a href="http://todomvc.com">you</a></p>
 

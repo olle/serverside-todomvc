@@ -32,10 +32,12 @@ all: build
 
 ## Examples should build, clean or test.
 build clean test:
-	$(MAKE) -C examples-java-servlet $@
-	$(MAKE) -C examples-java-wicket $@
-	$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
+	@echo '----------------------------------------------------------------------'
+	@$(MAKE) -C examples-java-servlet $@
+	@$(MAKE) -C examples-java-wicket $@
+	@$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
+	@echo '----------------------------------------------------------------------'
 
 ## Executes the acceptance tests, assuming a correct ${URL} is set
 run-test:
-	@npm test
+	@npm test -s

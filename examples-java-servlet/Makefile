@@ -1,21 +1,21 @@
-.PHONY: build clean
+.PHONY: build clean test run-test all
+
+SELF=examples-java-servlet
+URL=http://localhost:8080/${SELF}
 
 build:
-	@mvn verify
+	@echo -n '--> Building ${SELF} '
+	@mvn verify -q && echo ' [DONE]'
 
 clean:
-	@mvn clean
+	@echo -n '--> Cleaning ${SELF} '
+	@mvn clean -q && echo ' [DONE]'
 
-## TODO: This here below, was the old boostrap for starting and running tests.
-##       Unfortunately, it's not very smart - doesn't spawn a process to provide
-##       the actual start/stop control that we need. Need to rethink this.
-## 
-##       A-U-T-O-M-A-T-E!!!
-##
-#THIS="serverside-todomvc-java-wicket"
-#HERE=`pwd`
-#THERE="${HERE}/../"
-#export URL="http://localhost:8080/${THIS}/"
-#test:
-#	@java -jar target/*.jar
-#	$(MAKE) -C ${THERE} test
+test:
+	@echo '--> Running tests against ${URL} ...'
+	@mvn -Pit -q 2> /dev/null && echo '--> Testing ${SELF}  [DONE]'
+
+run-test:
+	@$(MAKE) URL=${URL} -C ../ run-test
+
+all: clean build test

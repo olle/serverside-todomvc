@@ -6,6 +6,6 @@
     "zombie": "^3.1.0"
   },
   "scripts": {
-    "test": "mocha --reporter list"
+    "test": "mocha -R dot"
   }
 }

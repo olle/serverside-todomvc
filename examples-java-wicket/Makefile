@@ -1,19 +1,21 @@
-.PHONY: build clean
+.PHONY: build clean test run-test all
+
+SELF=examples-java-wicket
+URL=http://localhost:8080/${SELF}
 
 build:
-	@mvn verify
+	@echo -n '--> Building ${SELF} '
+	@mvn verify -q > /dev/null 2>&1 && echo ' [DONE]'
 
 clean:
-	@mvn clean
+	@echo -n '--> Cleaning ${SELF} '
+	@mvn clean -q > /dev/null 2>&1 && echo ' [DONE]'
 
-##THIS="examples-java-wicket"
-##HERE=`pwd`
-##THERE="${HERE}/../"
-##export URL="http://localhost:8080/${THIS}/"
-##
-##build:
-##	@mvn verify -pl ${THIS} -am
-##
-##test:
-##	@java -jar target/*.jar
-##	$(MAKE) -C ${THERE} test
+test:
+	@echo '--> Running tests against ${URL} ...'
+	@mvn -Pit -q 2> /dev/null && echo '--> Testing ${SELF}  [DONE]'
+
+run-test:
+	@$(MAKE) URL=${URL} -C ../ run-test
+
+all: clean build test
