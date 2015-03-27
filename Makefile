@@ -36,6 +36,7 @@ build clean test:
 	@$(MAKE) -C examples-java-servlet $@
 	@$(MAKE) -C examples-java-wicket $@
 	@$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
+	@$(MAKE) -C examples-java-spark-mustache $@
 	@$(MAKE) -C examples-php-vanilla $@
 	@echo '----------------------------------------------------------------------'
 

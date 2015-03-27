@@ -1,17 +1,17 @@
 package com.studiomediatech.todomvc;
 
+import static spark.Spark.get;
+import static spark.Spark.post;
+import static spark.SparkBase.staticFileLocation;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.google.common.base.Optional;
-
 import spark.ModelAndView;
 import spark.template.mustache.MustacheTemplateEngine;
 
-import static spark.Spark.*;
-
-import static spark.SparkBase.*;
+import com.google.common.base.Optional;
 
 public class TodoMVC {
 
