@@ -3,7 +3,7 @@
 var
   Browser = require('zombie'),
   expect = require('chai').expect,
-  site = process.env.URL || "http://localhost:8080/";
+  site = process.env.URL || "http://localhost:8080/index.php";
 
 describe('Server-side Todo MVC', function() {
 

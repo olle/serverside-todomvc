@@ -135,7 +135,7 @@ foreach ($items as $todo => $status) {
   <body class="grey-plaid-bg modern-font">
     <section id="serverside-todomvc">
       <header>
-        <h1>Todos</h1>
+        <h1>todos</h1>
         <h2 class="is-hidden">Create a new task</h2>
         <form method="post" class="items-create-new">
           <input type="hidden" name="action" value="create" />
