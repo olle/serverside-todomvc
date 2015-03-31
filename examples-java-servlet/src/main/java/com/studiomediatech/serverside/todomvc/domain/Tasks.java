@@ -29,10 +29,19 @@ public final class Tasks {
    * @throws IllegalArgumentException if the given task is {@code null}
    */
   public void add(Task task) {
-    if (task == null) {
-      throw new IllegalArgumentException("An empty task cannot be added to a todo-list");
-    }
+    assertTaskArgumentIsNotNull(task);
     this.tasks.add(task);
+  }
+
+  private void assertTaskArgumentIsNotNull(Task task) {
+    if (task == null) {
+      throw new IllegalArgumentException("The task must not be empty");
+    }
+  }
+
+  public void remove(Task task) {
+    assertTaskArgumentIsNotNull(task);
+    this.tasks.remove(task);
   }
 
 }

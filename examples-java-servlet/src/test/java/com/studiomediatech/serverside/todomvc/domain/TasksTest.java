@@ -43,4 +43,31 @@ public class TasksTest {
     assertThat(Task.withDescription("foo"), is(equalTo(Task.withDescription("foo"))));
   }
 
+  @Test
+  public void tasks_have_uids() {
+    Task foo = Task.withDescription("foo");
+    Task bar = Task.withDescription("bar");
+    assertThat(foo.uuid, is(not(equalTo(bar.uuid))));
+
+    Task fooAgain = Task.withDescription("foo");
+    assertThat(fooAgain.uuid, is(equalTo(foo.uuid)));
+  }
+
+  @Test
+  public void adding_and_removing_tasks_is_possible() {
+    Tasks tasks = new Tasks();
+    Task hello = Task.withDescription("hello");
+    tasks.add(hello);
+    assertThat(tasks.list().size(), equalTo(1));
+    assertThat(tasks.list(), contains(hello));
+    tasks.remove(hello);
+    assertThat(tasks.list().size(), equalTo(0));
+    assertThat(tasks.list(), not(contains(hello)));
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void tasks_throw_when_trying_to_remove_null() {
+    new Tasks().remove(null);
+  }
+
 }

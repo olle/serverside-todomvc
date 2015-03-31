@@ -12,9 +12,11 @@ public final class Task {
    * Describes what this task pertains to; what it is that needs to be done.
    */
   public final String description;
+  public final String uuid;
 
   private Task(String description) {
     this.description = description;
+    this.uuid = "" + description.hashCode();
   }
 
   /**
