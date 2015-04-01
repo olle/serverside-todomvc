@@ -6,68 +6,57 @@ import static org.hamcrest.MatcherAssert.*;
 
 import static org.hamcrest.Matchers.*;
 
+// DESIGN
+// =======
+// [CHECK] tasks.add("Buy oranges");
+// [CHECK] tasks.clear(42);
+// [CHECK] tasks.change(11, "Buy apples");
+// tasks.complete(3);
+// tasks.list();
+// tasks.list(Predicates.completed());
+// tasks.complete();
+// tasks.clear(Predicates.completed());
+
 public class TasksTest {
 
   @Test
-  public void a_task_returns_its_description() {
-    Task task = Task.withDescription("hello");
-    assertThat(task.description, is("hello"));
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void creating_a_new_task_with_null_description_throws_an_exception() {
-    Task.withDescription(null);
+  public void we_can_create_a_new_task_list() {
+    assertThat(Tasks.newList(), is(notNullValue(Tasks.class)));
   }
 
   @Test
-  public void returns_an_empty_tasks_list_after_construction() {
-    Tasks tasks = new Tasks();
-    assertThat(tasks.list().size(), equalTo(0));
+  public void show_tasks_returns_an_empty_collection_for_new_task_list() {
+    assertThat(Tasks.newList().list(), is(emptyCollectionOf(Task.class)));
   }
 
   @Test
-  public void contains_a_task_that_as_added() {
-    Tasks tasks = new Tasks();
-    tasks.add(Task.withDescription("Paint the sky"));
-    assertThat(tasks.list().size(), equalTo(1));
-    assertThat(tasks.list(), contains(Task.withDescription("Paint the sky")));
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void tasks_throws_when_trying_to_add_null() {
-    new Tasks().add(null);
+  public void we_can_add_a_task_to_the_list() {
+    assertThat(Tasks.newList().add("Buy oranges").list(), contains(Task.withDescription("Buy oranges")));
   }
 
   @Test
-  public void two_tasks_with_the_same_description_are_considered_equal() {
-    assertThat(Task.withDescription("foo"), is(equalTo(Task.withDescription("foo"))));
-  }
-
-  @Test
-  public void tasks_have_uids() {
+  public void we_can_clear_a_specific_task_by_its_number_in_the_list() {
+    Tasks tasks = Tasks.newList().add("foo").add("bar");
     Task foo = Task.withDescription("foo");
     Task bar = Task.withDescription("bar");
-    assertThat(foo.uuid, is(not(equalTo(bar.uuid))));
-
-    Task fooAgain = Task.withDescription("foo");
-    assertThat(fooAgain.uuid, is(equalTo(foo.uuid)));
+    assertThat(tasks.list(), contains(foo, bar));
+    tasks.clear(0);
+    assertThat(tasks.list(), not(contains(foo)));
+    assertThat(tasks.list(), contains(bar));
+    assertThat(tasks.list().size(), is(1));
   }
 
   @Test
-  public void adding_and_removing_tasks_is_possible() {
-    Tasks tasks = new Tasks();
-    Task hello = Task.withDescription("hello");
-    tasks.add(hello);
-    assertThat(tasks.list().size(), equalTo(1));
-    assertThat(tasks.list(), contains(hello));
-    tasks.remove(hello);
-    assertThat(tasks.list().size(), equalTo(0));
-    assertThat(tasks.list(), not(contains(hello)));
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void tasks_throw_when_trying_to_remove_null() {
-    new Tasks().remove(null);
+  public void we_can_change_a_specific_task_description_in_the_list() {
+    Task foo = Task.withDescription("foo");
+    Task bar = Task.withDescription("bar");
+    Task foobar = Task.withDescription("foobar");
+    Tasks tasks = Tasks.newList().add("foo").add("bar");
+    assertThat(tasks.list(), contains(foo, bar));
+    tasks.change(1, "foobar");
+    assertThat(tasks.list(), contains(foo, foobar));
+    assertThat(tasks.list(), not(contains(bar)));
+    assertThat(tasks.list().size(), is(2));
   }
 
 }

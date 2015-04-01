@@ -12,11 +12,9 @@ public final class Task {
    * Describes what this task pertains to; what it is that needs to be done.
    */
   public final String description;
-  public final String uuid;
 
   private Task(String description) {
     this.description = description;
-    this.uuid = "" + description.hashCode();
   }
 
   /**
@@ -36,10 +34,14 @@ public final class Task {
   @Override
   public boolean equals(Object obj) {
     // NOTE: Since Tasks cannot be extended this should be correct.
-    if (obj instanceof Task) {
+    if (obj != null && obj instanceof Task) {
       return this.description.equals(((Task) obj).description);
     }
     return false;
   }
 
+  @Override
+  public String toString() {
+    return this.description;
+  }
 }
