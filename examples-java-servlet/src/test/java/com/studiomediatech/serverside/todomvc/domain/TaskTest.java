@@ -19,8 +19,11 @@ public class TaskTest {
   }
 
   @Test
-  public void two_tasks_with_the_same_description_are_considered_equal() {
-    assertThat(Task.withDescription("foo"), is(equalTo(Task.withDescription("foo"))));
+  public void two_tasks_with_the_same_description_are_considered_equal_and_have_the_same_hash_value() {
+    Task t1 = Task.withDescription("foo");
+    Task t2 = Task.withDescription("foo");
+    assertThat(t1, is(equalTo(t2)));
+    assertThat(t1.hashCode(), is(equalTo(t2.hashCode())));
   }
 
 }

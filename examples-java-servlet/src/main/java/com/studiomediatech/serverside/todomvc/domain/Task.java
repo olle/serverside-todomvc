@@ -32,6 +32,11 @@ public final class Task {
   }
 
   @Override
+  public int hashCode() {
+    return this.description.hashCode();
+  }
+
+  @Override
   public boolean equals(Object obj) {
     // NOTE: Since Tasks cannot be extended this should be correct.
     if (obj != null && obj instanceof Task) {
