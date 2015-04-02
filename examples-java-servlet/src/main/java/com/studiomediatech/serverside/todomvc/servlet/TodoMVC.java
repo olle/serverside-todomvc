@@ -1,8 +1,8 @@
 package com.studiomediatech.serverside.todomvc.servlet;
 
-import com.studiomediatech.serverside.todomvc.domain.Tasks;
-
 import java.io.IOException;
+import java.util.Collection;
+import java.util.function.Function;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,104 +10,102 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.studiomediatech.serverside.todomvc.domain.Task;
+import com.studiomediatech.serverside.todomvc.domain.Tasks;
 
 /**
- * Handles and directs all user intents in the todos application, providing task and task list management. This is
- * typically the "C" in MVC - the controller.
+ * Handles and directs all user intents in the todos application, providing task
+ * and task list management. This is typically the "C" in MVC - the controller.
  *
- * <p>TODO: There should be a View too, the "V" in MVC.</p>
+ * <p>
+ * TODO: There should be a View too, the "V" in MVC.
+ * </p>
  */
 public final class TodoMVC extends HttpServlet {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
+	private static final Tasks tasks = Tasks.newList();
+	private final Function<HttpServlet, String> contextSupplier;
 
-    private final Tasks tasks;
+	public TodoMVC() {
+		contextSupplier = s -> s.getServletContext().getContextPath();
+	}
 
-    public TodoMVC() {
+	/**
+	 * Show the todos default task list view (index).
+	 */
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 
-        tasks = Tasks.newList();
-    }
+		Collection<Task> list = tasks.list();
+		System.err.println(list);
+		req.setAttribute("todos", list);
+		req.setAttribute("completed", tasks.list(Tasks.completed()));
+		forwardToView("/todos/index.jsp", req, resp);
+	}
 
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
 
-        handleRequest(req, resp);
-    }
+		String uri = parseURI(req);
+		String view = doPostFor(uri, req, resp);
+		forwardToView(view, req, resp);
+	}
 
+	String parseURI(HttpServletRequest req) {
+		return req.getRequestURI()
+				.replace(this.contextSupplier.apply(this), "");
+	}
 
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	String doPostFor(String uri, HttpServletRequest req,
+			HttpServletResponse resp) throws IOException {
 
-        handleRequest(req, resp);
-    }
+		System.out.println("POST:" + uri);
 
+		if (uri.equals("/todos/")) {
+			String newTodo = req.getParameter("item-text");
+			System.out.println("New Todo: " + newTodo);
+			tasks.add(newTodo);
+			redirectToIndex(resp);
 
-    private void handleRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+			return "";
+		} else if (uri.equals("toggle")) {
+			int number = Integer.parseInt(req.getParameter("todo-id"));
 
-        String command = parseCommand(req);
-        String view = dispatchControl(command, req, resp);
-        forwardToView(view, req, resp);
-    }
+			// TODO: `Toggle` explicit or implicit?
+			tasks.complete(number);
 
+			redirectToIndex(resp);
 
-    String parseCommand(HttpServletRequest req) {
+			return "";
+		} else if (uri.equals("delete")) {
+			int number = Integer.parseInt(req.getParameter("todo-id"));
+			tasks.clear(number);
+			redirectToIndex(resp);
 
-        String requestURI = req.getRequestURI();
-        int lastSlashIdx = requestURI.lastIndexOf("/");
-        int lastDotIdx = requestURI.lastIndexOf(".");
+			return "";
+		} else if (uri.equals("clear")) {
+			tasks.clear(Tasks.completed());
+			redirectToIndex(resp);
 
-        return requestURI.substring(lastSlashIdx + 1, lastDotIdx);
-    }
+			return "";
+		} else {
+			return "index";
+		}
+	}
 
+	private void redirectToIndex(HttpServletResponse resp) throws IOException {
+		resp.sendRedirect(contextSupplier.apply(this));
+	}
 
-    String dispatchControl(String command, HttpServletRequest req, HttpServletResponse resp) throws IOException {
+	void forwardToView(String view, HttpServletRequest req,
+			HttpServletResponse resp) throws ServletException, IOException {
 
-        // final Repository<Todo, Long> repository = getSessionRepository(req);
-
-        if (command.equals("home")) {
-            req.setAttribute("todos", tasks.list());
-            req.setAttribute("completed", tasks.list(Tasks.completed()));
-
-            return "home";
-        } else if (command.equals("new")) {
-            String newTodo = req.getParameter("new-todo");
-            tasks.add(newTodo);
-            resp.sendRedirect("home.do");
-
-            return "";
-        } else if (command.equals("toggle")) {
-            int number = Integer.parseInt(req.getParameter("todo-id"));
-
-            // TODO: `Toggle` explicit or implicit?
-            tasks.complete(number);
-
-            resp.sendRedirect("home.do");
-
-            return "";
-        } else if (command.equals("delete")) {
-            int number = Integer.parseInt(req.getParameter("todo-id"));
-            tasks.clear(number);
-            resp.sendRedirect("home.do");
-
-            return "";
-        } else if (command.equals("clear")) {
-            tasks.clear(Tasks.completed());
-            resp.sendRedirect("home.do");
-
-            return "";
-        } else {
-            return "home";
-        }
-    }
-
-
-    void forwardToView(String view, HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-        IOException {
-
-        if (!resp.isCommitted()) {
-            String path = "/" + view + ".jsp";
-            RequestDispatcher dispatcher = req.getRequestDispatcher(path);
-            dispatcher.forward(req, resp);
-        }
-    }
+		if (!resp.isCommitted()) {
+			RequestDispatcher dispatcher = req.getRequestDispatcher(view);
+			dispatcher.forward(req, resp);
+		}
+	}
 }
