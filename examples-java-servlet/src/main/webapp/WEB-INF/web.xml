@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_2.xsd"
-	version="3.2">
+  xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_2.xsd"
+  version="3.2">
 
-	<display-name>Java Servlet • Server-side TodoMVC</display-name>
+  <display-name>Java Servlet • Server-side TodoMVC</display-name>
 
-	<servlet>
-		<servlet-name>todos</servlet-name>
-		<servlet-class>com.studiomediatech.serverside.todomvc.servlet.TodoMVC</servlet-class>
-	</servlet>
+  <servlet>
+    <servlet-name>Todos</servlet-name>
+    <servlet-class>
+      com.studiomediatech.serverside.todomvc.servlet.TodoMVC
+    </servlet-class>
+  </servlet>
 
-	<servlet-mapping>
-		<servlet-name>todos</servlet-name>
-		<url-pattern>todos/</url-pattern>
-	</servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>Todos</servlet-name>
+    <url-pattern>/todos</url-pattern>
+    <url-pattern>/todos/</url-pattern>
+    <url-pattern>/index.html</url-pattern>
+  </servlet-mapping>
 
-<!-- 	<welcome-file-list> -->
-<!-- 		<welcome-file>redirect.jsp</welcome-file> -->
-<!-- 	</welcome-file-list> -->
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
 
 </web-app>

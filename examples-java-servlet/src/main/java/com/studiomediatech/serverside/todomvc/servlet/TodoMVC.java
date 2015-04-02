@@ -1,7 +1,6 @@
 package com.studiomediatech.serverside.todomvc.servlet;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.function.Function;
 
 import javax.servlet.RequestDispatcher;
@@ -10,7 +9,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.studiomediatech.serverside.todomvc.domain.Task;
 import com.studiomediatech.serverside.todomvc.domain.Tasks;
 
 /**
@@ -23,89 +21,84 @@ import com.studiomediatech.serverside.todomvc.domain.Tasks;
  */
 public final class TodoMVC extends HttpServlet {
 
-	private static final long serialVersionUID = 1L;
-	private static final Tasks tasks = Tasks.newList();
-	private final Function<HttpServlet, String> contextSupplier;
+  private static final long serialVersionUID = 1L;
+  private static final Tasks tasks = Tasks.newList();
+  private final Function<HttpServlet, String> contextSupplier;
 
-	public TodoMVC() {
-		contextSupplier = s -> s.getServletContext().getContextPath();
-	}
+  public TodoMVC() {
+    this.contextSupplier = s -> s.getServletContext().getContextPath();
+  }
 
-	/**
-	 * Show the todos default task list view (index).
-	 */
-	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+  /**
+   * Show the todos default task list view (index).
+   */
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    req.setAttribute("todos", tasks.list());
+    req.setAttribute("completed", tasks.list(Tasks.completed()));
+    forwardToView("/WEB-INF/views/todos.jsp", req, resp);
+  }
 
-		Collection<Task> list = tasks.list();
-		System.err.println(list);
-		req.setAttribute("todos", list);
-		req.setAttribute("completed", tasks.list(Tasks.completed()));
-		forwardToView("/todos/index.jsp", req, resp);
-	}
+  @Override
+  protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+  IOException {
+    String uri = parseURI(req);
+    String view = doPostFor(uri, req, resp);
+    forwardToView(view, req, resp);
+  }
 
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
+  String parseURI(HttpServletRequest req) {
+    return req.getRequestURI().replace(this.contextSupplier.apply(this), "");
+  }
 
-		String uri = parseURI(req);
-		String view = doPostFor(uri, req, resp);
-		forwardToView(view, req, resp);
-	}
+  String doPostFor(String uri, HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
-	String parseURI(HttpServletRequest req) {
-		return req.getRequestURI()
-				.replace(this.contextSupplier.apply(this), "");
-	}
+    System.out.println(String.format("doPostFor(%s)", uri));
 
-	String doPostFor(String uri, HttpServletRequest req,
-			HttpServletResponse resp) throws IOException {
+    if (uri.equals("/todos/")) {
+      String newTodo = req.getParameter("item-text");
+      tasks.add(newTodo);
+      redirectToTodos(resp);
 
-		System.out.println("POST:" + uri);
+      return "";
+    }
+    else if (uri.equals("toggle")) {
+      int number = Integer.parseInt(req.getParameter("todo-id"));
 
-		if (uri.equals("/todos/")) {
-			String newTodo = req.getParameter("item-text");
-			System.out.println("New Todo: " + newTodo);
-			tasks.add(newTodo);
-			redirectToIndex(resp);
+      // TODO: `Toggle` explicit or implicit?
+      tasks.complete(number);
 
-			return "";
-		} else if (uri.equals("toggle")) {
-			int number = Integer.parseInt(req.getParameter("todo-id"));
+      redirectToTodos(resp);
 
-			// TODO: `Toggle` explicit or implicit?
-			tasks.complete(number);
+      return "";
+    }
+    else if (uri.equals("delete")) {
+      int number = Integer.parseInt(req.getParameter("todo-id"));
+      tasks.clear(number);
+      redirectToTodos(resp);
 
-			redirectToIndex(resp);
+      return "";
+    }
+    else if (uri.equals("clear")) {
+      tasks.clear(Tasks.completed());
+      redirectToTodos(resp);
 
-			return "";
-		} else if (uri.equals("delete")) {
-			int number = Integer.parseInt(req.getParameter("todo-id"));
-			tasks.clear(number);
-			redirectToIndex(resp);
+      return "";
+    }
+    else {
+      return "index";
+    }
+  }
 
-			return "";
-		} else if (uri.equals("clear")) {
-			tasks.clear(Tasks.completed());
-			redirectToIndex(resp);
+  private void redirectToTodos(HttpServletResponse resp) throws IOException {
+    resp.sendRedirect(this.contextSupplier.apply(this) + "/todos/");
+  }
 
-			return "";
-		} else {
-			return "index";
-		}
-	}
-
-	private void redirectToIndex(HttpServletResponse resp) throws IOException {
-		resp.sendRedirect(contextSupplier.apply(this));
-	}
-
-	void forwardToView(String view, HttpServletRequest req,
-			HttpServletResponse resp) throws ServletException, IOException {
-
-		if (!resp.isCommitted()) {
-			RequestDispatcher dispatcher = req.getRequestDispatcher(view);
-			dispatcher.forward(req, resp);
-		}
-	}
+  void forwardToView(String view, HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+  IOException {
+    if (!resp.isCommitted()) {
+      RequestDispatcher dispatcher = req.getRequestDispatcher(view);
+      dispatcher.forward(req, resp);
+    }
+  }
 }

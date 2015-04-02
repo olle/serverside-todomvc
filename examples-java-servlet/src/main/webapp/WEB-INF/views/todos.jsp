@@ -13,7 +13,7 @@
 		<section class="todoapp">
 			<header class="header">
 				<h1>todos</h1>
-        <form action="todos/" method="post">
+        <form action="<c:url value="/todos/"/>" method="post">
           <!--
             TODO: Remove the `autofocus="autofocus"` attribute if a todo-item is
                   currently being edited.
@@ -34,25 +34,26 @@
           <button class="icon angle-double down"></button>
         </form>
 				<ul class="todo-list">
+				<c:forEach items="${todos}" var="todo">
           <!--
             TODO: This is a todo-item. Make sure to mark it with either classes:
                   `completed` or `editing` depending on it's current status.
           -->
-					<li class="editing {completed}">
+					<li class="{editing} {completed}">
             <!--
               TODO: When the item is in `editing` status, only the following form
                     should be visible. The if-else-end markers show the blocks
                     that should be rendered.
             -->
             <!-- # if (is-editing) # -->
-            <form action="todos/item-id" method="post" class="">
+            <%-- <form action="todos/item-id" method="post" class="">
               <input type="hidden" name="method" value="put" />
               <!--
                 TODO: This should be the only element with the `autofocus`
                       attribute set. Check the create-form on the top.
                -->
               <input type="text" name="item-text" placeholder="{item-text}" autofocus="autofocus" autocomplete="off" class="edit" />
-            </form>
+            </form> --%>
             <!-- # else # -->
             <div class="view">
               <!--
@@ -90,6 +91,7 @@
 						</div>
             <!-- # end # -->
 					</li>
+				  </c:forEach>
           <!--
             TODO: This is just another example item, remove this.
           -->
