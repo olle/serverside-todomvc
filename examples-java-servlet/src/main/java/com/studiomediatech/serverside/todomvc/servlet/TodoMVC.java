@@ -86,7 +86,8 @@ public final class TodoMVC extends HttpServlet {
       return "";
     }
     else {
-      return "index";
+      redirectToTodos(resp);
+      return "";
     }
   }
 

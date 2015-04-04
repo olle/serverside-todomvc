@@ -34,7 +34,7 @@
           <button class="icon angle-double down"></button>
         </form>
 				<ul class="todo-list">
-				<c:forEach items="${todos}" var="todo">
+				<c:forEach items="${todos}" var="todo" varStatus="item">
           <!--
             TODO: This is a todo-item. Make sure to mark it with either classes:
                   `completed` or `editing` depending on it's current status.
@@ -60,7 +60,7 @@
                 TODO: Posting this form must toggle the completed state of the
                       todo item, identified by the given id.
               -->
-              <form action="todos/{item-id}/status" method="post" class="item-toggle-completed">
+              <form action="<c:url value="/todos/${item.index}/status"/>" method="post" class="item-toggle-completed">
                 <!--
                   TODO: Add the class `is-active` if the todo is completed.
                 -->
@@ -78,7 +78,7 @@
                       <span class="item-text">{item-text}</span>
               -->
               <!-- XXX: Fix link color from plain label. -->
-              <label><a href="?action=edit&amp;item-id=item-id" class="item-text">{item-text}</a></label>
+              <label><a href="?action=edit&amp;item-index=${item.index}" class="item-text">${todo}</a></label>
 							<!-- <label>Taste JavaScript</label> -->
               <!--
                 TODO: Posting this form should delete the todo item, identified
