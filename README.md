@@ -26,7 +26,7 @@ We're hoping that this can provide a base of reference when discussing more subj
 
 The doors are open. Anyone deeply in love with a server-side framework may join-in, clone-out and pull-request-away with ideas and contributions for the list of example implementations.
 
-We're also very grateful for suggestions, comments and constructive critisism on how to make each solution present the framework it uses in the best possible idiomatic way.
+We're also very grateful for suggestions, comments and constructive criticism on how to make each solution present the framework it uses in the best possible idiomatic way.
 
 ### Some words on the way
 
