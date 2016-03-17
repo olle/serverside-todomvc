@@ -57,17 +57,20 @@ public class TodoMVC {
 	}
 
 	private static Response handle(Request request) {
-		// TODO Auto-generated method stub
-		return null;
+
+		return new Response("<h1>Hello World!</h1>\n\n");
 	}
 
 	private static void writeResponse(Response response, OutputStream out) throws IOException {
+
+		String content = response.body;
+
 		out.write(("" //
 				+ "HTTP/1.1 200 OK\n" //
-				+ "Content-Type: text/plain\n" //
-				+ "Content-Length: 13\n" //
+				+ "Content-Type: text/html\n" //
+				+ "Content-Length: " + content.length() + "\n" //
 				+ "Connection: close\n\n" //
-				+ "hello world\n\n").getBytes());
+				+ content).getBytes());
 	}
 
 	static final class Request {
@@ -75,6 +78,12 @@ public class TodoMVC {
 	}
 
 	static final class Response {
+
+		final String body;
+
+		public Response(String body) {
+			this.body = body;
+		}
 	}
 
 }
