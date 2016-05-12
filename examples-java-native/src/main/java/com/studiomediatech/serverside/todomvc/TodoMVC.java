@@ -7,12 +7,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Spliterators;
-import java.util.SplittableRandom;
-import java.util.stream.Collectors;
 
 /**
  * A single-threaded synchronous request/response TodoMVC socket-server.
@@ -34,11 +28,13 @@ public class TodoMVC {
 				InputStreamReader stream = new InputStreamReader(in);
 				BufferedReader buffer = new BufferedReader(stream);
 				OutputStream out = socket.getOutputStream();
+
 				{
-					Request request = parseRequest(buffer);
+					Request request = parse(buffer);
 					Response response = handle(request);
-					writeResponse(response, out);
+					write(response, out);
 				}
+
 				out.flush();
 				buffer.close();
 				stream.close();
@@ -50,7 +46,7 @@ public class TodoMVC {
 
 	}
 
-	private static Request parseRequest(BufferedReader buffer) throws IOException {
+	private static Request parse(BufferedReader buffer) throws IOException {
 
 		String line = buffer.readLine();
 		String[] split = line.split(" ");
@@ -66,7 +62,7 @@ public class TodoMVC {
 		return new Response(String.format("<style>%s</style><h1>todos</h1>\n\n", CSS));
 	}
 
-	private static void writeResponse(Response response, OutputStream out) throws IOException {
+	private static void write(Response response, OutputStream out) throws IOException {
 
 		String content = response.body;
 
