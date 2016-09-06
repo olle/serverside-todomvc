@@ -3,15 +3,11 @@ package service;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.inject.Singleton;
 
 import model.Todo;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import com.google.common.collect.FluentIterable;
-import com.google.common.collect.Lists;
 
 @Singleton
 public class InMemoryTodoService implements TodoService {
@@ -26,21 +22,17 @@ public class InMemoryTodoService implements TodoService {
   }
 
   @Override
-  public List<Todo> list(final String filter) {
-    final Predicate<Todo> predicate;
-    if ("all".equals(filter)) {
-      predicate = Predicates.alwaysTrue();
-    }
-    else {
-      predicate = new Predicate<Todo>() {
+  public List<Todo> list(String filter) {
+	  
+	  final java.util.function.Predicate<Todo> predicate;
+	  
+	  if ("all".equals(filter)) {
+		  predicate = ignored -> true;
+	  } else {
+		  predicate = todo -> todo.getStatus().equals(filter);
+	  }
 
-        @Override
-        public boolean apply(Todo input) {
-          return input.getStatus().equals(filter);
-        }
-      };
-    }
-    return FluentIterable.from(Lists.newArrayList(todos.values())).filter(predicate).toList();
+	  return todos.values().stream().filter(predicate).collect(Collectors.toList());
   }
 
   @Override

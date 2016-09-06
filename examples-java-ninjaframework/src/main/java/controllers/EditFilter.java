@@ -1,7 +1,5 @@
 package controllers;
 
-import com.google.common.base.Optional;
-
 import ninja.Context;
 import ninja.Filter;
 import ninja.FilterChain;
@@ -13,7 +11,7 @@ public class EditFilter implements Filter {
   public Result filter(FilterChain chain, Context context) {
 
     String edit = context.getParameter("edit");
-    context.getSession().put("edit", Optional.fromNullable(edit).or(""));
+    context.getSession().put("edit", java.util.Optional.ofNullable(edit).orElse(""));
     return chain.next(context);
   }
 
