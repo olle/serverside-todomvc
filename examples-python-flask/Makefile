@@ -1,7 +1,7 @@
 .PHONY: check build clean test run-test all
 
 SELF=examples-python-flask
-URL=http://127.0.0.1:8080
+URL=http://127.0.0.1:5000/
 
 banner:
 	@echo '----------------------------------------------------------------------'
