@@ -8,7 +8,7 @@
   <body class="grey-plaid-bg modern-font">
     <section id="serverside-todomvc">
       <header>
-        <h1>Todos</h1>
+        <h1>todos</h1>
         <h2 class="is-hidden">Create a new task</h2>
         <form method="post" action="todos" class="items-create-new">
           <input type="text" name="todo" placeholder="What needs to be done?" <#if !session.edit?has_content>autofocus="autofocus"</#if> autocomplete="off" class="text-input"/>
@@ -56,7 +56,7 @@
           <li><a href="?filter=all"       class="<#if session.filter == 'all'       >is-active</#if>">All</a></li>
           <li><a href="?filter=active"    class="<#if session.filter == 'active'    >is-active</#if>">Active</a></li>
           <li><a href="?filter=completed" class="<#if session.filter == 'completed' >is-active</#if>">Completed</a></li>
-        </ul> 
+        </ul>
         <#if completedCount gt 0>
         <h3 class="is-hidden">Clear completed tasks</h3>
         <form method="post" action="clear" class="items-clear-completed is-inline">

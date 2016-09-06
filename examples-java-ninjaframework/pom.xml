@@ -8,7 +8,7 @@
     <packaging>war</packaging>
 
 	<name>Server-Side TodoMVC Example - Ninja Framework</name>
-	
+
     <properties>
         <ninja.version>5.8.0</ninja.version>
         <jetty.version>9.2.3.v20140905</jetty.version>
@@ -128,16 +128,6 @@
         </resources>
     </build>
     <dependencies>
-        <!-- If you want to deploy to a war please -->
-        <!-- comment ninja-standalone dependency and  -->
-        <!-- uncomment the dependency for ninja-servlet -->
-        <!--
-        <dependency>
-            <groupId>org.ninjaframework</groupId>
-            <artifactId>ninja-servlet</artifactId>
-            <version>${ninja.version}</version>
-        </dependency>
-        -->
         <dependency>
             <groupId>org.ninjaframework</groupId>
             <artifactId>ninja-standalone</artifactId>
