@@ -19,7 +19,23 @@ help:
 	@echo "\n Bye, happy hacking!\n"
 
 ## Setup target, helping out with the installation of some tools.
-setup: which-node which-npm check-require run-setup
+setup: which-node which-npm check run-setup
+
+which-%:
+	@echo -n '--> Checking if $* is installed... '
+	@(which $* > /dev/null && echo '[OK]') || (echo '[MISSING]'; exit 1)
+
+## Examples should build, clean or test.
+check build clean test:
+	@echo '----------------------------------------------------------------------'
+	@$(MAKE) -C examples-python-flask $@
+	@$(MAKE) -C examples-java-servlet $@
+	@$(MAKE) -C examples-java-wicket $@
+	@$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
+	@$(MAKE) -C examples-java-spark-mustache $@
+	@$(MAKE) -C examples-java-ninjaframework $@
+	@$(MAKE) -C examples-php-vanilla $@
+	@echo '----------------------------------------------------------------------'
 
 run-setup:
 	@echo " Let's see if you have Node.js and npm installed?"
@@ -29,24 +45,8 @@ run-setup:
 	@npm install
 	@echo "\nVery good!\n All done. Now move along!\n"
 
-
 ## Build __all__ the examples!
 all: build
-
-## Examples should build, clean or test.
-check-require build clean test:
-	@echo '----------------------------------------------------------------------'
-	@$(MAKE) -C examples-python-flask $@
-	@$(MAKE) -C examples-java-servlet $@
-	@$(MAKE) -C examples-java-wicket $@
-	@$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
-	@$(MAKE) -C examples-java-spark-mustache $@
-	@$(MAKE) -C examples-php-vanilla $@
-	@echo '----------------------------------------------------------------------'
-
-which-%:
-	@echo -n '--> Checking if $* is installed... '
-	@(which $* > /dev/null && echo '[OK]') || (echo '[MISSING]'; exit 1)
 
 ## Executes the acceptance tests, assuming a correct ${URL} is set
 run-test:

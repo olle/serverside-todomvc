@@ -1,4 +1,4 @@
-.PHONY: check-require build clean test run-test all
+.PHONY: check build clean test run-test all
 
 SELF=examples-python-flask
 URL=http://127.0.0.1:8080
