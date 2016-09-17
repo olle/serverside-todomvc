@@ -2,38 +2,8 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-    <!--
-    Server-side TodoMVC - Example Template (v3)
-
-    This is the template that any Server-side TodoMVC example implementation may
-    use. It's developed with the goal of being a guide for an implementation. It
-    aims to be semantic and beautifully styled out-of-the-box, in order to provide
-    the same experience in each Server-side TodoMVC implementation.
-
-    How-to:
-
-    It's easy. Make sure to serve this file from your server, as-is. You should
-    now be able to se the full logic-less TodoMVC web application.
-
-    Now your job is to read through this HTML-file and react to each of the `TODO`
-    annotations. It should be pretty straight forward.
-
-    Throughout the HTML-code there are `${variable}` placeholders. These are not
-    intended to be exact variables for interpolation or templating, but rather
-    hints at what type of information that should be output. Feel free to mess
-    around and modify anything to better suite your implementation. Also URLs will
-    need to be adapted.
-
-    And remember - no JavaScript!
-
-    Good luck and happy hacking!
-    -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--
-      TODO: Change the title placeholders to the apropriate language and framework
-            (or configuration) of your example.
-    -->
-    <title>${Language} ${Framework} • Server-side TodoMVC</title>
+    <title>Java Spring Boot • Server-side TodoMVC</title>
 		<link rel="stylesheet" href="index.css">
 	</head>
 	<body>
