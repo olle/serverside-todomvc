@@ -10,10 +10,6 @@
 		<section class="todoapp">
 			<header class="header">
 				<h1>todos</h1>
-        <!--
-          TODO: When this form is posted, a new todo should be created and visible
-                in the todo-list, as an `active` item.
-        -->
         <form action="todos/" method="post">
           <!--
             TODO: Remove the `autofocus="autofocus"` attribute if a todo-item is
