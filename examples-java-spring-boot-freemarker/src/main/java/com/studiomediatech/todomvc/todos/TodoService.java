@@ -1,6 +1,5 @@
 package com.studiomediatech.todomvc.todos;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +20,6 @@ public class TodoService {
 	}
 
 	public List<Todo> getTodos() {
-		return Collections.emptyList();
+		return todoRepository.findAll();
 	}
 }

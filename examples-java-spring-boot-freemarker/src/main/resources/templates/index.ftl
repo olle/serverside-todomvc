@@ -10,7 +10,7 @@
 		<section class="todoapp">
 			<header class="header">
 				<h1>todos</h1>
-        <form action="todos/" method="post">
+        <form action="/todos" method="post">
           <!--
             TODO: Remove the `autofocus="autofocus"` attribute if a todo-item is
                   currently being edited.
@@ -22,6 +22,9 @@
         TODO: This section must only be visible (exist) if there are _visible_
               todo items (don't forget the filter).
       -->
+
+      <#if todos?size &gt; 0>
+      HGEEEELOOOO
 			<section class="main">
         <!--
           TODO: If this form is posted, then all, not yet completed tasks, must be
@@ -48,7 +51,7 @@
                 TODO: This should be the only element with the `autofocus`
                       attribute set. Check the create-form on the top.
                -->
-              <input type="text" name="item-text" placeholder="${item-text}" autofocus="autofocus" autocomplete="off" class="edit" />
+              <input type="text" name="item-text" placeholder="{itemText}" autofocus="autofocus" autocomplete="off" class="edit" />
             </form>
             <!-- # else # -->
             <div class="view">
@@ -71,10 +74,10 @@
                       If the item is `completed` replace the link with this simple
                       span element:
 
-                      <span class="item-text">${item-text}</span>
+                      <span class="item-text">{item-text}</span>
               -->
               <!-- XXX: Fix link color from plain label. -->
-              <label><a href="?action=edit&amp;item-id=item-id" class="item-text">${item-text}</a></label>
+              <label><a href="?action=edit&amp;item-id=item-id" class="item-text">{item-text}</a></label>
 							<!-- <label>Taste JavaScript</label> -->
               <!--
                 TODO: Posting this form should delete the todo item, identified
@@ -100,6 +103,7 @@
 					</li>
 				</ul>
 			</section>
+      </#if>
       <!--
         TODO: This footer must only be visible if there are any todo items at
               at all, even if they are not visible.
@@ -109,7 +113,7 @@
           TODO: Provide a count and properly pluralized label of how many _active_
                 todo items there are left.
         -->
-        <span class="todo-count"><strong>${active}</strong> item|s left</span>
+        <span class="todo-count"><strong>{active}</strong> item|s left</span>
 				<!-- Remove this if you don't implement routing -->
 				<ul class="filters">
           <!--
@@ -130,7 +134,7 @@
         -->
         <form action="todos/?filter=completed" method="post">
           <input type="hidden" name="method" value="delete" />
-          <button class="clear-completed"><span>Clear completed (${completed-count})</span></button>
+          <button class="clear-completed"><span>Clear completed ({completed-count})</span></button>
         </form>
 			</footer>
 		</section>

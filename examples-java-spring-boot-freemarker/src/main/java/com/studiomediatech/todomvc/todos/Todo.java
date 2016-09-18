@@ -11,6 +11,10 @@ public class Todo extends AbstractPersistable<Long> {
 	
 	private String text;
 
+	Todo() {
+		// Required!
+	}
+	
 	public Todo(String text) {
 		this.text = text;
 	}

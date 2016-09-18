@@ -27,7 +27,7 @@ public class TodoController {
 		Todo todo = new Todo(itemText);		
 		todoService.saveTodo(todo);		
 		
-		return INDEX_VIEW;
+		return "redirect:/";
 	}
 	
 }
