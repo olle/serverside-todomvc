@@ -1,5 +1,8 @@
 package com.studiomediatech.todomvc.todos;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,5 +18,9 @@ public class TodoService {
 
 	public void saveTodo(Todo todo) {
 		todoRepository.save(todo);
+	}
+
+	public List<Todo> getTodos() {
+		return Collections.emptyList();
 	}
 }
