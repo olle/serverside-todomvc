@@ -1,4 +1,4 @@
-package com.studiomediatech.todomvc.todos;
+package com.studiomediatech.todomvc.app.todos;
 
 import java.util.List;
 
@@ -21,5 +21,9 @@ public class TodoService {
 
 	public List<Todo> getTodos() {
 		return todoRepository.findAll();
+	}
+
+	public void deleteTodo(Long id) {
+		todoRepository.delete(id);
 	}
 }

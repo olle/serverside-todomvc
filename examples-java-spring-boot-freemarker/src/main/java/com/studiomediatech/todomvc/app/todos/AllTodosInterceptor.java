@@ -1,4 +1,4 @@
-package com.studiomediatech.todomvc.todos;
+package com.studiomediatech.todomvc.app.todos;
 
 import java.util.Optional;
 
@@ -11,19 +11,20 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 @Component
-class AllTodosHandlerInterceptor extends HandlerInterceptorAdapter {
+class AllTodosInterceptor extends HandlerInterceptorAdapter {
 
 	private final TodoService todoService;
 
 	@Autowired
-	public AllTodosHandlerInterceptor(TodoService todoService) {
+	public AllTodosInterceptor(TodoService todoService) {
 		this.todoService = todoService;
 	}
 
 	@Override
 	public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		
-		Optional.ofNullable(modelAndView).ifPresent(m -> m.getModelMap().addAttribute("todos", todoService.getTodos()));
+
+		Optional.ofNullable(modelAndView)
+				.ifPresent(mav -> mav.getModelMap().addAttribute("todos", todoService.getTodos()));
 	}
 }

@@ -1,4 +1,4 @@
-package com.studiomediatech.todomvc.todos;
+package com.studiomediatech.todomvc.app.todos;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -9,8 +9,10 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.studiomediatech.todomvc.app.todos.AllTodosInterceptor;
+
 @RunWith(MockitoJUnitRunner.class)
-public class AllTodosHandlerInterceptorTest {
+public class AllTodosInterceptorTest {
 
 	@Mock
 	private TodoService todoService;
@@ -18,7 +20,7 @@ public class AllTodosHandlerInterceptorTest {
 	@Test
 	public void ensurePostHandlerFetchesAllTodos() throws Exception {
 		
-		AllTodosHandlerInterceptor interceptor = new AllTodosHandlerInterceptor(todoService);
+		AllTodosInterceptor interceptor = new AllTodosInterceptor(todoService);
 		
 		ModelAndView modelAndView = new ModelAndView();
 		

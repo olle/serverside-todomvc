@@ -1,4 +1,4 @@
-package com.studiomediatech.todomvc.todos;
+package com.studiomediatech.todomvc.app.todos;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

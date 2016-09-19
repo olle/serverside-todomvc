@@ -1,4 +1,4 @@
-package com.studiomediatech.todomvc.todos;
+package com.studiomediatech.todomvc.web;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
@@ -15,6 +15,9 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import com.studiomediatech.todomvc.app.todos.Todo;
+import com.studiomediatech.todomvc.app.todos.TodoService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TodoControllerTest {
@@ -45,6 +48,15 @@ public class TodoControllerTest {
 		assertThat(todo, is(instanceOf(Todo.class)));
 		assertThat(todo.getText(), is("todo text"));
 		assertThat(todo.getId(), is(nullValue()));
+	}
+	
+	@Test
+	public void ensureHandlesDeleteForTodoWithGivenId() throws Exception {
+		
+		mockMvc.perform(delete("/todos/42")).andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/"));
+		
+		verify(todoService).deleteTodo(42L);
+		
 	}
 
 }
