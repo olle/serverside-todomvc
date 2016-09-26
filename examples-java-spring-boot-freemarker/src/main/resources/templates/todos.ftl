@@ -13,77 +13,43 @@
         <header class="header">
             <h1>todos</h1>
             <form action="todos/" method="post">
-                <!--
-              TODO: Remove the `autofocus="autofocus"` attribute if a todo-item is
-                    currently being edited.
-                -->
-                <input type="text" name="item-text" placeholder="What needs to be done?" autocomplete="off" class="new-todo" autofocus>
+                <input type="text" name="item-text" placeholder="What needs to be done?" autocomplete="off" class="new-todo" ${editing?string('', 'autofocus')} />
             </form>
         </header>
         <!--
-      TODO: This section must only be visible (exist) if there are _visible_
-            todo items (don't forget the filter).
-    -->
+          TODO: This section must only be visible (exist) if there are _visible_
+                todo items (don't forget the filter).
+        -->
         <#if todos?size &gt; 0>
         <section class="main">
             <!--
-        TODO: If this form is posted, then all, not yet completed tasks, must be
-              marked as completed.
-      -->
+              TODO: If this form is posted, then all, not yet completed tasks, must be
+                    marked as completed.
+            -->
             <form action="todos/status" method="post" class="toggle-all">
                 <button class="icon angle-double down"></button>
             </form>
             <ul class="todo-list">
                 <!--
-          TODO: This is a todo-item. Make sure to mark it with either classes:
-                `completed` or `editing` depending on it's current status.
-        -->
+                  TODO: This is a todo-item. Make sure to mark it with either classes:
+                        `completed` or `editing` depending on it's current status.
+                -->
                 <#list todos as item>
                 <li class="${item.status!''}">
-                    <!--
-            TODO: When the item is in `editing` status, only the following form
-                  should be visible. The if-else-end markers show the blocks
-                  that should be rendered.
-          -->
-                    <#if item.editing>
-                    <form action="todos/item-id" method="post" class="">
-                        <input type="hidden" name="method" value="put" />
-                        <!--
-              TODO: This should be the only element with the `autofocus`
-                    attribute set. Check the create-form on the top.
-             -->
-                        <input type="text" name="item-text" placeholder="${item.text}" autofocus="autofocus" autocomplete="off" class="edit" />
+                    <#if item.editing == true>
+                    <form action="todos/${item.id}" method="post">
+                        <input type="text" name="item-text" value="${item.text}" autofocus="autofocus" autocomplete="off" class="edit-todo" />
                     </form>
                     <#else>
                     <div class="view">
-                        <!--
-              TODO: Posting this form must toggle the completed state of the
-                    todo item, identified by the given id.
-            -->
-                        <form action="todos/${item.id}/status" method="post" class="item-toggle-completed">
-                            <!--
-                TODO: Add the class `is-active` if the todo is completed.
-              -->
-                            <!-- XXX: Fix toggle icon styling from checkbox input. -->
-                            <button class="toggle checked"></button>
-                            <!-- <input class="toggle" type="checkbox" checked> -->
+                        <form action="todos/${item.id}/status" method="post" class="item-toggle-completed is-active">
+                            <button class="toggle ${item.status!''}"></button>
                         </form>
-                        <!--
-              TODO: Clicking this link, should create a page where the todo,
-                    identified by the given id, is in the `editing` status.
-
-                    If the item is `completed` replace the link with this simple
-                    span element:
-
-                    <span class="item-text">{item-text}</span>
-            -->
-                        <!-- XXX: Fix link color from plain label. -->
+                        <#if item.active>
                         <label><a href="?action=edit&amp;item-id=${item.id}" class="item-text">${item.text}</a></label>
-                        <!-- <label>Taste JavaScript</label> -->
-                        <!--
-              TODO: Posting this form should delete the todo item, identified
-                    by the given id.
-            -->
+                        <#else>
+                        <label>${item.text}</label>
+                        </#if>
                         <form action="todos/${item.id}" method="post" class="item-delete">
                             <input type="hidden" name="_method" value="delete" />
                             <button class="destroy"></button>
@@ -92,53 +58,42 @@
                     </#if>
                 </li>
                 </#list>
-                <!--
-          TODO: This is just another example item, remove this.
-        -->
-                <li class="completed">
-                    <div class="view">
-                        <input class="toggle" type="checkbox" checked>
-                        <label>Buy a unicorn</label>
-                        <button class="destroy"></button>
-                    </div>
-                    <input class="edit" value="Rule the web">
-                </li>
             </ul>
         </section>
         </#if>
-        <!--
-      TODO: This footer must only be visible if there are any todo items at
-            at all, even if they are not visible.
-    -->
+        <#if todos?size &gt; 0>
         <footer class="footer">
             <!--
-        TODO: Provide a count and properly pluralized label of how many _active_
-              todo items there are left.
-      -->
+              TODO: Provide a count and properly pluralized label of how many _active_
+                    todo items there are left.
+            -->
             <span class="todo-count"><strong>{active}</strong> item|s left</span>
             <!-- Remove this if you don't implement routing -->
             <ul class="filters">
                 <!--
-          TODO: Allow to see todo items based on filters `active`, `completed`
-                as well as showing `all`, which is selected by default.
+                  TODO: Allow to see todo items based on filters `active`, `completed`
+                        as well as showing `all`, which is selected by default.
 
-                Mark the current filter in use with the class `is-active`.
-        -->
+                        Mark the current filter in use with the class `selected`.
+                -->
                 <li><a href="?filter=all" class="selected">All</a></li>
                 <li><a href="?filter=active">Active</a></li>
                 <li><a href="?filter=completed">Completed</a></li>
             </ul>
             <!--
-        TODO: Posting this form must delete all todo items that are already
-              marked as being completed.
+              TODO: Posting this form must delete all todo items that are already
+                    marked as being completed.
 
-              This form should only be visible if there are completed items.
-      -->
+                    This form should only be visible if there are completed items.
+            -->
+            <#if completed &gt; 0>
             <form action="todos/?filter=completed" method="post">
-                <input type="hidden" name="method" value="delete" />
+                <input type="hidden" name="_method" value="delete" />
                 <button class="clear-completed"><span>Clear completed ({completed-count})</span></button>
             </form>
+            </#if>
         </footer>
+        </#if>
     </section>
     <footer class="info">
         <p>Click on the text to edit a todo.</p>

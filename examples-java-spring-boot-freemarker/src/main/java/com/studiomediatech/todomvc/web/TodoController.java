@@ -13,6 +13,7 @@ import com.studiomediatech.todomvc.app.todos.TodoService;
 @Controller
 class TodoController {
 
+	private static final String REDIRECT_TO_INDEX = "redirect:/";
 	private final TodoService todoService;
 
 	@Autowired
@@ -25,22 +26,41 @@ class TodoController {
 		return "todos";
 	}
 	
+	@RequestMapping(path ="/", method = RequestMethod.GET, params = {"action", "item-id"})
+	public String editTodo(@RequestParam("item-id") Long id) {
+		todoService.editTodo(id);
+		return REDIRECT_TO_INDEX;
+	}
+	
 	@RequestMapping(path = "/todos", method = RequestMethod.POST)
 	public String newTodo(@RequestParam("item-text") String itemText) {
-		
 		Todo todo = new Todo(itemText);
 		todoService.saveTodo(todo);
-		
-		return "redirect:/";
+		return REDIRECT_TO_INDEX;
+	}
+	
+	@RequestMapping(path = "/todos", method = RequestMethod.DELETE, params = {"filter=completed"})
+	public String clearCompleted() {	
+		todoService.clearCompleted();		
+		return REDIRECT_TO_INDEX;
 	}
 	
 	@RequestMapping(path = "/todos/{id}", method = RequestMethod.DELETE)
 	public String deleteTodo(@PathVariable Long id) {
-		
 		todoService.deleteTodo(id);
-		
-		return "redirect:/";
-		
+		return REDIRECT_TO_INDEX;
+	}
+	
+	@RequestMapping(path = "/todos/{id}", method = RequestMethod.POST)
+	public String editTodo(@PathVariable Long id, @RequestParam("item-text") String itemText) {
+		todoService.updateTodo(id, itemText);
+		return REDIRECT_TO_INDEX;
+	}
+	
+	@RequestMapping(path = "/todos/{id}/status", method = RequestMethod.POST)
+	public String toggleStatus(@PathVariable Long id) {
+		todoService.toggleStatus(id);
+		return REDIRECT_TO_INDEX;
 	}
 	
 }
