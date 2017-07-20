@@ -1,0 +1,8 @@
+spring:
+  thymeleaf:
+    cache: false
+  resources:
+    cache-period: 0
+logging:
+  level:
+    com.studiomediatech: DEBUG
