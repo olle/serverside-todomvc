@@ -1,12 +1,13 @@
 package com.studiomediatech.serversidetodomvc.experimentsjavaspringdatamap;
 
 import java.util.Collection;
-import java.util.Map;
+
+import org.springframework.util.MultiValueMap;
 
 public interface TodoRepository {
 
 	Collection<Todo> findAll();
 
-	void saveTodo(Map<String, Object> data);
+	void saveTodo(MultiValueMap<String, Object> data);
 
 }

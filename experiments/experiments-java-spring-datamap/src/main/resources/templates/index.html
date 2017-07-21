@@ -8,8 +8,11 @@
 </head>
 
 <body>
+  <form method="post">
+    <input id="text" name="text" />
+  </form>
   <ul>
-    <li th:each="todo : ${todos}" th:text="${todo.id} - ${todo.text}" />
+    <li th:each="todo : ${todos}" th:text="${todo.id} + ' - ' + ${todo.text}" />
   </ul>
 </body>
 

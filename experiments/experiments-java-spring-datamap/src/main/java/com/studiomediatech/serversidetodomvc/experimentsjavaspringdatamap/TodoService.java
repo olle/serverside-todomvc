@@ -1,11 +1,12 @@
 package com.studiomediatech.serversidetodomvc.experimentsjavaspringdatamap;
 
 import java.util.Collection;
-import java.util.Map;
+
+import org.springframework.util.MultiValueMap;
 
 interface TodoService {
 
 	Collection<Todo> getAllTodos();
 
-	void addNewTodo(Map<String, Object> data);
+	void addNewTodo(MultiValueMap<String, Object> data);
 }

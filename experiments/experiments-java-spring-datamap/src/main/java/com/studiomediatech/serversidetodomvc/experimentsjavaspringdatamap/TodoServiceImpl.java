@@ -1,12 +1,9 @@
 package com.studiomediatech.serversidetodomvc.experimentsjavaspringdatamap;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 
 @Service
 class TodoServiceImpl implements TodoService, Loggable {
@@ -24,9 +21,10 @@ class TodoServiceImpl implements TodoService, Loggable {
 		logger().debug("Found {} todos in all", todos.size());
 		return todos;
 	}
-
+	
 	@Override
-	public void addNewTodo(Map<String, Object> data) {
+	public void addNewTodo(MultiValueMap<String, Object> data) {
+		logger().debug("Saving new todo from {}", data);
 		todoRepository.saveTodo(data);
 	}
 }

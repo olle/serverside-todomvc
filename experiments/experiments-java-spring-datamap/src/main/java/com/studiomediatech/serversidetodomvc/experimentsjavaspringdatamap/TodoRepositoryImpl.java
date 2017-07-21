@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.MultiValueMap;
 
 @Repository
 public class TodoRepositoryImpl implements TodoRepository, Loggable {
@@ -27,7 +28,9 @@ public class TodoRepositoryImpl implements TodoRepository, Loggable {
 	}
 
 	@Override
-	public void saveTodo(Map<String, Object> data) {
-		data.put("" + data.hashCode(), data);
+	public void saveTodo(MultiValueMap<String, Object> data) {
+		String id = "" + data.hashCode();
+		this.data.put(id, data.toSingleValueMap());
+		logger().debug("Stored new todo under id {}, {}", id, data);
 	}
 }

@@ -1,7 +1,7 @@
 .PHONY: run debug
 
 run:
-	@mvn spring-boot:run
+	@mvn clean spring-boot:run
 
 debug:
-	@mvnDebug spring-boot:run
+	@mvnDebug clean spring-boot:run
