@@ -63,12 +63,7 @@
         </#if>
         <#if todos?size &gt; 0>
         <footer class="footer">
-            <!--
-              TODO: Provide a count and properly pluralized label of how many _active_
-                    todo items there are left.
-            -->
-            <span class="todo-count"><strong>{active}</strong> item|s left</span>
-            <!-- Remove this if you don't implement routing -->
+            <span class="todo-count"><strong>${active}</strong> item<#if active &gt; 1 || active == 0>s</#if> left</span>
             <ul class="filters">
                 <!--
                   TODO: Allow to see todo items based on filters `active`, `completed`
