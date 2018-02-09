@@ -123,20 +123,18 @@ label[for='toggle-all'] {
 }
 
 .toggle-all {
+  background: lightblue;
 	position: absolute;
+  display: inline-block;
+  font-size: 25px;
+  font-weight: bold;
+	color: #e6e6e6;
 	top: -55px;
-	left: -12px;
+	left: -8px;
 	width: 60px;
 	height: 34px;
 	text-align: center;
 	border: none; /* Mobile Safari */
-}
-
-.toggle-all:before {
-	content: '❯';
-	font-size: 22px;
-	color: #e6e6e6;
-	padding: 10px 27px 10px 27px;
 }
 
 .toggle-all:checked:before {
@@ -375,12 +373,6 @@ html .clear-completed:active {
 		height: 40px;
 	}
 
-	.toggle-all {
-		-webkit-transform: rotate(90deg);
-		transform: rotate(90deg);
-		-webkit-appearance: none;
-		appearance: none;
-	}
 }
 
 @media (max-width: 430px) {

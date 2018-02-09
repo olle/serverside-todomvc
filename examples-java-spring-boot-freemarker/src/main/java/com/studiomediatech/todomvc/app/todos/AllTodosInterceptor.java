@@ -11,10 +11,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,25 +41,18 @@ class AllTodosInterceptor extends HandlerInterceptorAdapter {
         final AtomicInteger completed = new AtomicInteger(0);
         final AtomicInteger active = new AtomicInteger(0);
 
-        List<TodoDto> todos = todoService.getTodos()
-                .stream()
-                .map(TodoDto::new)
-                .map(t -> {
-                        if (t.isEditing()) {
-                            editingAny.set(true);
-                        } else if (t.isCompleted()) {
-                            completed.incrementAndGet();
-                        } else if (t.isActive()) {
-                            active.incrementAndGet();
-                        }
-
-                        return t;
-                    })
-                .collect(Collectors.toList());
+        todoService.getTodos().stream().map(TodoDto::new).forEach(t -> {
+            if (t.isEditing()) {
+                editingAny.set(true);
+            } else if (t.isCompleted()) {
+                completed.incrementAndGet();
+            } else if (t.isActive()) {
+                active.incrementAndGet();
+            }
+        });
 
         ModelMap modelMap = modelAndView.getModelMap();
 
-        modelMap.addAttribute("todos", todos);
         modelMap.addAttribute("completed", completed.get());
         modelMap.addAttribute("editing", editingAny.get());
         modelMap.addAttribute("active", active.get());

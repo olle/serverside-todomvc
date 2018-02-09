@@ -16,24 +16,12 @@
                 <input type="text" name="item-text" placeholder="What needs to be done?" autocomplete="off" class="new-todo" ${editing?string('', 'autofocus')} />
             </form>
         </header>
-        <!--
-          TODO: This section must only be visible (exist) if there are _visible_
-                todo items (don't forget the filter).
-        -->
         <#if todos?size &gt; 0>
         <section class="main">
-            <!--
-              TODO: If this form is posted, then all, not yet completed tasks, must be
-                    marked as completed.
-            -->
-            <form action="todos/status" method="post" class="toggle-all">
-                <button class="icon angle-double down"></button>
+            <form action="todos/toggle?filter=completed" method="post" class="toggle-all">
+                <button type="submit" class="icon angle-double down">&or;</button>
             </form>
             <ul class="todo-list">
-                <!--
-                  TODO: This is a todo-item. Make sure to mark it with either classes:
-                        `completed` or `editing` depending on it's current status.
-                -->
                 <#list todos as item>
                 <li class="${item.status!''}">
                     <#if item.editing == true>
@@ -65,22 +53,12 @@
         <footer class="footer">
             <span class="todo-count"><strong>${active}</strong> item<#if active &gt; 1 || active == 0>s</#if> left</span>
             <ul class="filters">
-                <!--
-                  TODO: Allow to see todo items based on filters `active`, `completed`
-                        as well as showing `all`, which is selected by default.
-
-                        Mark the current filter in use with the class `selected`.
-                -->
-                <li><a href="?filter=all" class="selected">All</a></li>
-                <li><a href="?filter=active">Active</a></li>
-                <li><a href="?filter=completed">Completed</a></li>
+              <#if completed &gt; 0>
+                <li><a href="?filter=all" <#if filter == "all">class="selected"</#if>>All</a></li>
+                <li><a href="?filter=active" <#if filter == "active">class="selected"</#if>>Active</a></li>
+                <li><a href="?filter=completed" <#if filter == "completed">class="selected"</#if>>Completed</a></li>
+              </#if>
             </ul>
-            <!--
-              TODO: Posting this form must delete all todo items that are already
-                    marked as being completed.
-
-                    This form should only be visible if there are completed items.
-            -->
             <#if completed &gt; 0>
             <form action="todos/?filter=completed" method="post">
                 <input type="hidden" name="_method" value="delete" />
@@ -95,13 +73,6 @@
         <p>
             Original template by <a href="http://github.com/sindresorhus">Sindre Sorhus</a>
             <br /> Reworked by <a href="http://github.com/olle">Olle Törnström</a>
-        </p>
-        <!--
-        TODO: Properly replace the paragraph below with a link to you or your
-              organization.
-       -->
-        <p>
-            Created by <a href="http://todomvc.com">you</a>
         </p>
         <p>
             Part of <a href="http://github.com/olle/serverside-todomvc">Server-side TodoMVC</a>
