@@ -5,11 +5,13 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'org.akhikhl.gretty:gretty:2.0.0'
     }
 }
 
 apply plugin: 'kotlin'
 apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
 
 repositories {
     jcenter()
