@@ -56,7 +56,8 @@ public class TodoMVC {
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(in), 512);
 
-        String[] httpRequestItems = reader.readLine().split(" ");
+        String line = reader.readLine();
+        String[] httpRequestItems = line.split(" ");
 
         String httpMethod = httpRequestItems[0];
         String requestPath = httpRequestItems[1];
@@ -75,7 +76,7 @@ public class TodoMVC {
             return Response.NOT_FOUND;
         }
 
-        return new Response("HTTP/1.1 200 OK\n", "<h1>Hello World!</h1>");
+        return new Response("HTTP/1.1 200 OK\n", header + "<h1>Hello World!</h1>" + footer);
     }
 
 
