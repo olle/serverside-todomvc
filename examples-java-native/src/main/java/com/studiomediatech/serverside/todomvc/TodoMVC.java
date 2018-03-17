@@ -9,13 +9,21 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import java.util.stream.Collectors;
+
 
 /**
  * A single-threaded synchronous, blocking, request/response TodoMVC socket-server.
  */
 public class TodoMVC {
 
+    private static String header;
+    private static String footer;
+
     public static void main(String[] args) throws IOException {
+
+        header = readAllLines("header.html");
+        footer = readAllLines("footer.html");
 
         try(ServerSocket server = new ServerSocket(8989)) {
             while (true) {
@@ -34,6 +42,13 @@ public class TodoMVC {
                 }
             }
         }
+    }
+
+
+    private static String readAllLines(String fn) {
+
+        return new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(fn))).lines()
+            .collect(Collectors.joining());
     }
 
 
