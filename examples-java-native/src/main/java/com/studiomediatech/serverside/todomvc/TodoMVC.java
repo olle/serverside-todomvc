@@ -5,10 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
 
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -20,7 +24,7 @@ public class TodoMVC {
     private static String header;
     private static String footer;
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, URISyntaxException {
 
         header = readAllLines("header.html");
         footer = readAllLines("footer.html");
@@ -54,15 +58,21 @@ public class TodoMVC {
 
     private static Request parseRequest(InputStream in) throws IOException {
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in), 512);
-
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in), 256);
         String line = reader.readLine();
-        String[] httpRequestItems = line.split(" ");
 
+        if (Objects.isNull(line)) {
+            return new Request();
+        }
+
+        String[] httpRequestItems = line.split(" ");
         String httpMethod = httpRequestItems[0];
         String requestPath = httpRequestItems[1];
 
-        return new Request(httpMethod, requestPath);
+        Request request = new Request(httpMethod, requestPath);
+        System.out.println("PARSED REQUEST: " + request);
+
+        return request;
     }
 
 
@@ -76,7 +86,7 @@ public class TodoMVC {
             return Response.NOT_FOUND;
         }
 
-        return new Response("HTTP/1.1 200 OK\n", header + "<h1>Hello World!</h1>" + footer);
+        return new Response("HTTP/1.1 200 OK\n", header + "\n<!-- here we go -->\n" + footer);
     }
 
 
@@ -97,11 +107,32 @@ public class TodoMVC {
 
         private final String method;
         private final String path;
+        private final String query;
+
+        public Request() {
+
+            this("GET", "/");
+        }
+
 
         public Request(String method, String path) {
 
             this.method = method;
             this.path = path;
+
+            if (path.indexOf('?') > -1) {
+                String q = "";
+
+                try {
+                    q = URLDecoder.decode(path.split("\\?")[1], "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    // OK.
+                }
+
+                this.query = q;
+            } else {
+                this.query = "";
+            }
         }
 
         public boolean isGetMethod() {
@@ -113,6 +144,13 @@ public class TodoMVC {
         public boolean isFavicon() {
 
             return path.contains("/favicon.ico");
+        }
+
+
+        @Override
+        public String toString() {
+
+            return "Request [method=" + method + ", path=" + path + ", query=" + query + "]";
         }
     }
 

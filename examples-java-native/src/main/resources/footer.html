@@ -22,7 +22,7 @@
 
                 This form should only be visible if there are completed items.
         -->
-        <form action="todos/?filter=completed" method="post">
+        <form action="todos/?filter=completed">
           <input type="hidden" name="method" value="delete" />
           <button class="clear-completed"><span>Clear completed (${completed-count})</span></button>
         </form>
