@@ -52,6 +52,10 @@ public class TodoMVC {
 
     private static Response handleRequest(Request req) {
 
+        if (!req.isGetMethod()) {
+            return Response.NOT_IMPLEMENTED;
+        }
+
         if (req.isFavicon()) {
             return Response.NOT_FOUND;
         }
@@ -84,6 +88,12 @@ public class TodoMVC {
             this.path = path;
         }
 
+        public boolean isGetMethod() {
+
+            return method.equals("GET");
+        }
+
+
         public boolean isFavicon() {
 
             return path.contains("/favicon.ico");
@@ -93,6 +103,7 @@ public class TodoMVC {
     static final class Response {
 
         public static final Response NOT_FOUND = new Response("HTTP/1.1 404 Not Found\n");
+        public static final Response NOT_IMPLEMENTED = new Response("HTTP/1.1 501 Not Implemented\n");
 
         private final String response;
         private final String body;
