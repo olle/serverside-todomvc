@@ -2,13 +2,13 @@ package com.studiomediatech.todomvc;
 
 import static spark.Spark.get;
 import static spark.Spark.post;
-import static spark.SparkBase.staticFileLocation;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import spark.ModelAndView;
+import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
 
 import com.google.common.base.Optional;
@@ -20,7 +20,8 @@ public class TodoMVC {
   private static final TodoService service = new TodoService();
 
   public static void main(String[] args) {
-    staticFileLocation("/public");
+	  
+	Spark.staticFiles.location("/public");
 
     handleGetIndex();
     handlePostNewTodo();
