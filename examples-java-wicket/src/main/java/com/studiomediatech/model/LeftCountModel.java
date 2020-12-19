@@ -2,13 +2,11 @@ package com.studiomediatech.model;
 
 import java.util.List;
 
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
-import com.studiomediatech.domain.Status;
-import com.studiomediatech.domain.Todo;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+
+import com.studiomediatech.domain.Status;
+import com.studiomediatech.domain.Todo;
 
 public class LeftCountModel extends Model<Integer> {
 
@@ -22,12 +20,6 @@ public class LeftCountModel extends Model<Integer> {
 
   @Override
   public Integer getObject() {
-
-    return FluentIterable.from(this.model.getObject()).filter(new Predicate<Todo>() {
-
-      public boolean apply(Todo todo) {
-        return todo.getStatus() == Status.ACTIVE;
-      }
-    }).size();
+    return (int) this.model.getObject().stream().filter(todo -> todo.getStatus().equals(Status.ACTIVE)).count();
   }
 }
