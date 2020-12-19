@@ -1,5 +1,6 @@
 package com.studiomediatech;
 
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +30,13 @@ public class TodoService {
   }
 
   public void clearCompleted() {
-    this.todos.stream().filter(todo -> todo.getStatus().equals(Status.COMPLETED)).forEach(todos::remove);
+    Iterator<TodoEntity> it = this.todos.iterator();
+    while (it.hasNext()) {
+      TodoEntity todoEntity = it.next();
+      if (todoEntity.getStatus().equals(Status.COMPLETED)) {
+        it.remove();
+      }
+    }
   }
 
   public void delete(TodoEntity todo) {
