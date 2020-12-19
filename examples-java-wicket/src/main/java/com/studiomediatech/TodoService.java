@@ -4,10 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.studiomediatech.domain.Status;
 import com.studiomediatech.domain.Todo;
 import com.studiomediatech.domain.TodoEntity;
@@ -24,12 +22,7 @@ public class TodoService {
   }
 
   public List<Todo> findAll() {
-    return Lists.newArrayList(Iterables.transform(this.todos, new Function<TodoEntity, Todo>() {
-
-      public Todo apply(TodoEntity todoEntity) {
-        return new Todo(todoEntity);
-      }
-    }));
+    return this.todos.stream().map(Todo::new).collect(Collectors.toList());
   }
 
   public void save(TodoEntity todo) {
@@ -39,8 +32,8 @@ public class TodoService {
   public void clearCompleted() {
     Iterator<TodoEntity> it = this.todos.iterator();
     while (it.hasNext()) {
-      TodoEntity entity = it.next();
-      if (entity.getStatus() == Status.COMPLETED) {
+      TodoEntity todoEntity = it.next();
+      if (todoEntity.getStatus().equals(Status.COMPLETED)) {
         it.remove();
       }
     }
@@ -60,10 +53,6 @@ public class TodoService {
   }
 
   private void setStatuOnAll(Status status) {
-    Iterator<TodoEntity> it = this.todos.iterator();
-    while (it.hasNext()) {
-      TodoEntity entity = it.next();
-      entity.setStatus(status);
-    }
+    this.todos.forEach(todo -> todo.setStatus(status));
   }
 }

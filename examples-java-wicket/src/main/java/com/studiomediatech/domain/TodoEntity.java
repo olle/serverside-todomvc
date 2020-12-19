@@ -2,8 +2,6 @@ package com.studiomediatech.domain;
 
 import java.io.Serializable;
 
-import com.google.common.base.Objects;
-
 public class TodoEntity implements Serializable {
 
   private static final long serialVersionUID = -9118514027306307895L;
@@ -38,6 +36,6 @@ public class TodoEntity implements Serializable {
 
   @Override
   public String toString() {
-    return Objects.toStringHelper(this).add("todo", this.todo).add("status", this.status.name()).toString();
+    return "TodoEntity [todo=" + todo + ", status=" + status + "]";
   }
 }

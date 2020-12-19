@@ -2,15 +2,6 @@ package com.studiomediatech;
 
 import java.util.List;
 
-import com.studiomediatech.component.FilterLabel;
-import com.studiomediatech.component.ItemsLeftCountLabel;
-import com.studiomediatech.component.TodoTextLabel;
-import com.studiomediatech.domain.Filter;
-import com.studiomediatech.domain.Status;
-import com.studiomediatech.domain.Todo;
-import com.studiomediatech.model.FilteredTodoListModel;
-import com.studiomediatech.model.TodoListModel;
-
 import org.apache.wicket.Component;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
@@ -29,23 +20,29 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import com.studiomediatech.component.FilterLabel;
+import com.studiomediatech.component.ItemsLeftCountLabel;
+import com.studiomediatech.component.TodoTextLabel;
+import com.studiomediatech.domain.Filter;
+import com.studiomediatech.domain.Status;
+import com.studiomediatech.domain.Todo;
+import com.studiomediatech.model.FilteredTodoListModel;
+import com.studiomediatech.model.TodoListModel;
 
 /**
  * The home page displays the list of todos and allows adding, deleting and
  * completing of the listed items.
  */
-@SuppressWarnings("serial")
 public class HomePage extends WebPage {
 
   private static final Filter ALL = new Filter(Status.ACTIVE, Status.COMPLETED);
   private static final Filter ACTIVE = new Filter(Status.ACTIVE);
   private static final Filter COMPLETED = new Filter(Status.COMPLETED);
-
   private static final String IS_ACTIVE_CLASS = "is-active";
-
   private static final String CLASS_ATTRIBUTE = "class";
   private static final String AUTOFOCUS_ATTRIBUTE = "autofocus";
-
   private static final String TOGGLE_ALL_BUTTON_ID = "toggleAllButton";
   private static final String FILTER_COMPLETED_ID = "filterCompleted";
   private static final String FILTER_ACTIVE_ID = "filterActive";
@@ -79,8 +76,8 @@ public class HomePage extends WebPage {
   private final IModel<Integer> activeCount;
   private final IModel<Integer> completedCount;
 
-  public HomePage() {
-    super();
+  public HomePage(PageParameters parameters) {
+    super(parameters);
 
     // Models
     this.all = new TodoListModel();
@@ -96,9 +93,9 @@ public class HomePage extends WebPage {
 
     // Components
     add(newTodo());
+    add(todoList());
     add(toggleAll());
     add(new FilterLabel(FILTER_CAPTION_ID, this.filter));
-    add(todoList());
     add(controls());
   }
 
@@ -143,13 +140,12 @@ public class HomePage extends WebPage {
 
     form.add(new WebMarkupContainer(TOGGLE_ALL_BUTTON_ID).add(new AttributeAppender(CLASS_ATTRIBUTE,
                                                                                     new Model<String>() {
-      @Override
-      public String getObject() {
-        return HomePage.this.toggleAllCompleted.getObject()
-            ? ""
-            : IS_ACTIVE_CLASS;
-      }
-    }).setSeparator(" ")));
+                                                                                      @Override
+                                                                                      public String getObject() {
+                                                                                        return HomePage.this.toggleAllCompleted.getObject() ? ""
+                                                                                                                                            : IS_ACTIVE_CLASS;
+                                                                                      }
+                                                                                    }).setSeparator(" ")));
 
     return form;
   }
@@ -159,6 +155,7 @@ public class HomePage extends WebPage {
     ListView<Todo> list = new ListView<Todo>(TODO_LIST_ID, this.filtered) {
       @Override
       protected void onConfigure() {
+        super.onConfigure();
         setVisible(HomePage.this.all.getObject().size() > 0);
       }
 
@@ -259,6 +256,7 @@ public class HomePage extends WebPage {
 
           @Override
           protected void onConfigure() {
+            super.onConfigure();
             setVisible(getModelObject().equals(HomePage.this.editTodo.getObject()));
           }
         };
@@ -277,6 +275,7 @@ public class HomePage extends WebPage {
     WebMarkupContainer controls = new WebMarkupContainer(CONTROLS_ID) {
       @Override
       protected void onConfigure() {
+        super.onConfigure();
         setVisible(HomePage.this.all.getObject().size() > 0);
       }
     };
@@ -296,6 +295,7 @@ public class HomePage extends WebPage {
     Form<Void> form = new Form<Void>(CLEAR_COMPLETED_ID) {
       @Override
       protected void onConfigure() {
+        super.onConfigure();
         setVisible(HomePage.this.completedCount.getObject() > 0);
       }
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.studiomediatech.serverside-todomvc</groupId>
@@ -12,51 +12,66 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <wicket.version>6.16.0</wicket.version>
-    <jetty.version>7.6.3.v20120416</jetty.version>
+    <wicket.version>9.2.0</wicket.version>
+    <jetty9.version>9.4.34.v20201102</jetty9.version>
+    <slf4j.version>1.7.25</slf4j.version>
+    <junit.version>5.7.0</junit.version>
+    <wtp.version>none</wtp.version>
   </properties>
 
   <dependencies>
-    <!-- WICKET DEPENDENCIES -->
+
+    <!--  WICKET DEPENDENCIES -->
     <dependency>
       <groupId>org.apache.wicket</groupId>
       <artifactId>wicket-core</artifactId>
       <version>${wicket.version}</version>
     </dependency>
+    <!-- OPTIONAL DEPENDENCY
+		<dependency>
+			<groupId>org.apache.wicket</groupId>
+			<artifactId>wicket-extensions</artifactId>
+			<version>${wicket.version}</version>
+		</dependency>
+		-->
 
-    <!-- LOGGING DEPENDENCIES - LOG4J -->
+    <!-- LOGGING DEPENDENCIES - SLF4J-SIMPLE -->
     <dependency>
       <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.6.4</version>
-    </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.16</version>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4j.version}</version>
     </dependency>
 
-    <!-- GUAVA -->
+    <!--  JUNIT DEPENDENCY FOR TESTING -->
     <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>15.0</version>
-    </dependency>
-
-    <!-- JETTY DEPENDENCIES FOR TESTING -->
-    <dependency>
-      <groupId>org.eclipse.jetty.aggregate</groupId>
-      <artifactId>jetty-all-server</artifactId>
-      <version>${jetty.version}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.13.1</version>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>
+
+    <!--  JETTY DEPENDENCIES FOR TESTING  -->
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-webapp</artifactId>
+      <scope>test</scope>
+      <version>${jetty9.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jetty</groupId>
+      <artifactId>jetty-jmx</artifactId>
+      <version>${jetty9.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- uncomment if WebSocket support is needed
+		<dependency>
+			<groupId>org.eclipse.jetty.websocket</groupId>
+			<artifactId>javax-websocket-server-impl</artifactId>
+			<version>${jetty9.version}</version>
+			<scope>test</scope>
+		</dependency>
+		-->
 
   </dependencies>
 
@@ -95,36 +110,42 @@
     </testResources>
     <plugins>
       <plugin>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>${jetty.version}</version>
+        <inherited>true</inherited>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version>
         <configuration>
-          <connectors>
-            <connector
-              implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-              <port>8080</port>
-              <maxIdleTime>3600000</maxIdleTime>
-            </connector>
-          </connectors>
-          <webApp>
-            <contextPath>/${project.artifactId}</contextPath>
-          </webApp>
+          <source>11</source>
+          <target>11</target>
+          <encoding>UTF-8</encoding>
+          <showWarnings>true</showWarnings>
+          <showDeprecation>true</showDeprecation>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>${jetty9.version}</version>
+        <configuration>
+          <systemProperties>
+            <systemProperty>
+              <name>maven.project.build.directory.test-classes</name>
+              <value>${project.build.directory}/test-classes</value>
+            </systemProperty>
+          </systemProperties>
+          <jettyXml>${project.basedir}/src/test/jetty/jetty.xml,${project.basedir}/src/test/jetty/jetty-ssl.xml,${project.basedir}/src/test/jetty/jetty-http.xml,${project.basedir}/src/test/jetty/jetty-https.xml</jettyXml>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <version>2.10</version>
+        <configuration>
+          <downloadSources>true</downloadSources>
+          <wtpversion>${wtp.version}</wtpversion>
         </configuration>
       </plugin>
     </plugins>
-    <pluginManagement>
-      <plugins>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.18.1</version>
-          <configuration>
-            <printSummary>false</printSummary>
-            <redirectTestOutputToFile>true</redirectTestOutputToFile>
-          </configuration>
-        </plugin>
-      </plugins>
-    </pluginManagement>
   </build>
 
 

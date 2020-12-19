@@ -3,10 +3,7 @@ package com.studiomediatech.domain;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-
-import com.google.common.base.Function;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Iterables;
+import java.util.stream.Collectors;
 
 import org.apache.wicket.util.lang.Objects;
 
@@ -34,10 +31,7 @@ public class Filter implements Serializable {
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     Filter other = (Filter) obj;
@@ -46,11 +40,7 @@ public class Filter implements Serializable {
 
   @Override
   public String toString() {
-    return Joiner.on('-').join(Iterables.transform(this.status, new Function<Status, String>() {
-      public String apply(Status status) {
-        return status.name();
-      }
-    })).toString();
+    return this.status.stream().map(Status::name).collect(Collectors.joining("-"));
   }
 
   public boolean apply(Todo todo) {

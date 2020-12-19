@@ -1,11 +1,11 @@
 package com.studiomediatech.component;
 
-import com.studiomediatech.domain.Todo;
-
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.tester.WicketTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import com.studiomediatech.domain.Todo;
 
 public class TodoTextLabelTest {
 
