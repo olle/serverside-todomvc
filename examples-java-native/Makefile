@@ -1,5 +1,5 @@
 .PHONY: start
 
 start:
-	mvn clean package
+	./mvnw clean package
 	java -jar target/examples-java-native.jar
