@@ -40,6 +40,6 @@ Currently `make` is your friend - there's even a default target that guides you 
 
 ## License
 
-This project is a derivative work of the great [TodoMVC](http://http://todomvc.com) project, so we stay with the MIT License (please see the LICENSE file for more detailed information).
+This project is a derivative work of the great [TodoMVC](http://todomvc.com) project, so we stay with the MIT License (please see the LICENSE file for more detailed information).
 
 We also whish to aknowledge the [authors](https://github.com/tastejs/todomvc/blob/gh-pages/readme.md#team) and [contributors](https://github.com/tastejs/todomvc/graphs/contributors) of the original project.
