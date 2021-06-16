@@ -15,7 +15,7 @@
     <spring.version>4.3.14.RELEASE</spring.version>
     <org.aspectj-version>1.7.4</org.aspectj-version>
     <org.slf4j-version>1.7.5</org.slf4j-version>
-    <ch.qos.logback-version>1.0.13</ch.qos.logback-version>
+    <ch.qos.logback-version>1.2.0</ch.qos.logback-version>
     <org.thymeleaf-version>2.1.2.RELEASE</org.thymeleaf-version>
     <tomcat.version>2.2</tomcat.version>
   </properties>
