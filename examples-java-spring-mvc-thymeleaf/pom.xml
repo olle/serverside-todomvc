@@ -12,7 +12,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java-version>1.8</java-version>
-    <spring.version>4.3.14.RELEASE</spring.version>
+    <spring.version>5.3.18</spring.version>
     <org.aspectj-version>1.7.4</org.aspectj-version>
     <org.slf4j-version>1.7.5</org.slf4j-version>
     <ch.qos.logback-version>1.2.0</ch.qos.logback-version>
