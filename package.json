@@ -3,7 +3,7 @@
   "repository": {},
   "devDependencies": {
     "chai": "^2.1.2",
-    "mocha": "^8.2.1",
+    "mocha": "^10.1.0",
     "zombie": "^6.1.4"
   },
   "scripts": {
