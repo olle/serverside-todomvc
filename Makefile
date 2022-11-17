@@ -6,8 +6,8 @@
 ### server. Testing is aimed at asserting or validating the completeness of
 ### a built example, by running some high level web-test on it.
 ###
-### Also, my Makefile-foo is not so strong, so bare with me. Any
-### improvements are welcome.
+### Also, my Makefile-foo is not so strong, so bare with me. Any improvements
+### are welcome.
 ###
 .PHONY: help setup all build clean test run-test
 
