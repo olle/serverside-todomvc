@@ -1,3 +1,9 @@
+:root {
+  --fg: #000;
+  --bg: #fff;
+  --link: hsl(211, 100%, 40%);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -7,6 +13,9 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+}
+a {
+  color: var(--link);
 }
 
 body {
@@ -23,6 +32,18 @@ main {
   flex: 1;
 }
 footer {
-  background: #f1f1f1;
+  background: hsl(11, 6%, 95%);
   font-size: 80%;
+}
+
+
+input {
+  display: block;
+  width: 100%;
+  max-width: 33rem;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  outline: none;
+  
+  padding: .7rem;
 }
