@@ -45,13 +45,28 @@
   <main>
     <h1>Todos</h1>
     <label for="todo">Todo</label>
-    <input placeholder="What needs to be done?" autofocus required name="todo" id="todo" form="todos" />
-    <!-- <ul>
-      <li>foo</li>
-      <li>bar</li>
-      <li>baz</li>
-    </ul> -->
     <form action="todos" method="post" id="todos" />
+    <input placeholder="What needs to be done?" autofocus required name="todo" id="todo" form="todos" />
+    
+    <form action="todos" method="post" id="one-todo" />
+    <ul>
+      <li>
+        <button name="complete"></button>
+        <span>Create new HTML template</span>
+        <button name="delete" value="123" type="submit" form="one-todo">&#x2715;</button>
+      </li>
+      <li>
+        <button name="activate"></button>
+        <span>Update examples with new template</span>
+        <button name="delete">&#x2715;</button>
+      </li>
+      <li>
+        <button name="complete"></button>
+        <span>Relax, take it easy</span>
+        <button name="delete">&#x2715;</button>
+      </li>
+    </ul>
+    
   </main>
   <footer>
     <p>Click on the text to edit a todo.</p>

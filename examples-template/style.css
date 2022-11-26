@@ -3,10 +3,18 @@
   --bg: #fff;
   --link: hsl(211, 100%, 40%);
   --fg-muted: #555;
+  --fg-light: #dedede;
+  --max-width: 33rem;
 }
 
 * {
   box-sizing: border-box;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  list-style-position: inside;
 }
 
 html,
@@ -51,11 +59,67 @@ input {
   line-height: 1;
   display: block;
   width: 100%;
-  max-width: 33rem;
+  max-width: var(--max-width);
   border: 1px solid var(--fg-muted);
   border-radius: 3px;
   outline: none;
 
   padding: 0.7rem;
   padding-top: 1.3rem;
+}
+
+ul {
+  margin-top: 2rem;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  max-width: var(--max-width);
+  border-bottom: 1px solid var(--fg-light);
+  padding: 1rem 0;
+}
+li > button {
+  cursor: pointer;
+}
+li > button[name="complete"],
+li > button[name="activate"] {
+  margin-right: 1rem;
+  width: 20px;
+  height: 20px;
+  background-color: var(--bg);
+  border-radius: 999999px;
+  border: 1px solid var(--fg-muted);
+}
+li > button[name="complete"]:hover {
+  border-color: var(--link);
+}
+li > button[name="activate"] {
+  background: var(--link);
+  border: 4px solid white;
+  outline: 1px solid var(--link);
+}
+li > button[name="delete"] {
+  background: var(--bg);
+  font-size: 106%;
+  font-weight: 200;
+  color: var(--fg-light);
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  display: none;
+}
+li:hover > button[name="delete"] {
+  display: initial;
+}
+li > button[name="delete"]:hover {
+  color: var(--link);
+}
+li > span {
+  flex: 1;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
 }
