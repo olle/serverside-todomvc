@@ -2,6 +2,7 @@
   --fg: #000;
   --bg: #fff;
   --link: hsl(211, 100%, 40%);
+  --fg-muted: #555;
 }
 
 * {
@@ -36,14 +37,25 @@ footer {
   font-size: 80%;
 }
 
+label {
+  line-height: 1;
+  position: relative;
+  left: 0.5rem;
+  top: 0.7rem;
+  background: var(--bg);
+  padding: 0.1rem 0.3rem;
+  color: var(--fg-muted);
+}
 
 input {
+  line-height: 1;
   display: block;
   width: 100%;
   max-width: 33rem;
-  border: 1px solid #aaa;
+  border: 1px solid var(--fg-muted);
   border-radius: 3px;
   outline: none;
-  
-  padding: .7rem;
+
+  padding: 0.7rem;
+  padding-top: 1.3rem;
 }
