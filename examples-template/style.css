@@ -63,7 +63,12 @@ footer {
 }
 
 main > h1 {
+  max-width: var(--max-width);
   color: var(--primary);
+}
+main > h1 > small {
+  font-weight: normal;
+  float: right;
 }
 
 label {

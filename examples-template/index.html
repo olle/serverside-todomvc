@@ -38,7 +38,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--
       TODO: Change the title placeholders to the appropriate language and framework
-            (or configuration) of your example. -->
+            (or configuration) of your example.
+  -->
   <title>${Language} ${Framework} • Server-Side TodoMVC</title>
   <link rel="stylesheet" href="style.css">
   <!-- Look mom, no JavaScript! -->
@@ -46,13 +47,24 @@
 
 <body>
   <main>
-    <h1>Todos</h1>
-    <label for="todo">Todo</label>
-    <form action="todos" method="post">
-      <input placeholder="What needs to be done?" autofocus required name="todo" id="todo" />
+    <!--
+        TODO: Replace {{active-count}} with the number of not yet completed
+              todo items.
+    -->
+    <h1>Todos <small>{{active-count}}</small></h1>
+    <!--
+        TODO: When this form is posted, a new todo item should be created and
+              shown in the todo-list, as an `active` item.
+    -->
+    <form method="post">
+      <label for="todo">Todo</label>
+      <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
     </form>
-    <form action="todos" method="post">
+    <form method="post">
       <ul>
+        <!--
+            TODO: Render all todo items in the list.
+        -->
         <li>
           <button name="complete" value="{{todo-id}}"></button>
           <span>Create new HTML template</span>
@@ -72,7 +84,7 @@
     </form>
   </main>
   <footer>
-    <p>Click on the text to edit a todo.</p>
+    <em>Click on the text to edit a todo.</em>
     <p>
       Template by <a href="https://github.com/olle">Olle Törnström</a>,
       inspired by the original <a href="https://todomvc.com">TodoMVC</a> from
