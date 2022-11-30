@@ -1,0 +1,156 @@
+:root {
+  --fg: #000;
+  --bg: #fff;
+  --footer: #f3f3f3;
+  --primary: #f62459;
+  --link: #0063cc;
+  --fg-muted: #555;
+  --fg-light: #dedede;
+  --max-width: 33rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --bg: #222;
+    --fg: #efefef;
+    --footer: #444;
+    --primary: #e3446c;
+    --link: #3396ff;
+    --fg-muted: #bbb;
+    --fg-light: #dedede;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  list-style-position: inside;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 107%;
+}
+a {
+  color: var(--link);
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+main,
+footer {
+  padding: 1rem;
+}
+main {
+  flex: 1;
+}
+footer {
+  background: var(--footer);
+  font-size: 80%;
+}
+
+main > h1 {
+  max-width: var(--max-width);
+  color: var(--primary);
+}
+main > h1 > small {
+  font-weight: normal;
+  float: right;
+}
+
+label {
+  line-height: 1;
+  position: relative;
+  left: 0.5rem;
+  top: 0.7rem;
+  background: var(--bg);
+  padding: 0.1rem 0.3rem;
+  color: var(--fg-muted);
+  font-size: 90%;
+}
+
+input {
+  line-height: 1;
+  display: block;
+  width: 100%;
+  max-width: var(--max-width);
+  border: 1px solid var(--fg-muted);
+  border-radius: 3px;
+  outline: none;
+  background: var(--bg);
+  color: var(--fg);
+  padding: 0.7rem;
+  padding-top: 1.3rem;
+  font-size: 100%;
+}
+
+ul {
+  margin-top: 2rem;
+}
+
+li {
+  display: flex;
+  align-items: center;
+  max-width: var(--max-width);
+  border-bottom: 1px solid var(--fg-light);
+  padding: 1rem 0;
+}
+li > button {
+  cursor: pointer;
+}
+li > button[name="complete"],
+li > button[name="revert"] {
+  margin-right: 1rem;
+  width: 20px;
+  height: 20px;
+  background-color: var(--bg);
+  border-radius: 999999px;
+  border: 1px solid var(--fg-muted);
+  outline: none;
+}
+li > button[name="complete"]:hover {
+  border-color: var(--primary);
+}
+li > button[name="revert"] {
+  background: var(--primary);
+  border: 4px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+li > button[name="delete"] {
+  font-weight: 200;
+  font-size: 150%;
+  line-height: 70%;
+  background: var(--bg);
+  color: var(--fg-light);
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  display: none;
+}
+li:hover > button[name="delete"] {
+  display: initial;
+}
+li > button[name="delete"]:hover {
+  color: var(--link);
+}
+li > span {
+  flex: 1;
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
