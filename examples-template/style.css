@@ -1,10 +1,24 @@
 :root {
   --fg: #000;
   --bg: #fff;
-  --link: hsl(211, 100%, 40%);
+  --footer: #f3f3f3;
+  --primary: #f62459;
+  --link: #0063cc;
   --fg-muted: #555;
   --fg-light: #dedede;
   --max-width: 33rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    --bg: #222;
+    --fg: #efefef;
+    --footer: #444;
+    --primary: #e3446c;
+    --link: #3396ff;
+    --fg-muted: #bbb;
+    --fg-light: #dedede;
+  }
 }
 
 * {
@@ -22,6 +36,9 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 107%;
 }
 a {
   color: var(--link);
@@ -41,8 +58,12 @@ main {
   flex: 1;
 }
 footer {
-  background: hsl(11, 6%, 95%);
+  background: var(--footer);
   font-size: 80%;
+}
+
+main > h1 {
+  color: var(--primary);
 }
 
 label {
@@ -53,6 +74,7 @@ label {
   background: var(--bg);
   padding: 0.1rem 0.3rem;
   color: var(--fg-muted);
+  font-size: 90%;
 }
 
 input {
@@ -63,9 +85,11 @@ input {
   border: 1px solid var(--fg-muted);
   border-radius: 3px;
   outline: none;
-
+  background: var(--bg);
+  color: var(--fg);
   padding: 0.7rem;
   padding-top: 1.3rem;
+  font-size: 100%;
 }
 
 ul {
@@ -83,26 +107,28 @@ li > button {
   cursor: pointer;
 }
 li > button[name="complete"],
-li > button[name="activate"] {
+li > button[name="revert"] {
   margin-right: 1rem;
   width: 20px;
   height: 20px;
   background-color: var(--bg);
   border-radius: 999999px;
   border: 1px solid var(--fg-muted);
+  outline: none;
 }
 li > button[name="complete"]:hover {
-  border-color: var(--link);
+  border-color: var(--primary);
 }
-li > button[name="activate"] {
-  background: var(--link);
-  border: 4px solid white;
-  outline: 1px solid var(--link);
+li > button[name="revert"] {
+  background: var(--primary);
+  border: 4px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--primary);
 }
 li > button[name="delete"] {
-  background: var(--bg);
-  font-size: 106%;
   font-weight: 200;
+  font-size: 150%;
+  line-height: 70%;
+  background: var(--bg);
   color: var(--fg-light);
   padding: 0;
   margin: 0;

@@ -6,36 +6,39 @@
   <meta name="description"
     content="Helping you remember or select a server-side MV* framework - Todo apps for Spring Boot, Flask, PHP and many more">
   <!--
+    ****************************************************************************
+
     Server-side TodoMVC - Example Template (v4)
 
     This is the template that any Server-side TodoMVC example implementation may
-    use. It's developed with the goal of being a guide for an implementation. It
-    aims to be semantic and beautifully styled out-of-the-box, in order to provide
-    the same experience in each Server-side TodoMVC implementation.
+    use. It aims to be semantic and beautifully styled out-of-the-box, in order
+    to provide the same user experience in each Server-Side TodoMVC
+    implementation.
 
-    How-to:
+    How to use:
 
     It's easy. Make sure to serve this file from your server, as-is. You should
     now be able to se the full logic-less TodoMVC web application.
 
-    Now your job is to read through this HTML-file and react to each of the `TODO`
-    annotations. It should be pretty straight forward.
+    Now your job is to read through this HTML-file and solve each of the TODO
+    assignments. It should be pretty straight forward.
 
-    Throughout the HTML-code there are `${variable}` placeholders. These are not
-    intended to be exact variables for interpolation or templating, but rather
-    hints at what type of information that should be output. Feel free to mess
-    around and modify anything to better suite your implementation. Also URLs will
+    Throughout the HTML there are {{variable}} placeholders. These may not
+    be the exact variables to interpolate, but rather hints at what type of
+    information that is required. Feel free to mess around and modify anything
+    to better suite your implementation. Also URL/URIs and form handlers will
     need to be adapted.
 
     And remember - no JavaScript!
 
-    Good luck and happy hacking!
+    Good luck and happy coding!
+
+    ****************************************************************************
     -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!--
       TODO: Change the title placeholders to the appropriate language and framework
-            (or configuration) of your example.
-          -->
+            (or configuration) of your example. -->
   <title>${Language} ${Framework} • Server-Side TodoMVC</title>
   <link rel="stylesheet" href="style.css">
   <!-- Look mom, no JavaScript! -->
@@ -45,28 +48,28 @@
   <main>
     <h1>Todos</h1>
     <label for="todo">Todo</label>
-    <form action="todos" method="post" id="todos" />
-    <input placeholder="What needs to be done?" autofocus required name="todo" id="todo" form="todos" />
-    
-    <form action="todos" method="post" id="one-todo" />
-    <ul>
-      <li>
-        <button name="complete"></button>
-        <span>Create new HTML template</span>
-        <button name="delete" value="123" type="submit" form="one-todo">&#x2715;</button>
-      </li>
-      <li>
-        <button name="activate"></button>
-        <span>Update examples with new template</span>
-        <button name="delete">&#x2715;</button>
-      </li>
-      <li>
-        <button name="complete"></button>
-        <span>Relax, take it easy</span>
-        <button name="delete">&#x2715;</button>
-      </li>
-    </ul>
-    
+    <form action="todos" method="post">
+      <input placeholder="What needs to be done?" autofocus required name="todo" id="todo" />
+    </form>
+    <form action="todos" method="post">
+      <ul>
+        <li>
+          <button name="complete" value="{{todo-id}}"></button>
+          <span>Create new HTML template</span>
+          <button name="delete" value="{{todo-id}}">&#x2715;</button>
+        </li>
+        <li>
+          <button name="revert" value="{{todo-id}}"></button>
+          <span>Update examples with new template</span>
+          <button name="delete" value="{{todo-id}}">&#x2715;</button>
+        </li>
+        <li>
+          <button name="complete" value="{{todo-id}}"></button>
+          <span>Relax, take it easy</span>
+          <button name="delete" value="{{todo-id}}">&#x2715;</button>
+        </li>
+      </ul>
+    </form>
   </main>
   <footer>
     <p>Click on the text to edit a todo.</p>
@@ -76,8 +79,8 @@
       <a href="http://github.com/sindresorhus">Sindre Sorhus</a>.
     </p>
     <!--
-      TODO: Properly replace the paragraph below with a link to you or your
-            homepage, person, repository or organization.  -->
+      TODO: Replace the paragraph below with a link to you or your
+            homepage, person, repository or organization. -->
     <p>
       Created by <a href="http://todomvc.com">you</a>.
     </p>
