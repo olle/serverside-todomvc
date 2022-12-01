@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -31,6 +32,15 @@ public class TodoMvcController {
     public String createNewTodo(String todo) {
 
         service.createNewTodo(todo);
+
+        return "redirect:/";
+    }
+
+
+    @PostMapping(path = "/", params = { "complete" })
+    public String markTodoAsCompleted(@RequestParam("complete") String uuid) {
+
+        service.markTodoAsCompleted(uuid);
 
         return "redirect:/";
     }

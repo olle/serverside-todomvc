@@ -16,9 +16,23 @@ public final class Todo {
         this.active = true;
     }
 
+
+    private Todo(Todo other, boolean active) {
+
+        this.uuid = other.uuid;
+        this.todo = other.todo;
+        this.active = active;
+    }
+
     public boolean isActive() {
 
         return active;
+    }
+
+
+    public boolean isCompleted() {
+
+        return !active;
     }
 
 
@@ -31,5 +45,17 @@ public final class Todo {
     public UUID getUUID() {
 
         return this.uuid;
+    }
+
+
+    public String getTodo() {
+
+        return this.todo;
+    }
+
+
+    public Todo markAsCompleted() {
+
+        return new Todo(this, false);
     }
 }
