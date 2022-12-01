@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class TodoMvcController {
 
+    private static final String REDIRECT = "redirect:/";
+
     private final TodoMvcService service;
 
     public TodoMvcController(TodoMvcService service) {
@@ -33,7 +35,7 @@ public class TodoMvcController {
 
         service.createNewTodo(todo);
 
-        return "redirect:/";
+        return REDIRECT;
     }
 
 
@@ -42,6 +44,15 @@ public class TodoMvcController {
 
         service.markTodoAsCompleted(uuid);
 
-        return "redirect:/";
+        return REDIRECT;
+    }
+
+
+    @PostMapping(path = "/", params = { "delete" })
+    public String deleteTodo(@RequestParam("delete") String uuid) {
+
+        service.deleteTodo(uuid);
+
+        return REDIRECT;
     }
 }

@@ -17,6 +17,14 @@ public final class Todo {
     }
 
 
+    private Todo(Todo other) {
+
+        this.uuid = UUID.fromString(other.uuid.toString());
+        this.todo = other.todo;
+        this.active = other.active;
+    }
+
+
     private Todo(Todo other, boolean active) {
 
         this.uuid = other.uuid;
@@ -57,5 +65,11 @@ public final class Todo {
     public Todo markAsCompleted() {
 
         return new Todo(this, false);
+    }
+
+
+    public Todo copy() {
+
+        return new Todo(this);
     }
 }

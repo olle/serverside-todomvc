@@ -2,6 +2,7 @@ package com.studiomediatech.todomvc;
 
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,8 +19,13 @@ public class TodoMvcService {
 
     public Map<String, ?> fetchAttributesForIndexPage() {
 
-        return Map.of("activeCount", repo.activeTodoCount(), "active", repo.findAllActiveTodos(), "completed",
-                repo.findAllCompletedTodos());
+        Map<String, Object> map = new HashMap<>();
+
+        map.put("activeCount", repo.activeTodoCount());
+        map.put("active", repo.findAllActiveTodos());
+        map.put("completed", repo.findAllCompletedTodos());
+
+        return map;
     }
 
 
@@ -32,5 +38,11 @@ public class TodoMvcService {
     public void markTodoAsCompleted(String uuid) {
 
         repo.findByUUID(UUID.fromString(uuid)).map(Todo::markAsCompleted).ifPresent(repo::save);
+    }
+
+
+    public void deleteTodo(String uuid) {
+
+        repo.deleteByUUID(UUID.fromString(uuid));
     }
 }

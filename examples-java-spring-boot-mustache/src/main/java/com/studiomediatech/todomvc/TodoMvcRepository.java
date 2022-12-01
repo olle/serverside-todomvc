@@ -22,7 +22,8 @@ public class TodoMvcRepository {
 
     public void save(Todo todo) {
 
-        todos.put(todo.getUUID(), todo);
+        Todo copy = todo.copy();
+        todos.put(copy.getUUID(), copy);
     }
 
 
@@ -41,5 +42,11 @@ public class TodoMvcRepository {
     public Collection<Todo> findAllCompletedTodos() {
 
         return todos.values().stream().filter(Todo::isCompleted).toList();
+    }
+
+
+    public void deleteByUUID(UUID uuid) {
+
+        todos.remove(uuid);
     }
 }
