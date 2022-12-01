@@ -2,74 +2,70 @@ package com.studiomediatech.todomvc;
 
 import java.util.UUID;
 
-
 public final class Todo {
 
-    private final UUID uuid;
-    private final String todo;
-    private final boolean active;
+	private final UUID uuid;
+	private final String todo;
+	private final boolean active;
 
-    private Todo(UUID uuid, String todo) {
+	private Todo(UUID uuid, String todo) {
 
-        this.uuid = uuid;
-        this.todo = todo;
-        this.active = true;
-    }
+		this.uuid = uuid;
+		this.todo = todo;
+		this.active = true;
+	}
 
+	private Todo(Todo other) {
 
-    private Todo(Todo other) {
+		this.uuid = UUID.fromString(other.uuid.toString());
+		this.todo = other.todo;
+		this.active = other.active;
+	}
 
-        this.uuid = UUID.fromString(other.uuid.toString());
-        this.todo = other.todo;
-        this.active = other.active;
-    }
+	private Todo(Todo other, boolean active) {
 
+		this.uuid = other.uuid;
+		this.todo = other.todo;
+		this.active = active;
+	}
 
-    private Todo(Todo other, boolean active) {
+	public boolean isActive() {
 
-        this.uuid = other.uuid;
-        this.todo = other.todo;
-        this.active = active;
-    }
+		return active;
+	}
 
-    public boolean isActive() {
+	public boolean isCompleted() {
 
-        return active;
-    }
+		return !active;
+	}
 
+	public static Todo from(String todo) {
 
-    public boolean isCompleted() {
+		return new Todo(UUID.randomUUID(), todo);
+	}
 
-        return !active;
-    }
+	public UUID getUUID() {
 
+		return this.uuid;
+	}
 
-    public static Todo from(String todo) {
+	public String getTodo() {
 
-        return new Todo(UUID.randomUUID(), todo);
-    }
+		return this.todo;
+	}
 
+	public Todo markAsCompleted() {
 
-    public UUID getUUID() {
+		return new Todo(this, false);
+	}
 
-        return this.uuid;
-    }
+	public Todo markAsNotCompleted() {
 
+		return new Todo(this, true);
+	}
 
-    public String getTodo() {
+	public Todo copy() {
 
-        return this.todo;
-    }
-
-
-    public Todo markAsCompleted() {
-
-        return new Todo(this, false);
-    }
-
-
-    public Todo copy() {
-
-        return new Todo(this);
-    }
+		return new Todo(this);
+	}
 }

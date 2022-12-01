@@ -55,4 +55,12 @@ public class TodoMvcController {
 
         return REDIRECT;
     }
+    
+    @PostMapping(path = "/", params = { "revert" })
+    public String markTodoAsNotCompleted(@RequestParam("revert") String uuid) {
+    	
+    	service.markTodoAsNotCompleted(uuid);
+    	
+    	return REDIRECT;
+    }
 }

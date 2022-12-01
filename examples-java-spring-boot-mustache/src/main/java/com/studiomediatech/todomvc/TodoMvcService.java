@@ -33,6 +33,12 @@ public class TodoMvcService {
 
         repo.save(Todo.from(todo));
     }
+    
+    
+    public void deleteTodo(String uuid) {
+    	
+    	repo.deleteByUUID(UUID.fromString(uuid));
+    }
 
 
     public void markTodoAsCompleted(String uuid) {
@@ -40,9 +46,8 @@ public class TodoMvcService {
         repo.findByUUID(UUID.fromString(uuid)).map(Todo::markAsCompleted).ifPresent(repo::save);
     }
 
+	public void markTodoAsNotCompleted(String uuid) {
 
-    public void deleteTodo(String uuid) {
-
-        repo.deleteByUUID(UUID.fromString(uuid));
-    }
+		repo.findByUUID(UUID.fromString(uuid)).map(Todo::markAsNotCompleted).ifPresent(repo::save);
+	}
 }
