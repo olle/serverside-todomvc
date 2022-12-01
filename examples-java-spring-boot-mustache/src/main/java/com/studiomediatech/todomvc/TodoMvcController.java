@@ -1,27 +1,37 @@
 package com.studiomediatech.todomvc;
 
 import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+
 
 @Controller
 public class TodoMvcController {
 
-	@GetMapping("/")
-	public String index(Model model) {
+    private final TodoMvcService service;
 
-		// TODO: Get count from store.
-		model.addAttribute("activeCount", 0);
+    public TodoMvcController(TodoMvcService service) {
 
-		return "index";
-	}
+        this.service = service;
+    }
 
-	@PostMapping("/")
-	public String createNewTodo(String todo) {
+    @GetMapping("/")
+    public String index(Model model) {
 
-		// TODO: Add todo.
+        model.mergeAttributes(service.fetchAttributesForIndexPage());
 
-		return "redirect:/";
-	}
+        return "index";
+    }
+
+
+    @PostMapping("/")
+    public String createNewTodo(String todo) {
+
+        service.createNewTodo(todo);
+
+        return "redirect:/";
+    }
 }
