@@ -14,9 +14,25 @@ public class TodoMvcRepository {
 
     private final Map<UUID, Todo> todos = new ConcurrentHashMap<>();
 
+    public synchronized void deleteAllWhereActiveTrue() {
+
+        todos.values().stream()
+            .filter(Todo::isCompleted)
+            .map(Todo::getUUID)
+            .toList()
+            .forEach(todos::remove);
+    }
+
+
     public long activeTodoCount() {
 
         return todos.values().stream().filter(Todo::isActive).count();
+    }
+
+
+    public long completedTodoCount() {
+
+        return todos.values().stream().filter(Todo::isCompleted).count();
     }
 
 

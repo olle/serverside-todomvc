@@ -2,70 +2,80 @@ package com.studiomediatech.todomvc;
 
 import java.util.UUID;
 
+
 public final class Todo {
 
-	private final UUID uuid;
-	private final String todo;
-	private final boolean active;
+    private final UUID uuid;
+    private final String todo;
+    private final boolean active;
 
-	private Todo(UUID uuid, String todo) {
+    private Todo(UUID uuid, String todo) {
 
-		this.uuid = uuid;
-		this.todo = todo;
-		this.active = true;
-	}
+        this.uuid = uuid;
+        this.todo = todo;
+        this.active = true;
+    }
 
-	private Todo(Todo other) {
 
-		this.uuid = UUID.fromString(other.uuid.toString());
-		this.todo = other.todo;
-		this.active = other.active;
-	}
+    private Todo(Todo other) {
 
-	private Todo(Todo other, boolean active) {
+        this.uuid = UUID.fromString(other.uuid.toString());
+        this.todo = other.todo;
+        this.active = other.active;
+    }
 
-		this.uuid = other.uuid;
-		this.todo = other.todo;
-		this.active = active;
-	}
 
-	public boolean isActive() {
+    private Todo(Todo other, boolean active) {
 
-		return active;
-	}
+        this.uuid = other.uuid;
+        this.todo = other.todo;
+        this.active = active;
+    }
 
-	public boolean isCompleted() {
+    public boolean isActive() {
 
-		return !active;
-	}
+        return active;
+    }
 
-	public static Todo from(String todo) {
 
-		return new Todo(UUID.randomUUID(), todo);
-	}
+    public boolean isCompleted() {
 
-	public UUID getUUID() {
+        return !active;
+    }
 
-		return this.uuid;
-	}
 
-	public String getTodo() {
+    public static Todo from(String todo) {
 
-		return this.todo;
-	}
+        return new Todo(UUID.randomUUID(), todo);
+    }
 
-	public Todo markAsCompleted() {
 
-		return new Todo(this, false);
-	}
+    public UUID getUUID() {
 
-	public Todo markAsNotCompleted() {
+        return this.uuid;
+    }
 
-		return new Todo(this, true);
-	}
 
-	public Todo copy() {
+    public String getTodo() {
 
-		return new Todo(this);
-	}
+        return this.todo;
+    }
+
+
+    public Todo markAsCompleted() {
+
+        return new Todo(this, false);
+    }
+
+
+    public Todo markAsActive() {
+
+        return new Todo(this, true);
+    }
+
+
+    public Todo copy() {
+
+        return new Todo(this);
+    }
 }

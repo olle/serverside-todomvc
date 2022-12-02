@@ -1,6 +1,8 @@
 :root {
   --fg: #000;
   --bg: #fff;
+  --fg-panel: #555;
+  --bg-panel: #dedede;
   --footer: #f3f3f3;
   --primary: #f62459;
   --link: #0063cc;
@@ -13,6 +15,8 @@
   body {
     --bg: #222;
     --fg: #efefef;
+    --fg-panel: #dedede;
+    --bg-panel: #555;
     --footer: #444;
     --primary: #e3446c;
     --link: #3396ff;
@@ -69,6 +73,23 @@ main > h1 {
 main > h1 > small {
   font-weight: normal;
   float: right;
+}
+
+aside {
+  max-width: var(--max-width);
+  margin-top: 0.5rem;
+}
+aside > button {
+  cursor: pointer;
+  opacity: 0.8;
+  border: none;
+  color: var(--fg-panel);
+  background: var(--bg-panel);
+  border-radius: 0.6rem;
+  padding: 0.2rem 0.7rem;
+}
+aside > button:hover {
+  color: var(--link);
 }
 
 label {

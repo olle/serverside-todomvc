@@ -48,6 +48,15 @@ public class TodoMvcController {
     }
 
 
+    @PostMapping(path = "/", params = { "revert" })
+    public String markTodoAsActive(@RequestParam("revert") String uuid) {
+
+        service.markTodoAsActive(uuid);
+
+        return REDIRECT;
+    }
+
+
     @PostMapping(path = "/", params = { "delete" })
     public String deleteTodo(@RequestParam("delete") String uuid) {
 
@@ -55,12 +64,13 @@ public class TodoMvcController {
 
         return REDIRECT;
     }
-    
-    @PostMapping(path = "/", params = { "revert" })
-    public String markTodoAsNotCompleted(@RequestParam("revert") String uuid) {
-    	
-    	service.markTodoAsNotCompleted(uuid);
-    	
-    	return REDIRECT;
+
+
+    @PostMapping(path = "/", params = { "clear" })
+    public String clearCompleted() {
+
+        service.clearCompletedTodos();
+
+        return REDIRECT;
     }
 }

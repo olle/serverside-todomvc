@@ -22,6 +22,7 @@ public class TodoMvcService {
         Map<String, Object> map = new HashMap<>();
 
         map.put("activeCount", repo.activeTodoCount());
+        map.put("completedCount", repo.completedTodoCount());
         map.put("active", repo.findAllActiveTodos());
         map.put("completed", repo.findAllCompletedTodos());
 
@@ -33,11 +34,11 @@ public class TodoMvcService {
 
         repo.save(Todo.from(todo));
     }
-    
-    
+
+
     public void deleteTodo(String uuid) {
-    	
-    	repo.deleteByUUID(UUID.fromString(uuid));
+
+        repo.deleteByUUID(UUID.fromString(uuid));
     }
 
 
@@ -46,8 +47,15 @@ public class TodoMvcService {
         repo.findByUUID(UUID.fromString(uuid)).map(Todo::markAsCompleted).ifPresent(repo::save);
     }
 
-	public void markTodoAsNotCompleted(String uuid) {
 
-		repo.findByUUID(UUID.fromString(uuid)).map(Todo::markAsNotCompleted).ifPresent(repo::save);
-	}
+    public void markTodoAsActive(String uuid) {
+
+        repo.findByUUID(UUID.fromString(uuid)).map(Todo::markAsActive).ifPresent(repo::save);
+    }
+
+
+    public void clearCompletedTodos() {
+
+        repo.deleteAllWhereActiveTrue();
+    }
 }
