@@ -51,7 +51,7 @@
         TODO: Replace {{active-count}} with the number of not yet completed
               todo items.
     -->
-    <h1>Todos <small>{{active-count}}</small></h1>
+    <h1>Todos <small>{active-count}</small></h1>
     <!--
         TODO: When this form is posted, a new todo item should be created and
               shown in the todo-list, as an `active` item.
@@ -61,24 +61,27 @@
       <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
     </form>
     <form method="post">
+      <aside>
+        <button name="clear" value="completed">{completed-count} Completed • Clear</button>
+      </aside>
       <ul>
         <!--
             TODO: Render all todo items in the list.
         -->
         <li>
-          <button name="complete" value="{{todo-id}}"></button>
+          <button name="complete" value="{todo-id}"></button>
           <span>Create new HTML template</span>
-          <button name="delete" value="{{todo-id}}">&#x2715;</button>
+          <button name="delete" value="{todo-id}">&#x2715;</button>
         </li>
         <li>
-          <button name="revert" value="{{todo-id}}"></button>
+          <button name="revert" value="{todo-id}"></button>
           <span>Update examples with new template</span>
-          <button name="delete" value="{{todo-id}}">&#x2715;</button>
+          <button name="delete" value="{todo-id}">&#x2715;</button>
         </li>
         <li>
-          <button name="complete" value="{{todo-id}}"></button>
+          <button name="complete" value="{todo-id}"></button>
           <span>Relax, take it easy</span>
-          <button name="delete" value="{{todo-id}}">&#x2715;</button>
+          <button name="delete" value="{todo-id}">&#x2715;</button>
         </li>
       </ul>
     </form>
