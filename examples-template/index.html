@@ -52,6 +52,9 @@
               todo items.
     -->
     <h1>Todos <small>{active-count}</small></h1>
+    <form id="controls" method="post">
+      <button name="clear" value="completed">{completed-count} Completed • Clear</button>
+    </form>
     <!--
         TODO: When this form is posted, a new todo item should be created and
               shown in the todo-list, as an `active` item.
@@ -61,16 +64,21 @@
       <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
     </form>
     <form method="post">
-      <aside>
-        <button name="clear" value="completed">{completed-count} Completed • Clear</button>
-      </aside>
       <ul>
         <!--
-            TODO: Render all todo items in the list.
+            TODO: Render all active todos first here.
         -->
         <li>
+          <!--
+              TODO: Handle the form post by this button, and mark the given
+                    todo item as completed.
+          -->
           <button name="complete" value="{todo-id}"></button>
-          <span>Create new HTML template</span>
+          <span>{todo text goes here}</span>
+          <!--
+              TODO: Handle the form post by this button, and delete the
+                    specified todo item.
+          -->
           <button name="delete" value="{todo-id}">&#x2715;</button>
         </li>
         <li>
@@ -80,10 +88,11 @@
         </li>
         <li>
           <button name="complete" value="{todo-id}"></button>
-          <span>Relax, take it easy</span>
-          <button name="delete" value="{todo-id}">&#x2715;</button>
+          <input name="update" value="Previous value here" required autocomplete="off" form="update" formaction="{todo-id}" />
         </li>
       </ul>
+    </form>
+    <form id="update" method="post">
     </form>
   </main>
   <footer>
