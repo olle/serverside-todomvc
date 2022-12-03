@@ -1,5 +1,7 @@
 package com.studiomediatech.todomvc;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
@@ -7,6 +9,8 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class TodoMvcController {
@@ -21,14 +25,31 @@ public class TodoMvcController {
 	}
 
 	@GetMapping("/")
-	public String index(Model model) {
+	public String index(Model model, HttpSession session) {
 
-		model.mergeAttributes(service.fetchAttributesForIndexPage());
+		Boolean hideCompleted = getJustHideCompletedFilter(session);
+
+		model.mergeAttributes(service.fetchAttributesForIndexPage(hideCompleted));
 
 		return "index";
 	}
 
-	@PostMapping("/")
+	private Boolean getJustHideCompletedFilter(HttpSession session) {
+
+		return Optional.ofNullable(session.getAttribute("hideCompleted")).map(Boolean.class::cast)
+				.orElse(Boolean.FALSE);
+	}
+
+	@PostMapping(path = "controls", params = { "hide" })
+	public String toggleHide(HttpSession session, @RequestParam("hide") String hide) {
+
+		boolean hideCompleted = "completed".equals(hide);
+		session.setAttribute("hideCompleted", Boolean.valueOf(hideCompleted));
+
+		return REDIRECT;
+	}
+
+	@PostMapping(path = "todos")
 	public String createNewTodo(@RequestParam("todo") String todo) {
 
 		if (!StringUtils.hasText(todo)) {
@@ -52,7 +73,7 @@ public class TodoMvcController {
 	public String updateTodo(@RequestParam("update") String update, @RequestParam("id") String uuid) {
 
 		service.updateTodo(uuid, update);
-		
+
 		return REDIRECT;
 	}
 

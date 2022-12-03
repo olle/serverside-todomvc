@@ -16,14 +16,18 @@ public class TodoMvcService {
 		this.repo = repo;
 	}
 
-	public Map<String, ?> fetchAttributesForIndexPage() {
+	public Map<String, ?> fetchAttributesForIndexPage(Boolean hideCompleted) {
 
 		Map<String, Object> map = new HashMap<>();
 
+		map.put("hideCompleted", hideCompleted.booleanValue());
 		map.put("activeCount", repo.activeTodoCount());
 		map.put("completedCount", repo.completedTodoCount());
 		map.put("active", repo.findAllActiveTodos());
-		map.put("completed", repo.findAllCompletedTodos());
+		
+		if (!hideCompleted) {
+			map.put("completed", repo.findAllCompletedTodos());
+		}
 
 		return map;
 	}

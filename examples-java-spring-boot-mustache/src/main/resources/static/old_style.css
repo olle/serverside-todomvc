@@ -79,7 +79,6 @@ main > h1 > small {
 #controls {
   max-width: var(--max-width);
   margin-bottom: 1rem;
-  display: flex;
 }
 #controls > button {
   cursor: pointer;
@@ -92,9 +91,6 @@ main > h1 > small {
 }
 #controls > button:hover {
   color: var(--link);
-}
-#controls > button:first-child {
-  margin-right: auto;
 }
 
 form.inline {
@@ -193,7 +189,6 @@ li button[name="edit"] {
   display: inline-block;
   text-align: left;
   font-size: 100%;
-  color: var(--fg);
   background: var(--bg);
   border: none;
   outline: none;

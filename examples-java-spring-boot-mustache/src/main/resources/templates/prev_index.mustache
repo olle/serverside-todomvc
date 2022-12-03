@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Helping you remember or select a server-side MV* framework - Todo apps for Spring Boot, Flask, PHP and many more">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Java SpringBoot Mustache • Server-Side TodoMVC</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Look mom, no JavaScript! -->
+</head>
+
+<body>
+  <main>
+    <h1>Todos <small>{{activeCount}}</small></h1>
+    <form id="controls" method="post">
+      <button name="clear" value="completed">{{completedCount}} Completed • Clear</button>
+    </form>
+    <form method="post">
+      <label for="todo">Todo</label>
+      <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
+    </form>
+    <form id="handling" method="post"></form>
+    <ul>
+      {{#active}}
+        <li>
+          <button name="complete" value="{{uuid}}" title="Complete todo" form="handling"></button>
+          {{#editing}}
+          <form class="inline" method="post">
+            <input type="hidden" name="id" value="{{uuid}}" />
+            <input name="update" value="{{todo}}" required autocomplete="off" />
+          </form>
+          {{/editing}}
+          {{^editing}}
+          <button name="edit" value="{{uuid}}" form="handling">{{todo}}</button>
+          <button name="delete" value="{{uuid}}" title="Delete todo" form="handling">&#x2715;</button>
+          {{/editing}}
+        </li>
+      {{/active}}
+      {{#completed}}
+      <li>
+        <button name="revert" value="{{uuid}}" title="Revert" form="handling"></button>
+        <span>{{todo}}</span>
+        <button name="delete" value="{{uuid}}" title="Delete todo" form="handling">&#x2715;</button>
+      </li>
+      {{/completed}}
+    </ul>
+  </main>
+  <footer>
+    <em>Click on the text to edit a todo.</em>
+    <p>
+      Template by <a href="https://github.com/olle">Olle Törnström</a>,
+      inspired by the original <a href="https://todomvc.com">TodoMVC</a> from
+      <a href="http://github.com/sindresorhus">Sindre Sorhus</a>.
+    </p>
+    <!--
+      TODO: Replace the paragraph below with a link to you or your
+            homepage, person, repository or organization. -->
+    <p>
+      Created by <a href="http://todomvc.com">you</a>.
+    </p>
+    <p>
+      Part of <a href="http://github.com/olle/serverside-todomvc">Server-Side TodoMVC</a>
+    </p>
+  </footer>
+</body>
+
+</html>
