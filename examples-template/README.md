@@ -4,7 +4,7 @@ This is the plain HTML-only template-kit that we provide for any example
 implementation. It's a custom made asset, but was previously derived from the
 [TodoMVC](http://http://todomvc.com) project template.
 
-<img src="todo-template.png" style="margin: 0 auto;" />
+![Server-Side TodoMVC HTML Template](todo-template.png)
 
 ## Getting started
 
