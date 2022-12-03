@@ -1,15 +1,14 @@
-Example HTML Template
-=====================
+# Example HTML Template
 
 This is the plain HTML-only template-kit that we provide for any example
 implementation. It's a custom made asset, but was previously derived from the
 [TodoMVC](http://http://todomvc.com) project template.
 
-![HTML template preview](todos02.png)
+<img src="todo-template.png" style="margin: 0 auto;" />
 
 ## Getting started
 
-For any example implementation, it should be a simple matter of copying the 
+For any example implementation, it should be a simple matter of copying the
 assets and the `index.html` page into the new example implementation. Sometimes
 you might have to restructure the placement or linking of resources, for example
 images or CSS files.
