@@ -193,6 +193,7 @@ li button[name="edit"] {
   display: inline-block;
   text-align: left;
   font-size: 100%;
+  color: var(--fg);
   background: var(--bg);
   border: none;
   outline: none;
