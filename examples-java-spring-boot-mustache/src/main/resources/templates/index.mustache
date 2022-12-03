@@ -41,35 +41,29 @@
               for completing, re-activating, deleting and starting to edit a
               todo item.
     -->
-    <form id="todos" method="post"></form>
+    <form id="todo" method="post" action="todo"></form>
     <ul>
-      <!--
-          TODO: First render from a list of all active todo items.
-      -->
-
+      {{#active}}
       <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{todo-id}" form="todos" title="Mark completed"></button>
+        <button name="complete" value="{todo-id}" form="todo" title="Mark completed"></button>
         <form class="inline" method="post" action="todos/{todo-id}">
           <input type="hidden" name="id" value="{todo-id}" />
           <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
         </form>
       </li>
-
       <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{todo-id}" form="todos" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todos" title="Click to edit">{todo-text}</button>
-        <button name="delete" value="{todo-id}" form="todos" title="Delete todo item">&#x2715;</button>
+        <button name="complete" value="{todo-id}" form="todo" title="Mark completed"></button>
+        <button name="edit" value="{todo-id}" form="todo" title="Click to edit">{todo-text}</button>
+        <button name="delete" value="{todo-id}" form="todo" title="Delete todo item">&#x2715;</button>
       </li>
-
-      <!--
-          TODO: Then render the list of todo items marked as completed, unless
-                the current filter is toggled to hide completed.
-      -->
+      {{/active}}
+      {{#completed}}
       <li>
-        <button name="revert" value="{todo-id}" form="todos" title="Mark as active"></button>
+        <button name="revert" value="{todo-id}" form="todo" title="Mark as active"></button>
         <span>{todo-text}</span>
-        <button name="delete" value="{todo-id}" form="todos" title="Delete todo item">&#x2715;</button>
+        <button name="delete" value="{todo-id}" form="todo" title="Delete todo item">&#x2715;</button>
       </li>
+      {{/completed}}
     </ul>
   </main>
   <footer>
