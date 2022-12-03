@@ -36,12 +36,13 @@ public class TodoMvcRepository {
 
 	public Collection<Todo> findAllActiveTodos() {
 
-		return todos.values().stream().filter(Todo::isActive).toList();
+		return todos.values().stream().filter(Todo::isActive).map(Todo::copy).toList();
 	}
 
 	public Collection<Todo> findAllActiveTodosEditing(UUID uuid) {
 
-		return todos.values().stream().filter(Todo::isActive).map(todo -> todo.markAsEditingIfMatches(uuid)).toList();
+		return todos.values().stream().filter(Todo::isActive).map(Todo::copy)
+				.map(todo -> todo.markAsEditingIfMatches(uuid)).toList();
 	}
 
 	public Optional<Todo> findByUUID(UUID uuid) {

@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class TodoMvcController {
 
+	private static final String VIEW = "index";
 	private static final String REDIRECT = "redirect:/";
 
 	private final TodoMvcService service;
@@ -27,17 +28,16 @@ public class TodoMvcController {
 	@GetMapping("/")
 	public String index(Model model, HttpSession session) {
 
-		Boolean hideCompleted = getJustHideCompletedFilter(session);
-
+		boolean hideCompleted = justHideCompletedFlag(session);
 		model.mergeAttributes(service.fetchAttributesForIndexPage(hideCompleted));
 
-		return "index";
+		return VIEW;
 	}
 
-	private Boolean getJustHideCompletedFilter(HttpSession session) {
+	private boolean justHideCompletedFlag(HttpSession session) {
 
-		return Optional.ofNullable(session.getAttribute("hideCompleted")).map(Boolean.class::cast)
-				.orElse(Boolean.FALSE);
+		return Optional.ofNullable(session.getAttribute("hideCompleted")).map(Boolean.class::cast).orElse(Boolean.FALSE)
+				.booleanValue();
 	}
 
 	@PostMapping(path = "controls", params = { "hide" })
@@ -45,6 +45,14 @@ public class TodoMvcController {
 
 		boolean hideCompleted = "completed".equals(hide);
 		session.setAttribute("hideCompleted", Boolean.valueOf(hideCompleted));
+
+		return REDIRECT;
+	}
+
+	@PostMapping(path = "controls", params = { "clear" })
+	public String clearCompleted() {
+
+		service.clearCompletedTodos();
 
 		return REDIRECT;
 	}
@@ -61,15 +69,7 @@ public class TodoMvcController {
 		return REDIRECT;
 	}
 
-	@PostMapping(path = "/", params = { "edit" })
-	public String editTodo(Model model, @RequestParam("edit") String uuid) {
-
-		model.mergeAttributes(service.fetchAttributesForEditPage(uuid));
-
-		return "index";
-	}
-
-	@PostMapping(path = "/", params = { "update", "id" })
+	@PostMapping(path = "todos/{uuid}", params = { "update", "id" })
 	public String updateTodo(@RequestParam("update") String update, @RequestParam("id") String uuid) {
 
 		service.updateTodo(uuid, update);
@@ -77,7 +77,16 @@ public class TodoMvcController {
 		return REDIRECT;
 	}
 
-	@PostMapping(path = "/", params = { "complete" })
+	@PostMapping(path = "todo", params = { "edit" })
+	public String editTodo(Model model, HttpSession session, @RequestParam("edit") String uuid) {
+
+		boolean hideCompleted = justHideCompletedFlag(session);
+		model.mergeAttributes(service.fetchAttributesForEditPage(uuid, hideCompleted));
+
+		return VIEW;
+	}
+
+	@PostMapping(path = "todo", params = { "complete" })
 	public String markTodoAsCompleted(@RequestParam("complete") String uuid) {
 
 		service.markTodoAsCompleted(uuid);
@@ -85,7 +94,7 @@ public class TodoMvcController {
 		return REDIRECT;
 	}
 
-	@PostMapping(path = "/", params = { "revert" })
+	@PostMapping(path = "todo", params = { "revert" })
 	public String markTodoAsActive(@RequestParam("revert") String uuid) {
 
 		service.markTodoAsActive(uuid);
@@ -93,7 +102,7 @@ public class TodoMvcController {
 		return REDIRECT;
 	}
 
-	@PostMapping(path = "/", params = { "delete" })
+	@PostMapping(path = "todo", params = { "delete" })
 	public String deleteTodo(@RequestParam("delete") String uuid) {
 
 		service.deleteTodo(uuid);
@@ -101,11 +110,4 @@ public class TodoMvcController {
 		return REDIRECT;
 	}
 
-	@PostMapping(path = "/", params = { "clear" })
-	public String clearCompleted() {
-
-		service.clearCompletedTodos();
-
-		return REDIRECT;
-	}
 }

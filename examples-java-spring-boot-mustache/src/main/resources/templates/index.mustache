@@ -14,9 +14,10 @@
 <body>
   <main>
     <h1>Todos <small title="{{activeCount}} Active items">{{activeCount}}</small></h1>
+
+
     <form id="controls" method="post" action="controls">
       <button name="clear" value="completed" title="Clear {{completedCount}} completed">{{completedCount}} Completed • Clear</button>
-      {{hideCompleted}}
       {{^hideCompleted}}
       <button name="hide" value="completed" title="Hide completed todo items">Hide</button>
       {{/hideCompleted}}
@@ -28,40 +29,32 @@
 
     <form method="post" action="todos">
       <label for="todo">Todo</label>
-      <!--
-          TODO: Take care to remove the `autofocus` attribute, if there is a
-                todo item currently being edited.
-      -->
-      <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
+      <input placeholder="What needs to be done?" {{^isEditing}}autofocus{{/isEditing}} required autocomplete="off" name="todo" id="todo" />
     </form>
 
 
-    <!--
-        TODO: This form is posted with action/id pairs, an needs to be handled
-              for completing, re-activating, deleting and starting to edit a
-              todo item.
-    -->
-    <form id="todo" method="post" action="todo"></form>
+    <form id="todo-item" method="post" action="todo"></form>
     <ul>
       {{#active}}
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{todo-id}" form="todo" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{todo-id}">
-          <input type="hidden" name="id" value="{todo-id}" />
-          <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+      <li>
+        <button name="complete" value="{{uuid}}" form="todo-item" title="Mark completed"></button>
+        {{#editing}}
+        <form class="inline" method="post" action="todos/{{uuid}}">
+          <input type="hidden" name="id" value="{{uuid}}" />
+          <input name="update" value="{{todo}}" autofocus required autocomplete="off" />
         </form>
-      </li>
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{todo-id}" form="todo" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo" title="Click to edit">{todo-text}</button>
-        <button name="delete" value="{todo-id}" form="todo" title="Delete todo item">&#x2715;</button>
+        {{/editing}}
+        {{^editing}}
+        <button name="edit" value="{{uuid}}" form="todo-item" title="Click to edit">{{todo}}</button>
+        <button name="delete" value="{{uuid}}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        {{/editing}}
       </li>
       {{/active}}
       {{#completed}}
       <li>
-        <button name="revert" value="{todo-id}" form="todo" title="Mark as active"></button>
-        <span>{todo-text}</span>
-        <button name="delete" value="{todo-id}" form="todo" title="Delete todo item">&#x2715;</button>
+        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
+        <span>{{todo}}</span>
+        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
       {{/completed}}
     </ul>
