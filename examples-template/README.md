@@ -9,9 +9,7 @@ implementation. It's a custom made asset, but was previously derived from the
 ## Getting started
 
 For any example implementation, it should be a simple matter of copying the
-assets and the `index.html` page into the new example implementation. Sometimes
-you might have to restructure the placement or linking of resources, for example
-images or CSS files.
+`index.html` page and `style.css` files into the new example implementation.
 
 ## Request & Response Compatibility
 
