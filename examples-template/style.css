@@ -79,6 +79,7 @@ main > h1 > small {
 #controls {
   max-width: var(--max-width);
   margin-bottom: 1rem;
+  display: flex;
 }
 #controls > button {
   cursor: pointer;
@@ -91,6 +92,15 @@ main > h1 > small {
 }
 #controls > button:hover {
   color: var(--link);
+}
+#controls > button:first-child {
+  margin-right: auto;
+}
+
+form.inline {
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }
 
 label {
@@ -177,10 +187,18 @@ li:hover > button[name="delete"] {
 li > button[name="delete"]:hover {
   color: var(--link);
 }
-li > span {
+li > span,
+li button[name="edit"] {
   flex: 1;
+  display: inline-block;
+  text-align: left;
+  font-size: 100%;
+  background: var(--bg);
   border: none;
   outline: none;
   margin: 0;
   padding: 0;
+}
+li button[name="edit"]:hover {
+  color: var(--link);
 }

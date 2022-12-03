@@ -47,53 +47,77 @@
 
 <body>
   <main>
+
     <!--
-        TODO: Replace {{active-count}} with the number of not yet completed
+        TODO: Replace {active-count} with the number of not yet completed
               todo items.
     -->
     <h1>Todos <small>{active-count}</small></h1>
     <form id="controls" method="post">
+      <!--
+          TODO: Replace {completed-count} with the number of todo items marked
+                completed.
+      -->
       <button name="clear" value="completed">{completed-count} Completed • Clear</button>
+
+      <!--
+          TODO: Render the hide/show button depending on the current state of
+                such a filter, to either show completed items or not.
+      -->
+      <button name="hide" value="completed" title="Hide completed todo items">Hide</button>
+      <button name="show" value="completed" title="Show completed todo items">Show</button>
     </form>
+
+
     <!--
         TODO: When this form is posted, a new todo item should be created and
-              shown in the todo-list, as an `active` item.
+              added to the todo-list, as an active item.
     -->
-    <form method="post">
+    <form method="post" action="todos">
       <label for="todo">Todo</label>
+      <!--
+          TODO: Take care to remove the `autofocus` attribute, if there is a
+                todo item currently being edited.
+      -->
       <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
     </form>
-    <form method="post">
-      <ul>
-        <!--
-            TODO: Render all active todos first here.
-        -->
-        <li>
-          <!--
-              TODO: Handle the form post by this button, and mark the given
-                    todo item as completed.
-          -->
-          <button name="complete" value="{todo-id}"></button>
-          <span>{todo text goes here}</span>
-          <!--
-              TODO: Handle the form post by this button, and delete the
-                    specified todo item.
-          -->
-          <button name="delete" value="{todo-id}">&#x2715;</button>
-        </li>
-        <li>
-          <button name="revert" value="{todo-id}"></button>
-          <span>Update examples with new template</span>
-          <button name="delete" value="{todo-id}">&#x2715;</button>
-        </li>
-        <li>
-          <button name="complete" value="{todo-id}"></button>
-          <input name="update" value="Previous value here" required autocomplete="off" form="update" formaction="{todo-id}" />
-        </li>
-      </ul>
-    </form>
-    <form id="update" method="post">
-    </form>
+
+
+    <!--
+        TODO: This form is posted with action/id pairs, an needs to be handled
+              for completing, re-activating, deleting and starting to edit a
+              todo item.
+    -->
+    <form id="todos" method="post"></form>
+    <ul>
+      <!--
+          TODO: First render from a list of all active todo items.
+      -->
+
+      <li> <!-- TODO: If the todo item is being edited use this:  -->
+        <button name="complete" value="{todo-id}" form="todos"></button>
+        <form class="inline" method="post" action="todos/{todo-id}">
+          <input type="hidden" name="id" value="{todo-id}" />
+          <input name="update" value="{todo-text}" required autocomplete="off" />
+        </form>
+      </li>
+
+      <li> <!-- TODO: Otherwise render the todo item like this: -->
+        <button name="complete" value="{todo-id}" form="todos"></button>
+        <button name="edit" value="{todo-id}" form="todos">{todo-text}</button>
+        <button name="delete" value="{todo-id}" form="todos">&#x2715;</button>
+      </li>
+
+      <!--
+          TODO: Then render the list of todo items marked as completed, unless
+                the current filter is toggled to hide completed.
+      -->
+      <li>
+        <button name="revert" value="{todo-id}" form="todos"></button>
+        <span>{todo-text}</span>
+        <button name="delete" value="{todo-id}" form="todos">&#x2715;</button>
+      </li>
+    </ul>
   </main>
   <footer>
     <em>Click on the text to edit a todo.</em>
