@@ -2,80 +2,97 @@ package com.studiomediatech.todomvc;
 
 import java.util.UUID;
 
-
 public final class Todo {
 
-    private final UUID uuid;
-    private final String todo;
-    private final boolean active;
+	private final UUID uuid;
+	private final String todo;
+	private final boolean active;
 
-    private Todo(UUID uuid, String todo) {
+	private boolean editing;
 
-        this.uuid = uuid;
-        this.todo = todo;
-        this.active = true;
-    }
+	private Todo(UUID uuid, String todo) {
 
+		this.uuid = uuid;
+		this.todo = todo;
+		this.active = true;
+	}
 
-    private Todo(Todo other) {
+	private Todo(Todo other, String todo) {
 
-        this.uuid = UUID.fromString(other.uuid.toString());
-        this.todo = other.todo;
-        this.active = other.active;
-    }
+		this.uuid = UUID.fromString(other.uuid.toString());
+		this.todo = todo;
+		this.active = other.active;
+	}
 
+	private Todo(Todo other) {
 
-    private Todo(Todo other, boolean active) {
+		this.uuid = UUID.fromString(other.uuid.toString());
+		this.todo = other.todo;
+		this.active = other.active;
+	}
 
-        this.uuid = other.uuid;
-        this.todo = other.todo;
-        this.active = active;
-    }
+	private Todo(Todo other, boolean active) {
 
-    public boolean isActive() {
+		this.uuid = other.uuid;
+		this.todo = other.todo;
+		this.active = active;
+	}
 
-        return active;
-    }
+	public boolean isActive() {
 
+		return active;
+	}
 
-    public boolean isCompleted() {
+	public boolean isCompleted() {
 
-        return !active;
-    }
+		return !active;
+	}
 
+	public boolean isEditing() {
 
-    public static Todo from(String todo) {
+		return editing;
+	}
 
-        return new Todo(UUID.randomUUID(), todo);
-    }
+	public static Todo from(String todo) {
 
+		return new Todo(UUID.randomUUID(), todo);
+	}
 
-    public UUID getUUID() {
+	public UUID getUUID() {
 
-        return this.uuid;
-    }
+		return this.uuid;
+	}
 
+	public String getTodo() {
 
-    public String getTodo() {
+		return this.todo;
+	}
 
-        return this.todo;
-    }
+	public Todo markAsCompleted() {
 
+		return new Todo(this, false);
+	}
 
-    public Todo markAsCompleted() {
+	public Todo markAsActive() {
 
-        return new Todo(this, false);
-    }
+		return new Todo(this, true);
+	}
 
+	public Todo markAsEditingIfMatches(UUID uuid) {
 
-    public Todo markAsActive() {
+		this.editing = this.uuid.equals(uuid);
 
-        return new Todo(this, true);
-    }
+		return this;
+	}
 
+	public Todo update(String update) {
 
-    public Todo copy() {
+		return new Todo(this, update);
+	}
 
-        return new Todo(this);
-    }
+	public Todo copy() {
+
+		return new Todo(this);
+	}
+
 }

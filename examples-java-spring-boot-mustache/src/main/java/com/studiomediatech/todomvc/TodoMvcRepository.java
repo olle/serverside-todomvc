@@ -8,61 +8,55 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-
 @Repository
 public class TodoMvcRepository {
 
-    private final Map<UUID, Todo> todos = new ConcurrentHashMap<>();
+	private final Map<UUID, Todo> todos = new ConcurrentHashMap<>();
 
-    public synchronized void deleteAllWhereActiveTrue() {
+	public synchronized void deleteAllWhereActiveTrue() {
 
-        todos.values().stream()
-            .filter(Todo::isCompleted)
-            .map(Todo::getUUID)
-            .toList()
-            .forEach(todos::remove);
-    }
+		todos.values().stream().filter(Todo::isCompleted).map(Todo::getUUID).toList().forEach(todos::remove);
+	}
 
+	public long activeTodoCount() {
 
-    public long activeTodoCount() {
+		return todos.values().stream().filter(Todo::isActive).count();
+	}
 
-        return todos.values().stream().filter(Todo::isActive).count();
-    }
+	public long completedTodoCount() {
 
+		return todos.values().stream().filter(Todo::isCompleted).count();
+	}
 
-    public long completedTodoCount() {
+	public void save(Todo todo) {
 
-        return todos.values().stream().filter(Todo::isCompleted).count();
-    }
+		Todo copy = todo.copy();
+		todos.put(copy.getUUID(), copy);
+	}
 
+	public Collection<Todo> findAllActiveTodos() {
 
-    public void save(Todo todo) {
+		return todos.values().stream().filter(Todo::isActive).toList();
+	}
 
-        Todo copy = todo.copy();
-        todos.put(copy.getUUID(), copy);
-    }
+	public Collection<Todo> findAllActiveTodosEditing(UUID uuid) {
 
+		return todos.values().stream().filter(Todo::isActive).map(todo -> todo.markAsEditingIfMatches(uuid)).toList();
+	}
 
-    public Collection<Todo> findAllActiveTodos() {
+	public Optional<Todo> findByUUID(UUID uuid) {
 
-        return todos.values().stream().filter(Todo::isActive).toList();
-    }
+		return Optional.ofNullable(todos.get(uuid));
+	}
 
+	public Collection<Todo> findAllCompletedTodos() {
 
-    public Optional<Todo> findByUUID(UUID uuid) {
+		return todos.values().stream().filter(Todo::isCompleted).toList();
+	}
 
-        return Optional.ofNullable(todos.get(uuid));
-    }
+	public void deleteByUUID(UUID uuid) {
 
+		todos.remove(uuid);
+	}
 
-    public Collection<Todo> findAllCompletedTodos() {
-
-        return todos.values().stream().filter(Todo::isCompleted).toList();
-    }
-
-
-    public void deleteByUUID(UUID uuid) {
-
-        todos.remove(uuid);
-    }
 }
