@@ -121,8 +121,8 @@ public class TodoMVC {
 
 		if (req.isPostMethod()) {
 			if (req.hasPath("/todos") && req.hasParam("todo")) {
-				Todo t = new Todo(req.getParam("todo"));				
-				todos.put(t.getUuid(), t);
+				Todo newTodo = new Todo(req.getParam("todo"));
+				todos.put(newTodo.getUuid(), newTodo);
 				return Response.REDIRECT_ROOT;
 			}
 		}
@@ -135,8 +135,11 @@ public class TodoMVC {
 			return Response.NOT_FOUND;
 		}
 
-		return new Response("HTTP/1.1 200 OK\n",
-				HEADER_HTML + EDITING_HTML + ACTIVE_HTML + COMPLETED_HTML + FOOTER_HTML + "\n\n");
+		String todosResponse = todos.values().stream()
+				.map(todo -> ACTIVE_HTML.formatted(todo.getUuid(), todo.getUuid(), todo.getTodo(), todo.getUuid()))
+				.collect(Collectors.joining());
+
+		return new Response("HTTP/1.1 200 OK\n", HEADER_HTML + EDITING_HTML + todosResponse + FOOTER_HTML + "\n\n");
 	}
 
 	private static void sendResponse(Response resp, OutputStream out) throws IOException {
@@ -169,7 +172,7 @@ public class TodoMVC {
 		public String getParam(String param) {
 
 			if (hasParam(param)) {
-				return body.split("=")[1];
+				return URLDecoder.decode(body.split("=")[1], StandardCharsets.UTF_8);
 			}
 
 			return null;
