@@ -132,6 +132,11 @@ public class TodoMVC {
 				markTodoAsCompleted(req.getParam("complete"));
 				return Response.REDIRECT_ROOT;
 			}
+
+			if (req.hasPath("/todo") && req.hasParam("delete")) {
+				deleteTodo(req.getParam("delete"));
+				return Response.REDIRECT_ROOT;
+			}
 		}
 
 		if (!req.isGetMethod()) {
@@ -145,9 +150,11 @@ public class TodoMVC {
 		String activeTodosResponse = getActiveTodosResponse();
 		String completedTodosResponse = getCompletedTodosResponse();
 
-		return new Response("HTTP/1.1 200 OK\n", HEADER_HTML + EDITING_HTML + activeTodosResponse + completedTodosResponse + FOOTER_HTML + "\n\n");
+		return new Response("HTTP/1.1 200 OK\n",
+				HEADER_HTML + EDITING_HTML + activeTodosResponse + completedTodosResponse + FOOTER_HTML + "\n\n");
 	}
 
+	
 	private static String getActiveTodosResponse() {
 		return todos.values().stream().filter(Predicate.not(Todo::isCompleted))
 				.map(todo -> ACTIVE_HTML.formatted(todo.getUuid(), todo.getUuid(), todo.getTodo(), todo.getUuid()))
@@ -169,6 +176,11 @@ public class TodoMVC {
 	private static void markTodoAsCompleted(String uuid) {
 
 		Optional.ofNullable(todos.get(UUID.fromString(uuid))).ifPresent(Todo::markCompleted);
+	}
+
+	private static void deleteTodo(String uuid) {
+
+		todos.remove(UUID.fromString(uuid));
 	}
 
 	private static void sendResponse(Response resp, OutputStream out) throws IOException {
