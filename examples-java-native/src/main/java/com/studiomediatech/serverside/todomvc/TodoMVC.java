@@ -34,6 +34,8 @@ public class TodoMVC {
 	private static final String EDITING_HTML;
 
 	private static Map<UUID, Todo> todos = new ConcurrentHashMap<>();
+	
+	private static boolean hideCompleted = false;
 
 	static {
 		HEADER_HTML = readAllLines("header.html");
@@ -95,7 +97,7 @@ public class TodoMVC {
 
 			int length = 0;
 			String nextLine = null;
-			
+
 			while ((nextLine = reader.readLine()) != null) {
 
 				if (nextLine.startsWith("Content-Length:")) {
@@ -160,6 +162,16 @@ public class TodoMVC {
 				return Response.REDIRECT_ROOT;
 			}
 
+			if (req.hasPath("/controls") && req.hasParam("hide")) {
+				toggleHideCompleted();
+				return Response.REDIRECT_ROOT;
+			}
+
+			if (req.hasPath("/controls") && req.hasParam("show")) {
+				toggleShowCompleted();
+				return Response.REDIRECT_ROOT;
+			}
+
 		}
 
 		if (!req.isGetMethod()) {
@@ -203,6 +215,10 @@ public class TodoMVC {
 	}
 
 	private static String getCompletedTodosResponse() {
+
+		if (hideCompleted) {
+			return "";
+		}
 
 		return todos.values().stream().filter(Todo::isCompleted)
 				.map(todo -> COMPLETED_HTML.formatted(todo.getUuid(), todo.getTodo(), todo.getUuid()))
@@ -249,6 +265,14 @@ public class TodoMVC {
 				it.remove();
 			}
 		}
+	}
+
+	private static void toggleHideCompleted() {
+		hideCompleted = true;
+	}
+	
+	private static void toggleShowCompleted() {
+		hideCompleted = false;
 	}
 
 	private static void sendResponse(Response resp, OutputStream out) throws IOException {
