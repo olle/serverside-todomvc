@@ -4,7 +4,7 @@ To run this project, you simply need to:
    > ./mvnw clean package
    > java -jar target/examples-java-native.jar
 
-This should start the local native TodoMVC socket-server at the address
+This starts the local native TodoMVC socket-server at the address
 http://localhost:8989/.
 
 That's it!
