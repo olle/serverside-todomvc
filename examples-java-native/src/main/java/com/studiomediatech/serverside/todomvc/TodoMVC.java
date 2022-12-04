@@ -23,8 +23,6 @@ import java.util.stream.Collectors;
  */
 public class TodoMVC {
 
-	private static final Class<?> CLASS = TodoMVC.class;
-
 	private static final String HEADER_HTML;
 	private static final String FOOTER_HTML;
 	private static final String ACTIVE_HTML;
