@@ -143,6 +143,16 @@ public class TodoMVC {
 				return Response.REDIRECT_ROOT;
 			}
 
+			if (req.hasPath("/todo") && req.hasParam("edit")) {
+				markTodoAsBeingEdited(req.getParam("edit"));
+				return Response.REDIRECT_ROOT;
+			}
+
+			if (req.startsWithPath("/todos/") && req.hasParam("id") && req.hasParam("update")) {
+				updateTodo(req.getParam("id"), req.getParam("update"));
+				return Response.REDIRECT_ROOT;
+			}
+
 		}
 
 		if (!req.isGetMethod()) {
@@ -157,13 +167,23 @@ public class TodoMVC {
 		String completedTodosResponse = getCompletedTodosResponse();
 
 		return new Response("HTTP/1.1 200 OK\n",
-				HEADER_HTML + EDITING_HTML + activeTodosResponse + completedTodosResponse + FOOTER_HTML + "\n\n");
+				HEADER_HTML + activeTodosResponse + completedTodosResponse + FOOTER_HTML + "\n\n");
 	}
 
 	private static String getActiveTodosResponse() {
-		return todos.values().stream().filter(Predicate.not(Todo::isCompleted))
-				.map(todo -> ACTIVE_HTML.formatted(todo.getUuid(), todo.getUuid(), todo.getTodo(), todo.getUuid()))
+		return todos.values().stream().filter(Predicate.not(Todo::isCompleted)).map(todo -> toActiveTodoResponse(todo))
 				.collect(Collectors.joining());
+	}
+
+	private static String toActiveTodoResponse(Todo todo) {
+
+		UUID uuid = todo.getUuid();
+
+		if (todo.isEditing()) {
+			return EDITING_HTML.formatted(uuid, uuid, uuid, todo.getTodo());
+		}
+
+		return ACTIVE_HTML.formatted(uuid, uuid, todo.getTodo(), uuid);
 	}
 
 	private static String getCompletedTodosResponse() {
@@ -188,9 +208,19 @@ public class TodoMVC {
 		Optional.ofNullable(todos.get(UUID.fromString(uuid))).ifPresent(Todo::markActive);
 	}
 
+	private static void markTodoAsBeingEdited(String uuid) {
+
+		Optional.ofNullable(todos.get(UUID.fromString(uuid))).ifPresent(Todo::markEditing);
+	}
+
 	private static void deleteTodo(String uuid) {
 
 		todos.remove(UUID.fromString(uuid));
+	}
+
+	private static void updateTodo(String uuid, String text) {
+
+		Optional.ofNullable(todos.get(UUID.fromString(uuid))).ifPresent(todo -> todo.updateTodo(text));
 	}
 
 	private static void sendResponse(Response resp, OutputStream out) throws IOException {
@@ -222,8 +252,12 @@ public class TodoMVC {
 
 		public String getParam(String param) {
 
-			if (hasParam(param)) {
-				return URLDecoder.decode(body.split("=")[1], StandardCharsets.UTF_8);
+			String[] pairs = body.split("&");
+			for (int i = 0; i < pairs.length; i++) {
+				String[] split = pairs[i].split("=");
+				if (split[0].equals(param)) {
+					return URLDecoder.decode(split[1], StandardCharsets.UTF_8);
+				}
 			}
 
 			return null;
@@ -235,12 +269,25 @@ public class TodoMVC {
 				return false;
 			}
 
-			return body.split("=")[0].equals(param);
+			String[] pairs = body.split("&");
+			for (int i = 0; i < pairs.length; i++) {
+				String[] split = pairs[i].split("=");
+				if (split[0].equals(param)) {
+					return true;
+				}
+			}
+
+			return false;
 		}
 
 		public boolean hasPath(String path) {
 
 			return this.path.equals(path);
+		}
+
+		public boolean startsWithPath(String path) {
+
+			return this.path.startsWith(path);
 		}
 
 		public Request(String method, String path) {
@@ -309,13 +356,19 @@ public class TodoMVC {
 	static final class Todo {
 
 		private final UUID uuid;
-		private final String todo;
 
+		private String todo;
 		private boolean completed;
+		private boolean editing;
 
 		public Todo(String todo) {
 			this.uuid = UUID.randomUUID();
 			this.todo = todo;
+		}
+
+		public void updateTodo(String todo) {
+			this.todo = todo;
+			this.editing = false;
 		}
 
 		public UUID getUuid() {
@@ -330,12 +383,20 @@ public class TodoMVC {
 			return completed;
 		}
 
+		public boolean isEditing() {
+			return editing;
+		}
+
 		public void markCompleted() {
 			this.completed = true;
 		}
 
 		public void markActive() {
 			this.completed = false;
+		}
+
+		public void markEditing() {
+			this.editing = true;
 		}
 	}
 
