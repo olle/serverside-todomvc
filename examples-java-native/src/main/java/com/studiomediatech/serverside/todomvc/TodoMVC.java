@@ -13,8 +13,10 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -88,13 +90,13 @@ public class TodoMVC {
 		if (request.isPostMethod()) {
 
 			int length = 0;
-			String nextLine = reader.readLine();
 
-			while (nextLine != null) {
+			String nextLine;
 
-				if (nextLine.startsWith("Content-Length")) {
-					String lengthString = nextLine.split(":")[1].trim();
-					length = Integer.parseInt(lengthString);
+			while ((nextLine = reader.readLine()) != null) {
+
+				if (nextLine.startsWith("Content-Length:")) {
+					length = Integer.parseInt(nextLine.split(":")[1].trim());
 				}
 
 				if ("".equals(nextLine.trim())) {
@@ -120,9 +122,14 @@ public class TodoMVC {
 	private static Response handleRequest(Request req) {
 
 		if (req.isPostMethod()) {
+
 			if (req.hasPath("/todos") && req.hasParam("todo")) {
-				Todo newTodo = new Todo(req.getParam("todo"));
-				todos.put(newTodo.getUuid(), newTodo);
+				addNewTodo(req.getParam("todo"));
+				return Response.REDIRECT_ROOT;
+			}
+
+			if (req.hasPath("/todo") && req.hasParam("complete")) {
+				markTodoAsCompleted(req.getParam("complete"));
 				return Response.REDIRECT_ROOT;
 			}
 		}
@@ -135,11 +142,33 @@ public class TodoMVC {
 			return Response.NOT_FOUND;
 		}
 
-		String todosResponse = todos.values().stream()
+		String activeTodosResponse = getActiveTodosResponse();
+		String completedTodosResponse = getCompletedTodosResponse();
+
+		return new Response("HTTP/1.1 200 OK\n", HEADER_HTML + EDITING_HTML + activeTodosResponse + completedTodosResponse + FOOTER_HTML + "\n\n");
+	}
+
+	private static String getActiveTodosResponse() {
+		return todos.values().stream().filter(Predicate.not(Todo::isCompleted))
 				.map(todo -> ACTIVE_HTML.formatted(todo.getUuid(), todo.getUuid(), todo.getTodo(), todo.getUuid()))
 				.collect(Collectors.joining());
+	}
 
-		return new Response("HTTP/1.1 200 OK\n", HEADER_HTML + EDITING_HTML + todosResponse + FOOTER_HTML + "\n\n");
+	private static String getCompletedTodosResponse() {
+
+		return todos.values().stream().filter(Todo::isCompleted)
+				.map(todo -> COMPLETED_HTML.formatted(todo.getUuid(), todo.getTodo(), todo.getUuid()))
+				.collect(Collectors.joining());
+	}
+
+	private static void addNewTodo(String text) {
+		Todo todo = new Todo(text);
+		todos.put(todo.getUuid(), todo);
+	}
+
+	private static void markTodoAsCompleted(String uuid) {
+
+		Optional.ofNullable(todos.get(UUID.fromString(uuid))).ifPresent(Todo::markCompleted);
 	}
 
 	private static void sendResponse(Response resp, OutputStream out) throws IOException {
@@ -162,7 +191,7 @@ public class TodoMVC {
 		private final String path;
 		private final String query;
 
-		public String body;
+		protected String body;
 
 		public Request() {
 
@@ -260,6 +289,8 @@ public class TodoMVC {
 		private final UUID uuid;
 		private final String todo;
 
+		private boolean completed;
+
 		public Todo(String todo) {
 			this.uuid = UUID.randomUUID();
 			this.todo = todo;
@@ -273,6 +304,13 @@ public class TodoMVC {
 			return todo;
 		}
 
+		public boolean isCompleted() {
+			return completed;
+		}
+
+		public void markCompleted() {
+			this.completed = true;
+		}
 	}
 
 }
