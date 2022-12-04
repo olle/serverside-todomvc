@@ -194,11 +194,14 @@ public class TodoMVC {
 
 		long activeCount = todos.values().stream().filter(Predicate.not(Todo::isCompleted)).count();
 		long completedCount = todos.values().stream().filter(Todo::isCompleted).count();
+
 		String showHideAction = hideCompleted ? "show" : "hide";
 		String showHideLabel = hideCompleted ? "Show" : "Hide";
 
+		String autofocusAttribute = todos.values().stream().anyMatch(Todo::isEditing) ? "" : "autofocus";
+
 		return MAIN_HTML.formatted(activeCount, activeCount, completedCount, completedCount, showHideAction,
-				showHideLabel, showHideLabel);
+				showHideLabel, showHideLabel, autofocusAttribute);
 	}
 
 	private static String getActiveTodosResponse() {
