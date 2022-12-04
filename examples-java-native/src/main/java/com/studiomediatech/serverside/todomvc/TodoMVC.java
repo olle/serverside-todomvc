@@ -137,6 +137,12 @@ public class TodoMVC {
 				deleteTodo(req.getParam("delete"));
 				return Response.REDIRECT_ROOT;
 			}
+
+			if (req.hasPath("/todo") && req.hasParam("revert")) {
+				markTodoAsActive(req.getParam("revert"));
+				return Response.REDIRECT_ROOT;
+			}
+
 		}
 
 		if (!req.isGetMethod()) {
@@ -154,7 +160,6 @@ public class TodoMVC {
 				HEADER_HTML + EDITING_HTML + activeTodosResponse + completedTodosResponse + FOOTER_HTML + "\n\n");
 	}
 
-	
 	private static String getActiveTodosResponse() {
 		return todos.values().stream().filter(Predicate.not(Todo::isCompleted))
 				.map(todo -> ACTIVE_HTML.formatted(todo.getUuid(), todo.getUuid(), todo.getTodo(), todo.getUuid()))
@@ -176,6 +181,11 @@ public class TodoMVC {
 	private static void markTodoAsCompleted(String uuid) {
 
 		Optional.ofNullable(todos.get(UUID.fromString(uuid))).ifPresent(Todo::markCompleted);
+	}
+
+	private static void markTodoAsActive(String uuid) {
+
+		Optional.ofNullable(todos.get(UUID.fromString(uuid))).ifPresent(Todo::markActive);
 	}
 
 	private static void deleteTodo(String uuid) {
@@ -322,6 +332,10 @@ public class TodoMVC {
 
 		public void markCompleted() {
 			this.completed = true;
+		}
+
+		public void markActive() {
+			this.completed = false;
 		}
 	}
 
