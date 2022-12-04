@@ -105,13 +105,9 @@ form[action="controls"] > button:first-child {
   margin-right: auto;
 }
 
-form.inline {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-}
+/* New todo item form */
 
-label {
+form[action="todos"] > label {
   line-height: 1;
   position: relative;
   left: 0.5rem;
@@ -121,8 +117,7 @@ label {
   color: var(--fg-muted);
   font-size: 90%;
 }
-
-input {
+form[action="todos"] > input {
   line-height: 1;
   display: block;
   width: 100%;
@@ -136,17 +131,12 @@ input {
   padding-top: 1.3rem;
   font-size: 100%;
 }
-input[name="update"] {
-  padding: 0.47rem;
-  margin: 0.2rem 0;
-  background: var(--bg-edit);
-  border-color: var(--primary);
-}
+
+/* Todos listing */
 
 ul {
   margin-top: 1rem;
 }
-
 li {
   display: flex;
   align-items: center;
@@ -210,4 +200,25 @@ li button[name="edit"] {
 }
 li button[name="edit"]:hover {
   color: var(--link);
+}
+
+/* Inline edit/update form */
+
+ul form.inline {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+ul input[name="update"] {
+  line-height: 1;
+  display: block;
+  width: 100%;
+  border-radius: 3px;
+  outline: none;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 100%;
+  padding: 0.47rem;
+  margin: 0.2rem 0;
+  border: 1px solid var(--primary);
 }
