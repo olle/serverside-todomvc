@@ -11,7 +11,9 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -26,6 +28,7 @@ import java.util.stream.Collectors;
 public class TodoMVC {
 
 	private static final String HEADER_HTML;
+	private static final String MAIN_HTML;
 	private static final String FOOTER_HTML;
 	private static final String ACTIVE_HTML;
 	private static final String COMPLETED_HTML;
@@ -35,6 +38,7 @@ public class TodoMVC {
 
 	static {
 		HEADER_HTML = readAllLines("header.html");
+		MAIN_HTML = readAllLines("main.html");
 		FOOTER_HTML = readAllLines("footer.html");
 		ACTIVE_HTML = readAllLines("active.html");
 		COMPLETED_HTML = readAllLines("completed.html");
@@ -153,6 +157,11 @@ public class TodoMVC {
 				return Response.REDIRECT_ROOT;
 			}
 
+			if (req.hasPath("/controls") && req.hasParam("clear")) {
+				clearCompletedTodos();
+				return Response.REDIRECT_ROOT;
+			}
+
 		}
 
 		if (!req.isGetMethod()) {
@@ -163,11 +172,20 @@ public class TodoMVC {
 			return Response.NOT_FOUND;
 		}
 
+		String mainResponse = getMainResponse();
 		String activeTodosResponse = getActiveTodosResponse();
 		String completedTodosResponse = getCompletedTodosResponse();
 
 		return new Response("HTTP/1.1 200 OK\n",
-				HEADER_HTML + activeTodosResponse + completedTodosResponse + FOOTER_HTML + "\n\n");
+				HEADER_HTML + mainResponse + activeTodosResponse + completedTodosResponse + FOOTER_HTML + "\n\n");
+	}
+
+	private static String getMainResponse() {
+
+		long activeCount = todos.values().stream().filter(Predicate.not(Todo::isCompleted)).count();
+		long completedCount = todos.values().stream().filter(Todo::isCompleted).count();
+
+		return MAIN_HTML.formatted(activeCount, activeCount, completedCount, completedCount);
 	}
 
 	private static String getActiveTodosResponse() {
@@ -221,6 +239,18 @@ public class TodoMVC {
 	private static void updateTodo(String uuid, String text) {
 
 		Optional.ofNullable(todos.get(UUID.fromString(uuid))).ifPresent(todo -> todo.updateTodo(text));
+	}
+
+	private static void clearCompletedTodos() {
+
+		var it = todos.entrySet().iterator();
+		
+		while (it.hasNext()) {
+			Entry<UUID, Todo> e = it.next();
+			if (e.getValue().isCompleted()) {
+				it.remove();
+			}
+		}
 	}
 
 	private static void sendResponse(Response resp, OutputStream out) throws IOException {
