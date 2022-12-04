@@ -34,7 +34,7 @@ public class TodoMVC {
 	private static final String EDITING_HTML;
 
 	private static Map<UUID, Todo> todos = new ConcurrentHashMap<>();
-	
+
 	private static boolean hideCompleted = false;
 
 	static {
@@ -194,8 +194,11 @@ public class TodoMVC {
 
 		long activeCount = todos.values().stream().filter(Predicate.not(Todo::isCompleted)).count();
 		long completedCount = todos.values().stream().filter(Todo::isCompleted).count();
+		String showHideAction = hideCompleted ? "show" : "hide";
+		String showHideLabel = hideCompleted ? "Show" : "Hide";
 
-		return MAIN_HTML.formatted(activeCount, activeCount, completedCount, completedCount);
+		return MAIN_HTML.formatted(activeCount, activeCount, completedCount, completedCount, showHideAction,
+				showHideLabel, showHideLabel);
 	}
 
 	private static String getActiveTodosResponse() {
@@ -270,7 +273,7 @@ public class TodoMVC {
 	private static void toggleHideCompleted() {
 		hideCompleted = true;
 	}
-	
+
 	private static void toggleShowCompleted() {
 		hideCompleted = false;
 	}
