@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
@@ -58,7 +59,10 @@ public class TodoMVC {
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
 
-		try (ServerSocket server = new ServerSocket(8989)) {
+		try (ServerSocket server = new ServerSocket(8989, 0, InetAddress.getLoopbackAddress())) {
+			
+			System.out.println("Started Server-Side TodoMVC server at http://127.0.0.1:8989 ");
+			
 			while (true) {
 				try (Socket socket = server.accept()) {
 					try ( //
@@ -117,8 +121,6 @@ public class TodoMVC {
 				}
 			}
 		}
-
-		System.out.println("PARSED REQUEST: " + request);
 
 		return request;
 	}
@@ -247,6 +249,8 @@ public class TodoMVC {
 	}
 
 	private static void markTodoAsBeingEdited(String uuid) {
+
+		todos.values().stream().forEach(Todo::clearEditing);
 
 		Optional.ofNullable(todos.get(UUID.fromString(uuid))).ifPresent(Todo::markEditing);
 	}
@@ -447,6 +451,7 @@ public class TodoMVC {
 
 		public void markCompleted() {
 			this.completed = true;
+			this.editing = false;
 		}
 
 		public void markActive() {
@@ -455,6 +460,10 @@ public class TodoMVC {
 
 		public void markEditing() {
 			this.editing = true;
+		}
+
+		public void clearEditing() {
+			this.editing = false;
 		}
 	}
 
