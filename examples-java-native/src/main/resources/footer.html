@@ -1,50 +1,22 @@
-			<footer class="footer">
-        <!--
-          TODO: Provide a count and properly pluralized label of how many _active_
-                todo items there are left.
-        -->
-        <span class="todo-count"><strong>${active}</strong> item|s left</span>
-				<!-- Remove this if you don't implement routing -->
-				<ul class="filters">
-          <!--
-            TODO: Allow to see todo items based on filters `active`, `completed`
-                  as well as showing `all`, which is selected by default.
+</ul>
+</main>
+<footer>
+  <em>Click on the text to edit a todo.</em>
+  <p>
+    Template by <a href="https://github.com/olle">Olle Törnström</a>,
+    inspired by the original <a href="https://todomvc.com">TodoMVC</a> from
+    <a href="http://github.com/sindresorhus">Sindre Sorhus</a>.
+  </p>
+  <!--
+    TODO: Replace the paragraph below with a link to you or your
+          homepage, person, repository or organization. -->
+  <p>
+    Created by <a href="http://todomvc.com">you</a>.
+  </p>
+  <p>
+    Part of <a href="http://github.com/olle/serverside-todomvc">Server-Side TodoMVC</a>
+  </p>
+</footer>
+</body>
 
-                  Mark the current filter in use with the class `is-active`.
-          -->
-          <li><a href="?filter=all" class="selected">All</a></li>
-          <li><a href="?filter=active">Active</a></li>
-          <li><a href="?filter=completed">Completed</a></li>
-				</ul>
-        <!--
-          TODO: Posting this form must delete all todo items that are already
-                marked as being completed.
-
-                This form should only be visible if there are completed items.
-        -->
-        <form action="todos/?filter=completed">
-          <input type="hidden" name="method" value="delete" />
-          <button class="clear-completed"><span>Clear completed (${completed-count})</span></button>
-        </form>
-			</footer>
-		</section>
-		<footer class="info">
-      <p>Click on the text to edit a todo.</p>
-      <p>
-        Original template by <a href="http://github.com/sindresorhus">Sindre Sorhus</a>
-        <br /> Reworked by <a href="http://github.com/olle">Olle Törnström</a>
-      </p>
-      <!--
-          TODO: Properly replace the paragraph below with a link to you or your
-                organization.
-         -->
-      <p>
-        Created by <a href="http://todomvc.com">you</a>
-      </p>
-      <p>
-        Part of <a href="http://github.com/olle/serverside-todomvc">Server-side TodoMVC</a>
-      </p>
-		</footer>
-    <!-- Look ma, no JavaScript! -->
-	</body>
 </html>
