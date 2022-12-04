@@ -11,7 +11,6 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -78,7 +77,7 @@ public class TodoMVC {
 
 	private static Request parseRequest(InputStream in) throws IOException {
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in), 256);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in), 64);
 		String line = reader.readLine();
 
 		if (Objects.isNull(line)) {
@@ -86,6 +85,7 @@ public class TodoMVC {
 		}
 
 		String[] httpRequestItems = line.split(" ");
+
 		String httpMethod = httpRequestItems[0];
 		String requestPath = httpRequestItems[1];
 
@@ -94,9 +94,8 @@ public class TodoMVC {
 		if (request.isPostMethod()) {
 
 			int length = 0;
-
-			String nextLine;
-
+			String nextLine = null;
+			
 			while ((nextLine = reader.readLine()) != null) {
 
 				if (nextLine.startsWith("Content-Length:")) {
@@ -114,12 +113,11 @@ public class TodoMVC {
 					request.body = new String(body);
 					break;
 				}
-
-				nextLine = reader.readLine();
 			}
 		}
 
 		System.out.println("PARSED REQUEST: " + request);
+
 		return request;
 	}
 
@@ -244,7 +242,7 @@ public class TodoMVC {
 	private static void clearCompletedTodos() {
 
 		var it = todos.entrySet().iterator();
-		
+
 		while (it.hasNext()) {
 			Entry<UUID, Todo> e = it.next();
 			if (e.getValue().isCompleted()) {
