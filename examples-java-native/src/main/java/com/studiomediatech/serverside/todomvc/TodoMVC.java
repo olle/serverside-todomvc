@@ -11,167 +11,162 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
-
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-
 /**
- * A single-threaded synchronous, blocking, request/response TodoMVC socket-server.
+ * A single-threaded synchronous, blocking, request/response TodoMVC
+ * socket-server.
  */
 public class TodoMVC {
 
-    private static String header;
-    private static String footer;
+	private static String header;
+	private static String footer;
 
-    public static void main(String[] args) throws IOException, URISyntaxException {
+	public static void main(String[] args) throws IOException, URISyntaxException {
 
-        header = readAllLines("header.html");
-        footer = readAllLines("footer.html");
+		header = readAllLines("header.html");
+		footer = readAllLines("footer.html");
 
-        try(ServerSocket server = new ServerSocket(8989)) {
-            while (true) {
-                try(Socket socket = server.accept()) {
-                    try( //
-                        InputStream in = socket.getInputStream();
-                            OutputStream out = socket.getOutputStream()) {
-                        // Read and parse request
-                        Request request = parseRequest(in);
-                        socket.shutdownInput();
+		try (ServerSocket server = new ServerSocket(8989)) {
+			while (true) {
+				try (Socket socket = server.accept()) {
+					try ( //
+							InputStream in = socket.getInputStream();
+							OutputStream out = socket.getOutputStream()) {
+						// Read and parse request
+						Request request = parseRequest(in);
+						socket.shutdownInput();
 
-                        // Produce response and write out
-                        Response response = handleRequest(request);
-                        sendResponse(response, out);
-                    }
-                }
-            }
-        }
-    }
+						// Produce response and write out
+						Response response = handleRequest(request);
+						sendResponse(response, out);
+					}
+				}
+			}
+		}
+	}
 
+	private static String readAllLines(String filename) {
 
-    private static String readAllLines(String fn) {
+		InputStream in = ClassLoader.getSystemResourceAsStream(filename);
+		InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
 
-        return new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(fn))).lines()
-            .collect(Collectors.joining());
-    }
+		return new BufferedReader(reader).lines().collect(Collectors.joining());
+	}
 
+	private static Request parseRequest(InputStream in) throws IOException {
 
-    private static Request parseRequest(InputStream in) throws IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in), 256);
+		String line = reader.readLine();
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in), 256);
-        String line = reader.readLine();
+		if (Objects.isNull(line)) {
+			return new Request();
+		}
 
-        if (Objects.isNull(line)) {
-            return new Request();
-        }
+		String[] httpRequestItems = line.split(" ");
+		String httpMethod = httpRequestItems[0];
+		String requestPath = httpRequestItems[1];
 
-        String[] httpRequestItems = line.split(" ");
-        String httpMethod = httpRequestItems[0];
-        String requestPath = httpRequestItems[1];
+		Request request = new Request(httpMethod, requestPath);
+		System.out.println("PARSED REQUEST: " + request);
 
-        Request request = new Request(httpMethod, requestPath);
-        System.out.println("PARSED REQUEST: " + request);
+		return request;
+	}
 
-        return request;
-    }
+	private static Response handleRequest(Request req) {
 
+		if (!req.isGetMethod()) {
+			return Response.NOT_IMPLEMENTED;
+		}
 
-    private static Response handleRequest(Request req) {
+		if (req.isFavicon()) {
+			return Response.NOT_FOUND;
+		}
 
-        if (!req.isGetMethod()) {
-            return Response.NOT_IMPLEMENTED;
-        }
+		return new Response("HTTP/1.1 200 OK\n", header + "\n<!-- here we go -->\n" + footer + "\n\n");
+	}
 
-        if (req.isFavicon()) {
-            return Response.NOT_FOUND;
-        }
+	private static void sendResponse(Response resp, OutputStream out) throws IOException {
 
-        return new Response("HTTP/1.1 200 OK\n", header + "\n<!-- here we go -->\n" + footer);
-    }
+		byte[] responseBody = resp.body.getBytes(StandardCharsets.UTF_8);
 
+		out.write(("" //
+				+ resp.response + "Content-Type: text/html; charset=utf-8\n" //
+				+ "Content-Length: " + responseBody.length + "\n" //
+				+ "Connection: close\n\n" //
+				+ resp.body) //
+				.getBytes());
 
-    private static void sendResponse(Response resp, OutputStream out) throws IOException {
+		out.flush();
+	}
 
-        out.write(
-            ("" //
-                + resp.response
-                + "Content-Type: text/html\n" //
-                + "Content-Length: " + resp.body.length() + "\n" //
-                + "Connection: close\n\n" //
-                + resp.body).getBytes());
+	static final class Request {
 
-        out.flush();
-    }
+		private final String method;
+		private final String path;
+		private final String query;
 
-    static final class Request {
+		public Request() {
 
-        private final String method;
-        private final String path;
-        private final String query;
+			this("GET", "/");
+		}
 
-        public Request() {
+		public Request(String method, String path) {
 
-            this("GET", "/");
-        }
+			this.method = method;
+			this.path = path;
 
+			if (path.indexOf('?') > -1) {
+				String q = "";
 
-        public Request(String method, String path) {
+				try {
+					q = URLDecoder.decode(path.split("\\?")[1], "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					// OK.
+				}
 
-            this.method = method;
-            this.path = path;
+				this.query = q;
+			} else {
+				this.query = "";
+			}
+		}
 
-            if (path.indexOf('?') > -1) {
-                String q = "";
+		public boolean isGetMethod() {
 
-                try {
-                    q = URLDecoder.decode(path.split("\\?")[1], "UTF-8");
-                } catch (UnsupportedEncodingException e) {
-                    // OK.
-                }
+			return method.equals("GET");
+		}
 
-                this.query = q;
-            } else {
-                this.query = "";
-            }
-        }
+		public boolean isFavicon() {
 
-        public boolean isGetMethod() {
+			return path.contains("/favicon.ico");
+		}
 
-            return method.equals("GET");
-        }
+		@Override
+		public String toString() {
 
+			return "Request [method=" + method + ", path=" + path + ", query=" + query + "]";
+		}
+	}
 
-        public boolean isFavicon() {
+	static final class Response {
 
-            return path.contains("/favicon.ico");
-        }
+		public static final Response NOT_FOUND = new Response("HTTP/1.1 404 Not Found\n");
+		public static final Response NOT_IMPLEMENTED = new Response("HTTP/1.1 501 Not Implemented\n");
 
+		private final String response;
+		private final String body;
 
-        @Override
-        public String toString() {
+		public Response(String response) {
 
-            return "Request [method=" + method + ", path=" + path + ", query=" + query + "]";
-        }
-    }
+			this(response, "");
+		}
 
-    static final class Response {
+		public Response(String response, String body) {
 
-        public static final Response NOT_FOUND = new Response("HTTP/1.1 404 Not Found\n");
-        public static final Response NOT_IMPLEMENTED = new Response("HTTP/1.1 501 Not Implemented\n");
-
-        private final String response;
-        private final String body;
-
-        public Response(String response) {
-
-            this(response, "");
-        }
-
-
-        public Response(String response, String body) {
-
-            this.response = response;
-            this.body = body;
-        }
-    }
+			this.response = response;
+			this.body = body;
+		}
+	}
 }
