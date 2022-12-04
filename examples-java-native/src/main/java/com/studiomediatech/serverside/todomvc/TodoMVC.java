@@ -6,12 +6,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -21,13 +23,33 @@ import java.util.stream.Collectors;
  */
 public class TodoMVC {
 
-	private static String header;
-	private static String footer;
+	private static final Class<?> CLASS = TodoMVC.class;
+
+	private static final String HEADER_HTML;
+	private static final String FOOTER_HTML;
+	private static final String ACTIVE_HTML;
+	private static final String COMPLETED_HTML;
+	private static final String EDITING_HTML;
+
+	static {
+		HEADER_HTML = readAllLines("header.html");
+		FOOTER_HTML = readAllLines("footer.html");
+		ACTIVE_HTML = readAllLines("active.html");
+		COMPLETED_HTML = readAllLines("completed.html");
+		EDITING_HTML = readAllLines("editing.html");
+
+	}
+
+	private static String readAllLines(String filename) {
+
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(ClassLoader.getSystemResourceAsStream(filename)));
+
+		return reader.lines().map(s -> s.replaceAll(" +", " ")).collect(Collectors.joining());
+
+	}
 
 	public static void main(String[] args) throws IOException, URISyntaxException {
-
-		header = readAllLines("header.html");
-		footer = readAllLines("footer.html");
 
 		try (ServerSocket server = new ServerSocket(8989)) {
 			while (true) {
@@ -46,14 +68,6 @@ public class TodoMVC {
 				}
 			}
 		}
-	}
-
-	private static String readAllLines(String filename) {
-
-		InputStream in = ClassLoader.getSystemResourceAsStream(filename);
-		InputStreamReader reader = new InputStreamReader(in, StandardCharsets.UTF_8);
-
-		return new BufferedReader(reader).lines().collect(Collectors.joining());
 	}
 
 	private static Request parseRequest(InputStream in) throws IOException {
@@ -85,7 +99,8 @@ public class TodoMVC {
 			return Response.NOT_FOUND;
 		}
 
-		return new Response("HTTP/1.1 200 OK\n", header + "\n<!-- here we go -->\n" + footer + "\n\n");
+		return new Response("HTTP/1.1 200 OK\n",
+				HEADER_HTML + EDITING_HTML + ACTIVE_HTML + COMPLETED_HTML + FOOTER_HTML + "\n\n");
 	}
 
 	private static void sendResponse(Response resp, OutputStream out) throws IOException {
