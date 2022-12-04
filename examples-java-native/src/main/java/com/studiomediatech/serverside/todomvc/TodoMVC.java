@@ -11,9 +11,6 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -82,13 +79,47 @@ public class TodoMVC {
 		String requestPath = httpRequestItems[1];
 
 		Request request = new Request(httpMethod, requestPath);
-		System.out.println("PARSED REQUEST: " + request);
 
+		if (request.isPostMethod()) {
+
+			int length = 0;
+			String nextLine = reader.readLine();
+
+			while (nextLine != null) {
+
+				if (nextLine.startsWith("Content-Length")) {
+					String lengthString = nextLine.split(":")[1].trim();
+					length = Integer.parseInt(lengthString);
+				}
+
+				if ("".equals(nextLine.trim())) {
+
+					if (length <= 0) {
+						break;
+					}
+
+					char[] body = new char[length];
+					reader.read(body, 0, length);
+					request.body = new String(body);
+					break;
+				}
+
+				nextLine = reader.readLine();
+			}
+		}
+
+		System.out.println("PARSED REQUEST: " + request);
 		return request;
 	}
 
 	private static Response handleRequest(Request req) {
 
+		if (req.isPostMethod()) {
+			if (req.hasPath("/todos") && req.hasParam("todo")) {
+				System.out.println("ADDING TODO: " + req.getParam("todo"));
+			}
+		}
+		
 		if (!req.isGetMethod()) {
 			return Response.NOT_IMPLEMENTED;
 		}
@@ -121,9 +152,34 @@ public class TodoMVC {
 		private final String path;
 		private final String query;
 
+		public String body;
+
 		public Request() {
 
 			this("GET", "/");
+		}
+
+		public String getParam(String param) {
+
+			if (hasParam(param)) {
+				return body.split("=")[1];
+			}
+			
+			return null;
+		}
+
+		public boolean hasParam(String param) {
+
+			if (body == null) {
+				return false;
+			}
+			
+			return body.split("=")[0].equals(param);
+		}
+
+		public boolean hasPath(String path) {
+
+			return this.path.equals(path);
 		}
 
 		public Request(String method, String path) {
@@ -151,6 +207,11 @@ public class TodoMVC {
 			return method.equals("GET");
 		}
 
+		public boolean isPostMethod() {
+
+			return method.equals("POST");
+		}
+
 		public boolean isFavicon() {
 
 			return path.contains("/favicon.ico");
@@ -159,7 +220,7 @@ public class TodoMVC {
 		@Override
 		public String toString() {
 
-			return "Request [method=" + method + ", path=" + path + ", query=" + query + "]";
+			return "Request [method=" + method + ", path=" + path + ", query=" + query + ", body=" + body + "]";
 		}
 	}
 
