@@ -1,52 +1,15 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="utf-8">
-    <!--
-    Server-side TodoMVC - Example Template (v3)
-
-    This is the template that any Server-side TodoMVC example implementation may
-    use. It's developed with the goal of being a guide for an implementation. It
-    aims to be semantic and beautifully styled out-of-the-box, in order to provide
-    the same experience in each Server-side TodoMVC implementation.
-
-    How-to:
-
-    It's easy. Make sure to serve this file from your server, as-is. You should
-    now be able to se the full logic-less TodoMVC web application.
-
-    Now your job is to read through this HTML-file and react to each of the `TODO`
-    annotations. It should be pretty straight forward.
-
-    Throughout the HTML-code there are `${variable}` placeholders. These are not
-    intended to be exact variables for interpolation or templating, but rather
-    hints at what type of information that should be output. Feel free to mess
-    around and modify anything to better suite your implementation. Also URLs will
-    need to be adapted.
-
-    And remember - no JavaScript!
-
-    Good luck and happy hacking!
-    -->
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Java Native • Server-side TodoMVC</title>
-<style>
-body,button,html{margin:0;padding:0}.hidden,label[for=toggle-all]{display:none}.footer,.todoapp h1,.toggle-all{text-align:center}button{border:0;background:0 0;font-size:100%;vertical-align:baseline;font-family:inherit;font-weight:inherit;color:inherit;-webkit-appearance:none;appearance:none;-webkit-font-smoothing:antialiased;-moz-font-smoothing:antialiased;font-smoothing:antialiased}body{font:14px 'Helvetica Neue',Helvetica,Arial,sans-serif;line-height:1.4em;background:#f5f5f5;color:#4d4d4d;min-width:230px;max-width:550px;margin:0 auto;-webkit-font-smoothing:antialiased;-moz-font-smoothing:antialiased;font-smoothing:antialiased;font-weight:300}button,input[type=checkbox]{outline:0}.todoapp{background:#fff;margin:130px 0 40px;position:relative;box-shadow:0 2px 4px 0 rgba(0,0,0,.2),0 25px 50px 0 rgba(0,0,0,.1)}.todoapp input::-webkit-input-placeholder{font-style:italic;font-weight:300;color:#e6e6e6}.todoapp input::-moz-placeholder{font-style:italic;font-weight:300;color:#e6e6e6}.todoapp input::input-placeholder{font-style:italic;font-weight:300;color:#e6e6e6}.todoapp h1{position:absolute;top:-155px;width:100%;font-size:100px;font-weight:100;color:rgba(175,47,47,.15);-webkit-text-rendering:optimizeLegibility;-moz-text-rendering:optimizeLegibility;text-rendering:optimizeLegibility}.edit,.new-todo{position:relative;margin:0;width:100%;font-size:24px;font-family:inherit;font-weight:inherit;line-height:1.4em;outline:0;color:inherit;padding:6px;border:1px solid #999;box-shadow:inset 0 -1px 5px 0 rgba(0,0,0,.2);box-sizing:border-box;-webkit-font-smoothing:antialiased;-moz-font-smoothing:antialiased;font-smoothing:antialiased}.new-todo{padding:16px 16px 16px 60px;border:none;background:rgba(0,0,0,.003);box-shadow:inset 0 -2px 1px rgba(0,0,0,.03)}.main{position:relative;z-index:2;border-top:1px solid #e6e6e6}.toggle-all{position:absolute;top:-55px;left:-12px;width:60px;height:34px;border:none}.toggle-all:before{content:'❯';font-size:22px;color:#e6e6e6;padding:10px 27px}.toggle-all:checked:before{color:#737373}.todo-list{margin:0;padding:0;list-style:none}.todo-list li{position:relative;font-size:24px;border-bottom:1px solid #ededed}.todo-list li:last-child{border-bottom:none}.todo-list li.editing{border-bottom:none;padding:0}.todo-list li.editing .edit{display:block;width:506px;padding:13px 17px 12px;margin:0 0 0 43px}.todo-list li.editing .view{display:none}.todo-list li .toggle{text-align:center;width:40px;height:auto;position:absolute;top:0;bottom:0;margin:auto 0;border:none;-webkit-appearance:none;appearance:none}.todo-list li .toggle:after{content:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#ededed" stroke-width="3"/></svg>')}.todo-list li .toggle:checked:after{content:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="-10 -18 100 135"><circle cx="50" cy="50" r="50" fill="none" stroke="#bddad5" stroke-width="3"/><path fill="#5dc2af" d="M72 25L42 71 27 56l-4 4 20 20 34-52z"/></svg>')}.todo-list li label{white-space:pre;word-break:break-word;padding:15px 60px 15px 15px;margin-left:45px;display:block;line-height:1.2;transition:color .4s}.todo-list li.completed label{color:#d9d9d9;text-decoration:line-through}.todo-list li .destroy{display:none;position:absolute;top:0;right:10px;bottom:0;width:40px;height:40px;margin:auto 0 11px;font-size:30px;color:#cc9a9a;transition:color .2s ease-out}.todo-list li .destroy:hover{color:#af5b5e}.todo-list li .destroy:after{content:'×'}.todo-list li:hover .destroy{display:block}.todo-list li .edit{display:none}.todo-list li.editing:last-child{margin-bottom:-1px}.footer{color:#777;padding:10px 15px;height:20px;border-top:1px solid #e6e6e6}.footer:before{content:'';position:absolute;right:0;bottom:0;left:0;height:50px;overflow:hidden;box-shadow:0 1px 1px rgba(0,0,0,.2),0 8px 0 -3px #f6f6f6,0 9px 1px -3px rgba(0,0,0,.2),0 16px 0 -6px #f6f6f6,0 17px 2px -6px rgba(0,0,0,.2)}.todo-count{float:left;text-align:left}.todo-count strong{font-weight:300}.filters{margin:0;padding:0;list-style:none;position:absolute;right:0;left:0}.filters li{display:inline}.filters li a{color:inherit;margin:3px;padding:3px 7px;text-decoration:none;border:1px solid transparent;border-radius:3px}.filters li a.selected,.filters li a:hover{border-color:rgba(175,47,47,.1)}.filters li a.selected{border-color:rgba(175,47,47,.2)}.clear-completed,html .clear-completed:active{float:right;line-height:20px;text-decoration:none;cursor:pointer;visibility:hidden;position:relative}.clear-completed::after{visibility:visible;content:'Clear completed';position:absolute;top:0;right:0;white-space:nowrap}.clear-completed:hover::after{text-decoration:underline}.info{margin:65px auto 0;color:#bfbfbf;font-size:10px;text-shadow:0 1px 0 rgba(255,255,255,.5);text-align:center}.info p{line-height:1}.info a{color:inherit;text-decoration:none;font-weight:400}.info a:hover{text-decoration:underline}@media screen and (-webkit-min-device-pixel-ratio:0){.todo-list li .toggle,.toggle-all{background:0 0}.todo-list li .toggle{height:40px}.toggle-all{-webkit-transform:rotate(90deg);transform:rotate(90deg);-webkit-appearance:none;appearance:none}}@media (max-width:430px){.footer{height:50px}.filters{bottom:10px}}
-</style>
-	</head>
-	<body>
-		<section class="todoapp">
-			<header class="header">
-				<h1>todos</h1>
-        <!--
-          TODO: When this form is posted, a new todo should be created and visible
-                in the todo-list, as an `active` item.
-        -->
-        <form action="todos/">
-          <!--
-            TODO: Remove the `autofocus="autofocus"` attribute if a todo-item is
-                  currently being edited.
-          -->
-          <input type="text" name="new-item-text" placeholder="What needs to be done?" autocomplete="off" class="new-todo" autofocus>
-        </form>
-			</header>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Helping you remember or select a server-side MV* framework - Todo apps for Spring Boot, Flask, PHP and many more">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Java Native • Server-Side TodoMVC</title>
+  <style>
+body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{max-width:var(--max-width)}:root{--fg:#000;--bg:#fff;--fg-panel:#555;--bg-panel:#dedede;--footer:#f3f3f3;--primary:#f62459;--link:#0063cc;--fg-muted:#555;--fg-light:#dedede;--max-width:33rem}@media (prefers-color-scheme:dark){body{--bg:#222;--fg:#efefef;--fg-panel:#dedede;--bg-panel:#555;--footer:#444;--primary:#e3446c;--link:#3396ff;--fg-muted:#bbb;--fg-light:#dedede}}*{box-sizing:border-box}ul{margin:1rem 0 0;padding:0;list-style:none inside}a,form[action=controls]>button:hover,li button[name=edit]:hover,li>button[name=delete]:hover{color:var(--link)}body,html{height:100%;margin:0;padding:0;background:var(--bg);color:var(--fg);font-size:107%}body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;flex-direction:column}footer,main{padding:1rem}main{flex:1}footer{background:var(--footer);font-size:80%}main>h1{color:var(--primary);margin:0}main>h1>small{font-weight:400;float:right}form[action=controls]{margin-bottom:1rem;display:flex}form[action=controls]>button{cursor:pointer;opacity:.8;border:none;color:var(--fg-panel);background:var(--bg-panel);border-radius:.6rem;padding:.29rem .7rem}form[action=controls]>button:first-child{margin-right:auto}form[action=todos]>label{line-height:1;position:relative;left:.5rem;top:.7rem;background:var(--bg);padding:.1rem .3rem;color:var(--fg-muted);font-size:90%}form[action=todos]>input{line-height:1;display:block;width:100%;border:1px solid var(--fg-muted);border-radius:3px;outline:0;background:var(--bg);color:var(--fg);padding:1.3rem .7rem .7rem;font-size:100%}li{align-items:center;border-bottom:1px solid var(--fg-light)}li>*{margin:1rem 0}li>button{cursor:pointer}li>button[name=complete],li>button[name=revert]{margin-right:1rem;width:20px;height:20px;background-color:var(--bg);border-radius:999999px;border:1px solid var(--fg-muted);outline:0}li>button[name=complete]:hover{border-color:var(--primary)}li>button[name=revert]{background:var(--primary);border:4px solid var(--bg);box-shadow:0 0 0 1px var(--primary)}li>button[name=delete]{font-weight:200;font-size:150%;line-height:70%;background:var(--bg);color:var(--fg-light);padding:0;margin:0;border:none;outline:0;display:none}li button[name=edit],li>span,ul input[name=update]{outline:0;background:var(--bg);color:var(--fg);font-size:100%}li:hover>button[name=delete]{display:initial}li button[name=edit],li>span{flex:1;display:inline-block;text-align:left;border:none;margin:0;padding:0}ul form.inline{margin:0;padding:0;width:100%}ul input[name=update]{line-height:1;display:block;width:100%;border-radius:3px;padding:.47rem;margin:.2rem 0;border:1px solid var(--primary)}    
+  </style>
+  <!-- Look mom, no JavaScript! -->
+</head>
+<body>
+  <main>

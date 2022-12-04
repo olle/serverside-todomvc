@@ -1,0 +1,11 @@
+<h1>Todos <small title="%d Active items">%d</small></h1>
+<form action="controls" method="post">
+  <button name="clear" value="completed" title="Clear %d completed">%d Completed • Clear</button>
+  <button name="%s" value="completed" title="%s completed todo items">%s</button>
+</form>
+<form action="todos" method="post">
+  <label for="todo">Todo</label>
+  <input placeholder="What needs to be done?" %s required autocomplete="off" name="todo" id="todo" />
+</form>
+<form id="todo-item" method="post" action="todo"></form>
+<ul>
