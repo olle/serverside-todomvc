@@ -11,7 +11,10 @@ import java.net.Socket;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -25,6 +28,8 @@ public class TodoMVC {
 	private static final String ACTIVE_HTML;
 	private static final String COMPLETED_HTML;
 	private static final String EDITING_HTML;
+
+	private static Map<UUID, Todo> todos = new ConcurrentHashMap<>();
 
 	static {
 		HEADER_HTML = readAllLines("header.html");
@@ -116,10 +121,12 @@ public class TodoMVC {
 
 		if (req.isPostMethod()) {
 			if (req.hasPath("/todos") && req.hasParam("todo")) {
-				System.out.println("ADDING TODO: " + req.getParam("todo"));
+				Todo t = new Todo(req.getParam("todo"));				
+				todos.put(t.getUuid(), t);
+				return Response.REDIRECT_ROOT;
 			}
 		}
-		
+
 		if (!req.isGetMethod()) {
 			return Response.NOT_IMPLEMENTED;
 		}
@@ -164,7 +171,7 @@ public class TodoMVC {
 			if (hasParam(param)) {
 				return body.split("=")[1];
 			}
-			
+
 			return null;
 		}
 
@@ -173,7 +180,7 @@ public class TodoMVC {
 			if (body == null) {
 				return false;
 			}
-			
+
 			return body.split("=")[0].equals(param);
 		}
 
@@ -226,6 +233,7 @@ public class TodoMVC {
 
 	static final class Response {
 
+		public static final Response REDIRECT_ROOT = new Response("HTTP/1.1 301 Moved Permanently\nLocation: /\n\n");
 		public static final Response NOT_FOUND = new Response("HTTP/1.1 404 Not Found\n");
 		public static final Response NOT_IMPLEMENTED = new Response("HTTP/1.1 501 Not Implemented\n");
 
@@ -243,4 +251,25 @@ public class TodoMVC {
 			this.body = body;
 		}
 	}
+
+	static final class Todo {
+
+		private final UUID uuid;
+		private final String todo;
+
+		public Todo(String todo) {
+			this.uuid = UUID.randomUUID();
+			this.todo = todo;
+		}
+
+		public UUID getUuid() {
+			return uuid;
+		}
+
+		public String getTodo() {
+			return todo;
+		}
+
+	}
+
 }
