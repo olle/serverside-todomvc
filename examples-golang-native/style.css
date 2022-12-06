@@ -1,0 +1,224 @@
+/* Themes - light and dark. */
+
+:root {
+  --fg: #000;
+  --bg: #fff;
+  --fg-panel: #555;
+  --bg-panel: #dedede;
+  --footer: #f3f3f3;
+  --primary: #f62459;
+  --link: #0063cc;
+  --fg-muted: #555;
+  --fg-light: #dedede;
+  --max-width: 33rem;
+}
+@media (prefers-color-scheme: dark) {
+  body {
+    --bg: #222;
+    --fg: #efefef;
+    --fg-panel: #dedede;
+    --bg-panel: #555;
+    --footer: #444;
+    --primary: #e3446c;
+    --link: #3396ff;
+    --fg-muted: #bbb;
+    --fg-light: #dedede;
+  }
+}
+
+/* Micro reset */
+
+* {
+  box-sizing: border-box;
+}
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  list-style-position: inside;
+}
+a {
+  color: var(--link);
+}
+
+/* Layout */
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 107%;
+}
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+main,
+footer {
+  padding: 1rem;
+}
+main {
+  flex: 1;
+}
+footer {
+  background: var(--footer);
+  font-size: 80%;
+}
+
+/* Semantic header */
+
+main > h1 {
+  max-width: var(--max-width);
+  color: var(--primary);
+  margin: 0;
+}
+main > h1 > small {
+  font-weight: normal;
+  float: right;
+}
+
+/* Clear, filter and control form */
+
+form[action="controls"] {
+  max-width: var(--max-width);
+  margin-bottom: 1rem;
+  display: flex;
+}
+form[action="controls"] > button {
+  cursor: pointer;
+  opacity: 0.8;
+  border: none;
+  color: var(--fg-panel);
+  background: var(--bg-panel);
+  border-radius: 0.6rem;
+  padding: 0.29rem 0.7rem;
+}
+form[action="controls"] > button:hover {
+  color: var(--link);
+}
+form[action="controls"] > button:first-child {
+  margin-right: auto;
+}
+
+/* New todo item form */
+
+form[action="todos"] > label {
+  line-height: 1;
+  position: relative;
+  left: 0.5rem;
+  top: 0.7rem;
+  background: var(--bg);
+  padding: 0.1rem 0.3rem;
+  color: var(--fg-muted);
+  font-size: 90%;
+}
+form[action="todos"] > input {
+  line-height: 1;
+  display: block;
+  width: 100%;
+  max-width: var(--max-width);
+  border: 1px solid var(--fg-muted);
+  border-radius: 3px;
+  outline: none;
+  background: var(--bg);
+  color: var(--fg);
+  padding: 0.7rem;
+  padding-top: 1.3rem;
+  font-size: 100%;
+}
+
+/* Todos listing */
+
+ul {
+  margin-top: 1rem;
+}
+li {
+  display: flex;
+  align-items: center;
+  max-width: var(--max-width);
+  border-bottom: 1px solid var(--fg-light);
+}
+li > * {
+  margin: 1rem 0;
+}
+li > button {
+  cursor: pointer;
+}
+li > button[name="complete"],
+li > button[name="revert"] {
+  margin-right: 1rem;
+  width: 20px;
+  height: 20px;
+  background-color: var(--bg);
+  border-radius: 999999px;
+  border: 1px solid var(--fg-muted);
+  outline: none;
+}
+li > button[name="complete"]:hover {
+  border-color: var(--primary);
+}
+li > button[name="revert"] {
+  background: var(--primary);
+  border: 4px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+li > button[name="delete"] {
+  font-weight: 200;
+  font-size: 150%;
+  line-height: 70%;
+  background: var(--bg);
+  color: var(--fg-light);
+  padding: 0;
+  margin: 0;
+  border: none;
+  outline: none;
+  display: none;
+}
+li:hover > button[name="delete"] {
+  display: initial;
+}
+li > button[name="delete"]:hover {
+  color: var(--link);
+}
+li > span,
+li button[name="edit"] {
+  flex: 1;
+  display: inline-block;
+  text-align: left;
+  font-size: 100%;
+  color: var(--fg);
+  background: var(--bg);
+  border: none;
+  outline: none;
+  margin: 0;
+  padding: 0;
+}
+li button[name="edit"]:hover {
+  color: var(--link);
+}
+
+/* Inline edit/update form */
+
+ul form.inline {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+ul input[name="update"] {
+  line-height: 1;
+  display: block;
+  width: 100%;
+  border-radius: 3px;
+  outline: none;
+  background: var(--bg);
+  color: var(--fg);
+  font-size: 100%;
+  padding: 0.47rem;
+  margin: 0.2rem 0;
+  border: 1px solid var(--primary);
+}
