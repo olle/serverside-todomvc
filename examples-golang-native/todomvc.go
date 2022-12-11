@@ -2,6 +2,7 @@ package main
 
 import (
 	_ "embed"
+	"fmt"
 	"log"
 	"net/http"
 	"text/template"
@@ -14,25 +15,36 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
-		template, err := template.New("index").Parse(indexTemplate)
-
-		if err != nil {
-			w.WriteHeader(500)
-			log.Fatal(err)
-			return
+		switch r.Method {
+		case "GET":
+			template, err := template.New("index").Parse(indexTemplate)
+			if err != nil {
+				w.WriteHeader(500)
+				log.Fatal(err)
+				return
+			}
+			w.WriteHeader(200)
+			data := struct {
+				ActiveCount int
+			}{
+				ActiveCount: 0,
+			}
+			template.Execute(w, data)
+		case "POST":
+			// Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
+			if err := r.ParseForm(); err != nil {
+				fmt.Fprintf(w, "ParseForm() err: %v", err)
+				return
+			}
+			log.Printf("Post from website! r.PostFrom = %v\n", r.PostForm)
+			http.Redirect(w, r, "/", 301)
+		default:
+			fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 		}
 
-		w.WriteHeader(200)
-
-		data := struct {
-			ActiveCount int
-		}{
-			ActiveCount: 0,
-		}
-		template.Execute(w, data)
 	})
-	err := http.ListenAndServe("127.0.0.1:8000", mux)
 
+	err := http.ListenAndServe("127.0.0.1:8000", mux)
 	if err != nil {
 		log.Fatal(err)
 	}
