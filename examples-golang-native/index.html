@@ -72,7 +72,7 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
 
       <li> <!-- TODO: Otherwise render the todo item like this: -->
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{todo-text}</button>
+        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{{.Todo}}</button>
         <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
 

@@ -11,7 +11,19 @@ import (
 //go:embed index.html
 var indexTemplate string
 
+type Todo struct {
+	Text string
+}
+
+var Todos []Todo
+
+type Data struct {
+	ActiveCount int
+	Todo        string
+}
+
 func main() {
+	var data = Data{0, ""}
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 
@@ -24,11 +36,6 @@ func main() {
 				return
 			}
 			w.WriteHeader(200)
-			data := struct {
-				ActiveCount int
-			}{
-				ActiveCount: 0,
-			}
 			template.Execute(w, data)
 		case "POST":
 			// Call ParseForm() to parse the raw query and update r.PostForm and r.Form.
@@ -37,6 +44,7 @@ func main() {
 				return
 			}
 			log.Printf("Post from website! r.PostFrom = %v\n", r.PostForm)
+			data.Todo = r.FormValue("todo")
 			http.Redirect(w, r, "/", 301)
 		default:
 			fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
