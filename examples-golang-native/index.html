@@ -36,11 +36,6 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
       <button name="show" value="completed" title="Show completed todo items">Show</button>
     </form>
 
-
-    <!--
-        TODO: When this form is posted, a new todo item should be created and
-              added to the todo-list, as an active item.
-    -->
     <form action="todos" method="post">
       <label for="todo">Todo</label>
       <!--
@@ -58,6 +53,7 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
     -->
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
+      {{range .Todos}}
       <!--
           TODO: First render from a list of all active todo items.
       -->
@@ -72,7 +68,7 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
 
       <li> <!-- TODO: Otherwise render the todo item like this: -->
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{{.Todo}}</button>
+        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{{.Text}}</button>
         <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
 
@@ -85,6 +81,7 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
         <span>{todo-text}</span>
         <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
+      {{end}}
     </ul>
   </main>
   <footer>
