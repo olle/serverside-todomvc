@@ -71,16 +71,18 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
         {{end}}
       {{end}}
 
-      {{range .CompletedTodos}}
-      <!--
-          TODO: Then render the list of todo items marked as completed, unless
-                the current filter is toggled to hide completed.
-      -->
-      <li>
-        <button name="revert" value="{{.Id}}" form="todo-item" title="Mark as active"></button>
-        <span>{todo-text}</span>
-        <button name="delete" value="{{.Id}}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
+      {{if .Show}}
+        {{range .CompletedTodos}}
+        <!--
+            TODO: Then render the list of todo items marked as completed, unless
+                  the current filter is toggled to hide completed.
+        -->
+        <li>
+          <button name="revert" value="{{.Id}}" form="todo-item" title="Mark as active"></button>
+          <span>{{.Text}}</span>
+          <button name="delete" value="{{.Id}}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        </li>
+        {{end}}
       {{end}}
     </ul>
   </main>
