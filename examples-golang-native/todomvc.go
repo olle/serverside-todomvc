@@ -62,6 +62,11 @@ func completeTodo(id string, data Data) Data {
 	return updateCounts(data)
 }
 
+func clearCompleted(data Data) Data {
+	data.CompletedTodos = []Todo{}
+	return updateCounts(data)
+}
+
 func main() {
 
 	mux := http.NewServeMux()
@@ -91,6 +96,9 @@ func main() {
 				}
 				if r.PostForm.Has("show") {
 					data.Show = true
+				}
+				if r.PostForm.Has("clear") {
+					data = clearCompleted(data)
 				}
 			case "/todos":
 				data = addTodo(r.FormValue("todo"), data)
