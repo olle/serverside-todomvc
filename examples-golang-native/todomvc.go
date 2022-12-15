@@ -44,11 +44,16 @@ func addTodo(text string, data Data) Data {
 	return updateCounts(data)
 }
 
-func completeTodo(id string, data Data) Data {
-	todoId, err := strconv.ParseInt(id, 10, 64)
+func toInt(s string) int64 {
+	n, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
 		log.Fatal(err)
 	}
+	return n
+}
+
+func completeTodo(id string, data Data) Data {
+	todoId := toInt(id)
 	var NewActiveTodos = []Todo{}
 	for i := 0; i < len(data.ActiveTodos); i++ {
 		todo := data.ActiveTodos[i]
@@ -65,6 +70,24 @@ func completeTodo(id string, data Data) Data {
 func clearCompleted(data Data) Data {
 	data.CompletedTodos = []Todo{}
 	return updateCounts(data)
+}
+
+func deleteTodo(id string, data Data) Data {
+	todoId := toInt(id)
+	data.ActiveTodos = deleteById(todoId, data.ActiveTodos)
+	data.CompletedTodos = deleteById(todoId, data.CompletedTodos)
+	return updateCounts(data)
+}
+
+func deleteById(id int64, todos []Todo) []Todo {
+	var NewTodos = []Todo{}
+	for i := 0; i < len(todos); i++ {
+		todo := todos[i]
+		if todo.Id != id {
+			NewTodos = append(NewTodos, todo)
+		}
+	}
+	return NewTodos
 }
 
 func main() {
@@ -106,6 +129,9 @@ func main() {
 			case "/todo":
 				if r.PostForm.Has("complete") {
 					data = completeTodo(r.FormValue("complete"), data)
+				}
+				if r.PostForm.Has("delete") {
+					data = deleteTodo(r.FormValue("delete"), data)
 				}
 			}
 			http.Redirect(w, r, "/", 301)
