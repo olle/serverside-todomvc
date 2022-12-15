@@ -53,11 +53,7 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
     -->
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
-      {{range .Todos}}
-      <!--
-          TODO: First render from a list of all active todo items.
-      -->
-
+      {{range .ActiveTodos}}
       <li> <!-- TODO: If the todo item is being edited use this:  -->
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
         <form class="inline" method="post" action="todos/{todo-id}">
@@ -65,13 +61,14 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
           <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
         </form>
       </li>
-
       <li> <!-- TODO: Otherwise render the todo item like this: -->
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
         <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{{.Text}}</button>
         <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
+      {{end}}
 
+      {{range .CompletedTodos}}
       <!--
           TODO: Then render the list of todo items marked as completed, unless
                 the current filter is toggled to hide completed.
