@@ -67,6 +67,21 @@ func completeTodo(id string, data Data) Data {
 	return updateCounts(data)
 }
 
+func revertTodo(id string, data Data) Data {
+	todoId := toInt(id)
+	var NewCompletedTodos = []Todo{}
+	for i := 0; i < len(data.CompletedTodos); i++ {
+		todo := data.CompletedTodos[i]
+		if todo.Id == todoId {
+			data.ActiveTodos = append(data.ActiveTodos, todo)
+		} else {
+			NewCompletedTodos = append(NewCompletedTodos, todo)
+		}
+	}
+	data.CompletedTodos = NewCompletedTodos
+	return updateCounts(data)
+}
+
 func clearCompleted(data Data) Data {
 	data.CompletedTodos = []Todo{}
 	return updateCounts(data)
@@ -129,6 +144,9 @@ func main() {
 			case "/todo":
 				if r.PostForm.Has("complete") {
 					data = completeTodo(r.FormValue("complete"), data)
+				}
+				if r.PostForm.Has("revert") {
+					data = revertTodo(r.FormValue("revert"), data)
 				}
 				if r.PostForm.Has("delete") {
 					data = deleteTodo(r.FormValue("delete"), data)
