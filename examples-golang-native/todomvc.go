@@ -27,6 +27,12 @@ var data = Data{
 	[]Todo{},
 	[]Todo{}}
 
+func addNewTodo(todo Todo, data Data) Data {
+	data.ActiveTodos = append(data.ActiveTodos, todo)
+	data.ActiveCount = len(data.ActiveTodos)
+	return data
+}
+
 func main() {
 
 	mux := http.NewServeMux()
@@ -34,43 +40,34 @@ func main() {
 
 		switch r.Method {
 		case "GET":
-
 			template, err := template.New("index").Parse(indexTemplate)
-
 			if err != nil {
 				w.WriteHeader(500)
 				log.Fatal(err)
 				return
 			}
-
-			// TODO: Move this to the POST handling!!
-			data.ActiveCount = len(data.ActiveTodos)
-
 			w.WriteHeader(200)
 			template.Execute(w, data)
 
 		case "POST":
-
 			if err := r.ParseForm(); err != nil {
 				fmt.Fprintf(w, "ParseForm() err: %v", err)
 				return
 			}
-
 			log.Printf("HANDLING: r.PostForm = %v - r.URL = %v\n", r.PostForm, r.URL)
-
 			switch r.URL.Path {
 			case "/todos":
+				var NewTodo = Todo{r.FormValue("todo"), false}
 
-				data.ActiveTodos = append(data.ActiveTodos, Todo{r.FormValue("todo"), false})
-
+				data = addNewTodo(NewTodo, data)
 			default:
 				log.Print("Nothing to do...")
 			}
 			http.Redirect(w, r, "/", 301)
+
 		default:
 			fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 		}
-
 	})
 
 	err := http.ListenAndServe("127.0.0.1:8080", mux)
