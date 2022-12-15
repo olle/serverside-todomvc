@@ -18,6 +18,7 @@ type Todo struct {
 	Id        int64
 	Text      string
 	Completed bool
+	Editing   bool
 }
 
 type Data struct {
@@ -33,7 +34,7 @@ var data = Data{
 
 func addTodo(text string, data Data) Data {
 	seq = seq + 1
-	var NewTodo = Todo{seq, text, false}
+	var NewTodo = Todo{seq, text, false, false}
 	return addNewTodo(NewTodo, data)
 }
 

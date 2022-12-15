@@ -54,18 +54,21 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
       {{range .ActiveTodos}}
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{{.Id}}" form="todo-item" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{{.Id}}">
-          <input type="hidden" name="id" value="{{.Id}}" />
-          <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
-        </form>
-      </li>
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{{.Id}}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{{.Id}}" form="todo-item" title="Click to edit">{{.Text}}</button>
-        <button name="delete" value="{{.Id}}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
+        {{if .Editing}}
+        <li> <!-- TODO: If the todo item is being edited use this:  -->
+          <button name="complete" value="{{.Id}}" form="todo-item" title="Mark completed"></button>
+          <form class="inline" method="post" action="todos/{{.Id}}">
+            <input type="hidden" name="id" value="{{.Id}}" />
+            <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+          </form>
+        </li>
+        {{else}}
+        <li> <!-- TODO: Otherwise render the todo item like this: -->
+          <button name="complete" value="{{.Id}}" form="todo-item" title="Mark completed"></button>
+          <button name="edit" value="{{.Id}}" form="todo-item" title="Click to edit">{{.Text}}</button>
+          <button name="delete" value="{{.Id}}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        </li>
+        {{end}}
       {{end}}
 
       {{range .CompletedTodos}}
