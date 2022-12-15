@@ -85,6 +85,13 @@ func main() {
 			}
 			log.Printf("HANDLING: r.URL=%v r.PostForm=%v\n", r.URL, r.PostForm)
 			switch r.URL.Path {
+			case "/controls":
+				if r.PostForm.Has("hide") {
+					data.Show = false
+				}
+				if r.PostForm.Has("show") {
+					data.Show = true
+				}
 			case "/todos":
 				data = addTodo(r.FormValue("todo"), data)
 
