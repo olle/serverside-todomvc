@@ -44,15 +44,15 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
     <ul>
       {{range .ActiveTodos}}
         {{if .Editing}}
-        <li> <!-- TODO: If the todo item is being edited use this:  -->
+        <li>
           <button name="complete" value="{{.Id}}" form="todo-item" title="Mark completed"></button>
           <form class="inline" method="post" action="todos/{{.Id}}">
             <input type="hidden" name="id" value="{{.Id}}" />
-            <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+            <input name="update" value="{{.Text}}" autofocus required autocomplete="off" />
           </form>
         </li>
         {{else}}
-        <li> <!-- TODO: Otherwise render the todo item like this: -->
+        <li>
           <button name="complete" value="{{.Id}}" form="todo-item" title="Mark completed"></button>
           <button name="edit" value="{{.Id}}" form="todo-item" title="Click to edit">{{.Text}}</button>
           <button name="delete" value="{{.Id}}" form="todo-item" title="Delete todo item">&#x2715;</button>
@@ -62,10 +62,6 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
 
       {{if .Show}}
         {{range .CompletedTodos}}
-        <!--
-            TODO: Then render the list of todo items marked as completed, unless
-                  the current filter is toggled to hide completed.
-        -->
         <li>
           <button name="revert" value="{{.Id}}" form="todo-item" title="Mark as active"></button>
           <span>{{.Text}}</span>
@@ -82,11 +78,8 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
       inspired by the original <a href="https://todomvc.com">TodoMVC</a> from
       <a href="http://github.com/sindresorhus">Sindre Sorhus</a>.
     </p>
-    <!--
-      TODO: Replace the paragraph below with a link to you or your
-            homepage, person, repository or organization. -->
     <p>
-      Created by <a href="http://todomvc.com">you</a>.
+      Created by <a href="http://github.com/olle/">Olle Törnström</a>.
     </p>
     <p>
       Part of <a href="http://github.com/olle/serverside-todomvc">Server-Side TodoMVC</a>
