@@ -159,7 +159,7 @@ func main() {
 				fmt.Fprintf(w, "ParseForm() err: %v", err)
 				return
 			}
-			log.Printf("HANDLING: r.URL=%v r.PostForm=%v\n", r.URL, r.PostForm)
+			//log.Printf("HANDLING: r.URL=%v r.PostForm=%v\n", r.URL, r.PostForm)
 			switch r.URL.Path {
 			case "/controls":
 				if r.PostForm.Has("hide") {
