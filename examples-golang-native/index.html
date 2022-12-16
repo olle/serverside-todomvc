@@ -34,7 +34,7 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
         {{if .Editing}}
         <li>
           <button name="complete" value="{{.Id}}" form="todo-item" title="Mark completed"></button>
-          <form class="inline" method="post" action="todos/{{.Id}}">
+          <form class="inline" method="post" action="todos">
             <input type="hidden" name="id" value="{{.Id}}" />
             <input name="update" value="{{.Text}}" autofocus required autocomplete="off" />
           </form>
