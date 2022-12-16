@@ -23,13 +23,14 @@ type Todo struct {
 
 type Data struct {
 	Show           bool
+	NotEditing     bool
 	ActiveCount    int
 	CompletedCount int
 	ActiveTodos    []Todo
 	CompletedTodos []Todo
 }
 
-var data = Data{true, 0, 0, []Todo{}, []Todo{}}
+var data = Data{true, true, 0, 0, []Todo{}, []Todo{}}
 
 func updateCounts(data Data) Data {
 	data.ActiveCount = len(data.ActiveTodos)
@@ -59,6 +60,22 @@ func completeTodo(id string, data Data) Data {
 		todo := data.ActiveTodos[i]
 		if todo.Id == todoId {
 			data.CompletedTodos = append(data.CompletedTodos, todo)
+		} else {
+			NewActiveTodos = append(NewActiveTodos, todo)
+		}
+	}
+	data.ActiveTodos = NewActiveTodos
+	return updateCounts(data)
+}
+
+func editTodo(id string, data Data) Data {
+	todoId := toInt(id)
+	var NewActiveTodos = []Todo{}
+	for i := 0; i < len(data.ActiveTodos); i++ {
+		todo := data.ActiveTodos[i]
+		if todo.Id == todoId {
+			data.NotEditing = false
+			NewActiveTodos = append(NewActiveTodos, Todo{todo.Id, todo.Text, true})
 		} else {
 			NewActiveTodos = append(NewActiveTodos, todo)
 		}
@@ -150,6 +167,9 @@ func main() {
 				}
 				if r.PostForm.Has("delete") {
 					data = deleteTodo(r.FormValue("delete"), data)
+				}
+				if r.PostForm.Has("edit") {
+					data = editTodo(r.FormValue("edit"), data)
 				}
 			}
 			http.Redirect(w, r, "/", 301)
