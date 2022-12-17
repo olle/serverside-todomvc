@@ -25,30 +25,43 @@ which-%:
 	@echo -n '--> Checking if $* is installed... '
 	@(which $* > /dev/null && echo '[OK]') || (echo '[MISSING]'; exit 1)
 
-## Examples should build, clean or test.
-check build clean test:
+##
+## All examples must support the targets `build`, `test` and `clean`.
+##
+##   `build` - assumes the example is complied, unit tested, packaged and - for
+##             that specific language or framework - prepared in such a way that
+##             it can be locally run, serving the web app.
+##
+##   `test`  - will expect the example to start the web app, allow for end to
+##             end tests to be run, and then stop the app again.
+##
+##   `clean` - assumes the example removes any temporarily built artefacts, and
+##             ensures the project is source-only, if possible.
+##
+check build test clean:
 	@$(MAKE) -C examples-golang-native $@
-##	@$(MAKE) -C examples-java-native $@
-##	@$(MAKE) -C examples-java-ninjaframework $@
-##	@$(MAKE) -C examples-java-servlet $@
-##	@$(MAKE) -C examples-java-spark-mustache $@
-##	@$(MAKE) -C examples-java-spring-boot-2.x $@
-##	@$(MAKE) -C examples-java-spring-boot-freemarker $@
-##	@$(MAKE) -C examples-java-spring-boot-mustache $@
-##	@$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
-##	@$(MAKE) -C examples-java-wicket $@
-##	@$(MAKE) -C examples-kotlin-simple $@
-##	@$(MAKE) -C examples-php-vanilla $@
-##	@$(MAKE) -C examples-python-flask $@
-##	@echo '----------------------------------------------------------------------'
+	@$(MAKE) -C examples-java-native $@
+	@$(MAKE) -C examples-java-ninjaframework $@
+	@$(MAKE) -C examples-java-servlet $@
+	@$(MAKE) -C examples-java-spark-mustache $@
+	@$(MAKE) -C examples-java-spring-boot-2.x $@
+	@$(MAKE) -C examples-java-spring-boot-freemarker $@
+	@$(MAKE) -C examples-java-spring-boot-mustache $@
+	@$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
+	@$(MAKE) -C examples-java-wicket $@
+	@$(MAKE) -C examples-kotlin-simple $@
+	@$(MAKE) -C examples-php-vanilla $@
+	@$(MAKE) -C examples-python-flask $@
+	@echo '----------------------------------------------------------------------'
 
 run-setup:
-	@echo " Let's see if you have Node.js and npm installed?"
-	@which npm || (echo " Ouch, too bad. Start by installing that first please."; exit 1)
-	@echo " Oh, great."
-	@echo "\n Now let's make sure everything is installed properly...\n"
-	@npm install
-	@echo "\nVery good!\n All done. Now move along!\n"
+	@echo " Everyting seems to be in order."
+##	@echo " Let's see if you have Node.js and npm installed?"
+##	@which npm || (echo " Ouch, too bad. Start by installing that first please."; exit 1)
+##	@echo " Oh, great."
+##	@echo "\n Now let's make sure everything is installed properly...\n"
+##	@npm install
+##	@echo "\nVery good!\n All done. Now move along!\n"
 
 ## Build __all__ the examples!
 all: build
