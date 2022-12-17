@@ -27,15 +27,20 @@ which-%:
 
 ## Examples should build, clean or test.
 check build clean test:
-	@echo '----------------------------------------------------------------------'
-	@$(MAKE) -C examples-python-flask $@
-	@$(MAKE) -C examples-java-servlet $@
-	@$(MAKE) -C examples-java-wicket $@
-	@$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
-	@$(MAKE) -C examples-java-spark-mustache $@
-	@$(MAKE) -C examples-java-ninjaframework $@
-	@$(MAKE) -C examples-php-vanilla $@
-	@echo '----------------------------------------------------------------------'
+	@$(MAKE) -C examples-golang-native $@
+##	@$(MAKE) -C examples-java-native $@
+##	@$(MAKE) -C examples-java-ninjaframework $@
+##	@$(MAKE) -C examples-java-servlet $@
+##	@$(MAKE) -C examples-java-spark-mustache $@
+##	@$(MAKE) -C examples-java-spring-boot-2.x $@
+##	@$(MAKE) -C examples-java-spring-boot-freemarker $@
+##	@$(MAKE) -C examples-java-spring-boot-mustache $@
+##	@$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
+##	@$(MAKE) -C examples-java-wicket $@
+##	@$(MAKE) -C examples-kotlin-simple $@
+##	@$(MAKE) -C examples-php-vanilla $@
+##	@$(MAKE) -C examples-python-flask $@
+##	@echo '----------------------------------------------------------------------'
 
 run-setup:
 	@echo " Let's see if you have Node.js and npm installed?"
