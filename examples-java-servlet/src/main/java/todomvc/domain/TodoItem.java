@@ -4,58 +4,98 @@ import todomvc.repository.Identifiable;
 
 public class TodoItem implements Identifiable<Long> {
 
-  public enum Status {
-    ACTIVE(""),
-    COMPLETED("completed"),
-    EDITING("editing");
+	private final String todo;
+	private final Long id;
+	private final Status status;
 
-    private final String css;
+	public boolean isActive() {
 
-    Status(String css) {
-      this.css = css;
-    }
+		return this.status == Status.ACTIVE;
+	}
 
-    @Override
-    public String toString() {
-      return this.css;
-    };
-  }
+	public boolean isNew() {
 
-  private final String todo;
-  private final Long id;
-  private final Status status;
+		return id == null;
+	}
 
-  public TodoItem() {
-    this("");
-  }
+	public boolean isEditing() {
 
-  public TodoItem(String todo) {
-    this.todo = todo;
-    this.id = System.currentTimeMillis();
-    this.status = Status.ACTIVE;
-  }
+		return status == Status.EDITING;
+	}
 
-  public TodoItem(TodoItem prev, Status newStatus) {
-    this.todo = prev.todo;
-    this.id = prev.id;
-    this.status = newStatus;
-  }
+	public boolean isNotEditing() {
 
-  @Override
-  public Long getId() {
-    return this.id;
-  }
+		return !isEditing();
+	}
 
-  public String getTodo() {
-    return this.todo;
-  }
+	public TodoItem markCompleted() {
 
-  @Override
-  public String toString() {
-    return this.todo;
-  }
+		return new TodoItem(this, Status.COMPLETED);
+	}
 
-  public Status getStatus() {
-    return this.status;
-  }
+	public enum Status {
+		ACTIVE, COMPLETED, EDITING;
+	}
+
+	public TodoItem() {
+		this("");
+	}
+
+	public TodoItem(String todo) {
+		this.todo = todo;
+		this.id = System.currentTimeMillis();
+		this.status = Status.ACTIVE;
+	}
+
+	public TodoItem(TodoItem prev, Status newStatus) {
+		this.todo = prev.todo;
+		this.id = prev.id;
+		this.status = newStatus;
+	}
+
+	public TodoItem(TodoItem other, long id) {
+		this.id = id;
+		this.todo = other.todo;
+		this.status = other.status;
+	}
+
+	public TodoItem(TodoItem other) {
+		this.id = other.id;
+		this.todo = other.todo;
+		this.status = other.status;
+	}
+
+	@Override
+	public Long getId() {
+		return this.id;
+	}
+
+	public String getTodo() {
+		return this.todo;
+	}
+
+	@Override
+	public String toString() {
+		return this.todo;
+	}
+
+	public Status getStatus() {
+		return this.status;
+	}
+
+	public static TodoItem from(String text) {
+
+		return new TodoItem(text);
+	}
+
+	public static TodoItem from(TodoItem entity, long newId) {
+
+		return new TodoItem(entity, newId);
+	}
+
+	public static TodoItem from(TodoItem entity) {
+
+		return new TodoItem(entity);
+	}
+
 }

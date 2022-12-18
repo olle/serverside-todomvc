@@ -1,75 +1,51 @@
 package todomvc.repository;
 
 import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 import todomvc.domain.TodoItem;
 
-public class SimpleHashMapRepository implements Repository<TodoItem, Long>{
+public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
+
+	private static long SEQ = 1;
+
+	private final Map<Long, TodoItem> todos = new ConcurrentHashMap<>();
 
 	@Override
-	public long count() {
-		// TODO Auto-generated method stub
-		return 0;
+	public Collection<TodoItem> findAllActive() {
+
+		return todos.values().stream().filter(TodoItem::isActive).toList();
 	}
 
 	@Override
-	public Collection<TodoItem> findAll() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Collection<TodoItem> findAllCompleted() {
 
-	@Override
-	public Iterable<TodoItem> findAll(Iterable<Long> ids) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TodoItem findOne(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return todos.values().stream().filter(Predicate.not(TodoItem::isActive)).toList();
 	}
 
 	@Override
 	public TodoItem save(TodoItem entity) {
-		// TODO Auto-generated method stub
-		return null;
+
+		final TodoItem copy;
+
+		if (entity.isNew()) {
+			long newId = System.currentTimeMillis() + (SEQ++);
+			copy = TodoItem.from(entity, newId);
+		} else {
+			copy = TodoItem.from(entity);
+		}
+
+		return todos.put(copy.getId(), copy);
 	}
 
 	@Override
-	public Iterable<TodoItem> save(Iterable<? extends TodoItem> entities) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public void markCompletedById(long id) {
 
-	@Override
-	public void delete(TodoItem entity) {
-		// TODO Auto-generated method stub
-		
-	}
+		Optional.ofNullable(todos.get(id)).map(TodoItem::markCompleted).ifPresent(this::save);
 
-	@Override
-	public void delete(Long id) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void delete(Iterable<? extends TodoItem> entities) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void deleteAll() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean exists(Long id) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }

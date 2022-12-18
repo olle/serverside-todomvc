@@ -1,16 +1,12 @@
 package todomvc.servlet;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.List;
 
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import todomvc.domain.TodoItem;
-import todomvc.domain.TodoItem.Status;
 import todomvc.repository.Repository;
 import todomvc.repository.SimpleHashMapStorage;
 import todomvc.repository.Storage;
@@ -24,85 +20,43 @@ public final class TodoMvcServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		System.err.println("GET " + req);
+
+		Repository<TodoItem, Long> repo = storage.forKey(req.getRequestedSessionId());
+		req.setAttribute("active", repo.findAllActive());
+		req.setAttribute("completed", repo.findAllCompleted());
+
 		req.getRequestDispatcher("/index.jsp").forward(req, resp);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.err.println("POST " + req);
+
+		var uri = req.getRequestURI();
+		var params = req.getParameterMap();
+
+		System.err.println("POST " + uri + "  " + params);
+
+		if (uri.equals("/todos.do")) {
+			if (params.containsKey("todo")) {
+				String todoText = params.get("todo")[0];
+				addNewTodoItem(todoText, req.getRequestedSessionId());
+			}
+		} else if (uri.equals("/todo.do")) {
+			if (params.containsKey("complete")) {
+				var todoId = params.get("complete")[0];
+				markTodoItemAsCompleted(todoId, req.getRequestedSessionId());
+			}
+		}
+
 		resp.sendRedirect("/index.do");
 	}
 
-	String parseCommand(HttpServletRequest req) {
-		String requestURI = req.getRequestURI();
-		int lastSlashIdx = requestURI.lastIndexOf("/");
-		int lastDotIdx = requestURI.lastIndexOf(".");
-		return requestURI.substring(lastSlashIdx + 1, lastDotIdx);
+	private void addNewTodoItem(String todoText, String sessionId) {
+		storage.forKey(sessionId).save(TodoItem.from(todoText));
 	}
 
-	String dispatchControl(String command, HttpServletRequest req, HttpServletResponse resp) throws IOException {
-
-		final Repository<TodoItem, Long> repository = getSessionRepository(req);
-
-		if (command.equals("home")) {
-
-			Collection<TodoItem> all = repository.findAll();
-			List<TodoItem> completed = all.stream().filter(todo -> todo.getStatus() == Status.COMPLETED).toList();
-
-			req.setAttribute("todos", all);
-			req.setAttribute("completed", completed);
-			return "home";
-		} else if (command.equals("new")) {
-
-			String newTodo = req.getParameter("new-todo");
-			TodoItem todo = new TodoItem(newTodo);
-			repository.save(todo);
-			resp.sendRedirect("home.do");
-			return "";
-		} else if (command.equals("toggle")) {
-
-			long todoId = Long.parseLong(req.getParameter("todo-id"));
-			TodoItem todo = repository.findOne(todoId);
-			if (todo.getStatus() == Status.ACTIVE) {
-				repository.save(new TodoItem(todo, Status.COMPLETED));
-			} else {
-				repository.save(new TodoItem(todo, Status.ACTIVE));
-			}
-			resp.sendRedirect("home.do");
-			return "";
-		} else if (command.equals("delete")) {
-
-			long todoId = Long.parseLong(req.getParameter("todo-id"));
-			repository.delete(todoId);
-			resp.sendRedirect("home.do");
-			return "";
-		} else if (command.equals("clear")) {
-
-			Iterable<TodoItem> todos = repository.findAll();
-			for (TodoItem todo : todos) {
-				if (todo.getStatus() == Status.COMPLETED) {
-					repository.delete(todo.getId());
-				}
-			}
-			resp.sendRedirect("home.do");
-			return "";
-		} else {
-
-			return "home";
-		}
+	private void markTodoItemAsCompleted(String todoId, String sessionId) {
+		storage.forKey(sessionId).markCompletedById(Long.parseLong(todoId));
 	}
 
-	private Repository<TodoItem, Long> getSessionRepository(HttpServletRequest req) {
-		return this.storage.forKey(req.getSession(true).getId());
-	}
-
-	void forwardToView(String view, HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException {
-		if (!resp.isCommitted()) {
-			String path = "/" + view + ".jsp";
-
-			RequestDispatcher dispatcher = req.getRequestDispatcher(path);
-			dispatcher.forward(req, resp);
-		}
-	}
 }

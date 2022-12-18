@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8"%>
 <!doctype html>
 <html lang="en">
@@ -55,35 +56,41 @@
               for completing, re-activating, deleting and starting to edit a
               todo item.
     -->
-    <form id="todo-item" method="post" action="todo"></form>
+    <form id="todo-item" method="post" action="todo.do"></form>
     <ul>
       <!--
           TODO: First render from a list of all active todo items.
       -->
-
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{todo-id}">
-          <input type="hidden" name="id" value="{todo-id}" />
-          <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
-        </form>
-      </li>
-
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{todo-text}</button>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
+      <c:forEach items="${active}" var="todo">
+        <c:if test="${todo.isEditing()}">
+          <li>
+            <button name="complete" value="${todo.getId()}" form="todo-item" title="Mark completed"></button>
+            <form class="inline" method="post" action="todos/${todo.getId()}">
+              <input type="hidden" name="id" value="${todo.getTodo()}" />
+              <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+            </form>
+          </li>
+        </c:if>
+        <c:if test="${todo.isNotEditing()}">
+          <li>
+            <button name="complete" value="${todo.getId()}" form="todo-item" title="Mark completed"></button>
+            <button name="edit" value="${todo.getId()}" form="todo-item" title="Click to edit"><c:out value="${todo.getTodo()}" /></button>
+            <button name="delete" value="${todo.getId()}" form="todo-item" title="Delete todo item">&#x2715;</button>
+          </li>
+        </c:if>
+      </c:forEach>
 
       <!--
           TODO: Then render the list of todo items marked as completed, unless
                 the current filter is toggled to hide completed.
       -->
-      <li>
-        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
-        <span>{todo-text}</span>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
+      <c:forEach items="${completed}" var="todo">
+        <li>
+          <button name="revert" value="${todo.getId()}" form="todo-item" title="Mark as active"></button>
+          <span><c:out value="${todo.getTodo()}" /></span>
+          <button name="delete" value="${todo.getId()}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        </li>
+      </c:forEach>
     </ul>
   </main>
   <footer>
