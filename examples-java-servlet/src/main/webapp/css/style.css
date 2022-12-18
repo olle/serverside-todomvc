@@ -107,7 +107,7 @@ form[action="controls"] > button:first-child {
 
 /* New todo item form */
 
-form[action="todos"] > label {
+form[action="todos.do"] > label {
   line-height: 1;
   position: relative;
   left: 0.5rem;
@@ -117,7 +117,7 @@ form[action="todos"] > label {
   color: var(--fg-muted);
   font-size: 90%;
 }
-form[action="todos"] > input {
+form[action="todos.do"] > input {
   line-height: 1;
   display: block;
   width: 100%;

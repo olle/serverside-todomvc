@@ -21,12 +21,17 @@ public final class TodoMvcServlet extends HttpServlet {
 
 	private final Storage<TodoItem, Long> storage = new SimpleHashMapStorage();
 
-//  private void handleRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
-//                                                                              IOException {
-//    String command = parseCommand(req);
-//    String view = dispatchControl(command, req, resp);
-//    forwardToView(view, req, resp);
-//  }
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.err.println("GET " + req);
+		req.getRequestDispatcher("/index.jsp").forward(req, resp);
+	}
+
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		System.err.println("POST " + req);
+		resp.sendRedirect("/index.do");
+	}
 
 	String parseCommand(HttpServletRequest req) {
 		String requestURI = req.getRequestURI();

@@ -40,7 +40,7 @@
         TODO: When this form is posted, a new todo item should be created and
               added to the todo-list, as an active item.
     -->
-    <form action="todos" method="post">
+    <form action="todos.do" method="post">
       <label for="todo">Todo</label>
       <!--
           TODO: Take care to remove the `autofocus` attribute, if there is a
