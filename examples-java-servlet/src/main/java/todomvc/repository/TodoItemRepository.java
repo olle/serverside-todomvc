@@ -1,15 +1,14 @@
 package todomvc.repository;
 
-import java.io.Serializable;
 import java.util.Collection;
 
 import todomvc.domain.TodoItem;
 
-public interface Repository<T extends Identifiable<ID>, ID extends Serializable> {
+public interface TodoItemRepository {
 
 	void createNewTodoItem(String todoText);
 
-	void updateTodoItem(long id, String todoText);
+	void updateById(long id, String todoText);
 
 	void deleteById(long id);
 
@@ -26,4 +25,10 @@ public interface Repository<T extends Identifiable<ID>, ID extends Serializable>
 	boolean isEditing();
 
 	void clearAllCompletedTodoItems();
+
+	void toggleShowCompleted();
+
+	void toggleHideCompleted();
+
+	boolean isShowingCompleted();
 }

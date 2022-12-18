@@ -1,9 +1,20 @@
 package todomvc.repository;
 
-import todomvc.domain.TodoItem;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-public interface Storage<T1, T2> {
+public interface Storage {
 
-	Repository<TodoItem, Long> forKey(String sessionId);
+	static final Map<String, TodoItemRepository> REPOSITORIES = new ConcurrentHashMap<>();
 
+	default TodoItemRepository forKey(String sessionId) {
+		return REPOSITORIES.computeIfAbsent(sessionId, k -> new TodoItemRepositoryImpl());
+	}
+
+	static Storage create() {
+
+		return new Storage() {
+			// OK
+		};
+	}
 }

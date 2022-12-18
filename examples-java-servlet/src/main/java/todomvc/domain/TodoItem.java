@@ -1,8 +1,6 @@
 package todomvc.domain;
 
-import todomvc.repository.Identifiable;
-
-public class TodoItem implements Identifiable<Long> {
+public class TodoItem {
 
 	private final String todo;
 	private final Long id;
@@ -41,7 +39,6 @@ public class TodoItem implements Identifiable<Long> {
 		return new TodoItem(todoText, newId);
 	}
 
-	@Override
 	public Long getId() {
 		return this.id;
 	}

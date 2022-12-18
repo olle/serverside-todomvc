@@ -4,14 +4,17 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import todomvc.domain.TodoItem;
 
-public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
+class TodoItemRepositoryImpl implements TodoItemRepository {
 
 	private static long SEQ = 1;
 
 	private final Map<Long, TodoItem> todos = new ConcurrentHashMap<>();
+
+	private final AtomicBoolean showCompleted = new AtomicBoolean(true);
 
 	@Override
 	public Collection<TodoItem> fetchActive() {
@@ -65,7 +68,22 @@ public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
 	}
 
 	@Override
-	public void updateTodoItem(long id, String todoText) {
-		Optional.ofNullable(todos.get(id)).map(todo -> todo.update(todoText)).ifPresent(this::save);
+	public void updateById(long id, String todoText) {
+		Optional.ofNullable(todos.get(id)).map(todoItem -> todoItem.update(todoText)).ifPresent(this::save);
+	}
+
+	@Override
+	public void toggleShowCompleted() {
+		this.showCompleted.set(true);
+	}
+
+	@Override
+	public void toggleHideCompleted() {
+		this.showCompleted.set(false);
+	}
+
+	@Override
+	public boolean isShowingCompleted() {
+		return showCompleted.get();
 	}
 }
