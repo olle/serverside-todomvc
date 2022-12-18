@@ -1,6 +1,10 @@
 package com.studiomediatech.serverside.todomvc.common.storage;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.stream.Stream;
+
+import com.studiomediatech.serverside.todomvc.servlet.Todo;
 
 /**
  * Interface for repository operations available on entities of a given type
@@ -27,7 +31,7 @@ public interface Repository<T extends Identifiable<ID>, ID extends Serializable>
    * 
    * @return all entities or {@code null} if none exist
    */
-  Iterable<T> findAll();
+  Collection<Todo> findAll();
 
   /**
    * Returns all the maintained entities matching any of the the given ids.
