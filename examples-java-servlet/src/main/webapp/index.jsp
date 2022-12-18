@@ -1,1 +1,1 @@
-<% response.sendRedirect("home.do"); %>
+<h1>Hello World!</h1>
