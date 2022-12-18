@@ -6,3 +6,5 @@ node_modules/
 bower_components/
 .extract/
 venv/
+test/cypress/videos/
+test/cypress/videos/*
