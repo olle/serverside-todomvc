@@ -7,17 +7,23 @@ import todomvc.domain.TodoItem;
 
 public interface Repository<T extends Identifiable<ID>, ID extends Serializable> {
 
-	void save(T entity);
+	void createNewTodoItem(String todoText);
 
-	void deleteById(String todoId);
+	void updateTodoItem(long id, String todoText);
 
-	void markCompletedById(long parseLong);
+	void deleteById(long id);
 
-	void markActiveById(long parseLong);
+	void markCompletedById(long id);
 
-	Collection<TodoItem> findAllActive();
+	void markActiveById(long id);
 
-	Collection<TodoItem> findAllCompleted();
+	void markEditingById(long id);
+
+	Collection<TodoItem> fetchActive();
+
+	Collection<TodoItem> fetchCompleted();
+
+	boolean isEditing();
 
 	void clearAllCompletedTodoItems();
 }

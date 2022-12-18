@@ -32,7 +32,7 @@
           TODO: Take care to remove the `autofocus` attribute, if there is a
                 todo item currently being edited.
       -->
-      <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
+      <input placeholder="What needs to be done?" ${editing == false ? 'autofocus' : ''} required autocomplete="off" name="todo" id="todo" />
     </form>
 
 
@@ -50,9 +50,9 @@
         <c:if test="${todo.isEditing()}">
           <li>
             <button name="complete" value="${todo.getId()}" form="todo-item" title="Mark completed"></button>
-            <form class="inline" method="post" action="todos/${todo.getId()}">
-              <input type="hidden" name="id" value="${todo.getTodo()}" />
-              <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+            <form class="inline" method="post" action="todos.do">
+              <input type="hidden" name="id" value="${todo.getId()}" />
+              <input name="update" value="${todo.getTodo()}" autofocus required autocomplete="off" />
             </form>
           </li>
         </c:if>

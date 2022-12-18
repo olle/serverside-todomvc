@@ -12,32 +12,27 @@ public class TodoItem implements Identifiable<Long> {
 		ACTIVE, COMPLETED, EDITING;
 	}
 
-	public TodoItem() {
-		this("");
-	}
-
-	public TodoItem(String todo) {
+	private TodoItem(String todo, long id) {
 		this.todo = todo;
-		this.id = System.currentTimeMillis();
+		this.id = id;
 		this.status = Status.ACTIVE;
 	}
 
-	public TodoItem(TodoItem prev, Status newStatus) {
-		this.todo = prev.todo;
-		this.id = prev.id;
+	private TodoItem(TodoItem other, Status newStatus) {
+		this.todo = other.todo;
+		this.id = other.id;
 		this.status = newStatus;
 	}
 
-	public TodoItem(TodoItem other, long id) {
-		this.id = id;
+	private TodoItem(TodoItem other) {
 		this.todo = other.todo;
+		this.id = other.id;
 		this.status = other.status;
 	}
 
-	public TodoItem(TodoItem other) {
-		this.id = other.id;
-		this.todo = other.todo;
-		this.status = other.status;
+	public static TodoItem from(String todoText, long newId) {
+
+		return new TodoItem(todoText, newId);
 	}
 
 	@Override
@@ -51,7 +46,7 @@ public class TodoItem implements Identifiable<Long> {
 
 	public boolean isActive() {
 
-		return this.status == Status.ACTIVE;
+		return this.status == Status.ACTIVE || this.status == Status.EDITING;
 	}
 
 	public boolean isCompleted() {
@@ -84,19 +79,14 @@ public class TodoItem implements Identifiable<Long> {
 		return new TodoItem(this, Status.ACTIVE);
 	}
 
-	public static TodoItem from(String text) {
+	public TodoItem markEditing() {
 
-		return new TodoItem(text);
+		return new TodoItem(this, Status.EDITING);
 	}
 
-	public static TodoItem from(TodoItem entity, long newId) {
+	public TodoItem copy() {
 
-		return new TodoItem(entity, newId);
-	}
-
-	public static TodoItem from(TodoItem entity) {
-
-		return new TodoItem(entity);
+		return new TodoItem(this);
 	}
 
 }

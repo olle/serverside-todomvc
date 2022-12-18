@@ -14,12 +14,12 @@ public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
 	private final Map<Long, TodoItem> todos = new ConcurrentHashMap<>();
 
 	@Override
-	public Collection<TodoItem> findAllActive() {
+	public Collection<TodoItem> fetchActive() {
 		return todos.values().stream().filter(TodoItem::isActive).toList();
 	}
 
 	@Override
-	public Collection<TodoItem> findAllCompleted() {
+	public Collection<TodoItem> fetchCompleted() {
 		return todos.values().stream().filter(TodoItem::isCompleted).toList();
 	}
 
@@ -29,22 +29,24 @@ public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
 	}
 
 	@Override
-	public void save(TodoItem entity) {
-
-		final TodoItem copy;
-
-		if (entity.isNew()) {
-			copy = TodoItem.from(entity, System.currentTimeMillis() + (SEQ++));
-		} else {
-			copy = TodoItem.from(entity);
-		}
-
-		todos.put(copy.getId(), copy);
+	public boolean isEditing() {
+		return todos.values().stream().anyMatch(TodoItem::isEditing);
 	}
 
 	@Override
-	public void deleteById(String todoId) {
-		todos.remove(Long.parseLong(todoId));
+	public void createNewTodoItem(String todoText) {
+		TodoItem newTodoItem = TodoItem.from(todoText, System.currentTimeMillis() + (SEQ++));
+		todos.put(newTodoItem.getId(), newTodoItem);
+	}
+
+	private void save(TodoItem todoItem) {
+		TodoItem todoItemCopy = todoItem.copy();
+		todos.put(todoItemCopy.getId(), todoItemCopy);
+	}
+
+	@Override
+	public void deleteById(long id) {
+		todos.remove(id);
 	}
 
 	@Override
@@ -55,5 +57,15 @@ public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
 	@Override
 	public void markActiveById(long id) {
 		Optional.ofNullable(todos.get(id)).map(TodoItem::markActive).ifPresent(this::save);
+	}
+
+	@Override
+	public void markEditingById(long id) {
+		Optional.ofNullable(todos.get(id)).map(TodoItem::markEditing).ifPresent(this::save);
+	}
+
+	@Override
+	public void updateTodoItem(long id, String todoText) {
+		Optional.ofNullable(todos.get(id)).map(TodoItem::markEditing).ifPresent(this::save);
 	}
 }
