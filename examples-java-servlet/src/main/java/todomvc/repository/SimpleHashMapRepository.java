@@ -1,10 +1,10 @@
-package com.studiomediatech.serverside.todomvc.common.storage;
+package todomvc.repository;
 
 import java.util.Collection;
 
-import com.studiomediatech.serverside.todomvc.servlet.Todo;
+import todomvc.domain.TodoItem;
 
-public class SimpleHashMapRepository implements Repository<Todo, Long>{
+public class SimpleHashMapRepository implements Repository<TodoItem, Long>{
 
 	@Override
 	public long count() {
@@ -13,37 +13,37 @@ public class SimpleHashMapRepository implements Repository<Todo, Long>{
 	}
 
 	@Override
-	public Collection<Todo> findAll() {
+	public Collection<TodoItem> findAll() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Iterable<Todo> findAll(Iterable<Long> ids) {
+	public Iterable<TodoItem> findAll(Iterable<Long> ids) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Todo findOne(Long id) {
+	public TodoItem findOne(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Todo save(Todo entity) {
+	public TodoItem save(TodoItem entity) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Iterable<Todo> save(Iterable<? extends Todo> entities) {
+	public Iterable<TodoItem> save(Iterable<? extends TodoItem> entities) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void delete(Todo entity) {
+	public void delete(TodoItem entity) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -55,7 +55,7 @@ public class SimpleHashMapRepository implements Repository<Todo, Long>{
 	}
 
 	@Override
-	public void delete(Iterable<? extends Todo> entities) {
+	public void delete(Iterable<? extends TodoItem> entities) {
 		// TODO Auto-generated method stub
 		
 	}

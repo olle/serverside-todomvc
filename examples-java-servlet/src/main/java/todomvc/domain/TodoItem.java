@@ -1,8 +1,8 @@
-package com.studiomediatech.serverside.todomvc.servlet;
+package todomvc.domain;
 
-import com.studiomediatech.serverside.todomvc.common.storage.Identifiable;
+import todomvc.repository.Identifiable;
 
-public class Todo implements Identifiable<Long> {
+public class TodoItem implements Identifiable<Long> {
 
   public enum Status {
     ACTIVE(""),
@@ -25,17 +25,17 @@ public class Todo implements Identifiable<Long> {
   private final Long id;
   private final Status status;
 
-  public Todo() {
+  public TodoItem() {
     this("");
   }
 
-  public Todo(String todo) {
+  public TodoItem(String todo) {
     this.todo = todo;
     this.id = System.currentTimeMillis();
     this.status = Status.ACTIVE;
   }
 
-  public Todo(Todo prev, Status newStatus) {
+  public TodoItem(TodoItem prev, Status newStatus) {
     this.todo = prev.todo;
     this.id = prev.id;
     this.status = newStatus;

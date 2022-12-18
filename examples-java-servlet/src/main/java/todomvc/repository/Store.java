@@ -1,4 +1,4 @@
-package com.studiomediatech.serverside.todomvc.common.storage;
+package todomvc.repository;
 
 import java.io.Serializable;
 
