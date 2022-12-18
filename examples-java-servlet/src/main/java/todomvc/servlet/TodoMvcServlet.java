@@ -23,6 +23,7 @@ public final class TodoMvcServlet extends HttpServlet {
 		System.err.println("GET " + req);
 
 		Repository<TodoItem, Long> repo = storage.forKey(req.getRequestedSessionId());
+		
 		req.setAttribute("active", repo.findAllActive());
 		req.setAttribute("completed", repo.findAllCompleted());
 
@@ -46,11 +47,15 @@ public final class TodoMvcServlet extends HttpServlet {
 			if (params.containsKey("complete")) {
 				var todoId = params.get("complete")[0];
 				markTodoItemAsCompleted(todoId, req.getRequestedSessionId());
+			} else if (params.containsKey("revert")) {
+				var todoId = params.get("revert")[0];
+				markTodoItemAsActive(todoId, req.getRequestedSessionId());
 			}
 		}
 
 		resp.sendRedirect("/index.do");
 	}
+
 
 	private void addNewTodoItem(String todoText, String sessionId) {
 		storage.forKey(sessionId).save(TodoItem.from(todoText));
@@ -60,4 +65,7 @@ public final class TodoMvcServlet extends HttpServlet {
 		storage.forKey(sessionId).markCompletedById(Long.parseLong(todoId));
 	}
 
+	private void markTodoItemAsActive(String todoId, String sessionId) {
+		storage.forKey(sessionId).markActiveById(Long.parseLong(todoId));		
+	}
 }

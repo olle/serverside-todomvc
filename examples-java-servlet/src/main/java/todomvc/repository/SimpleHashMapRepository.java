@@ -43,9 +43,11 @@ public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
 
 	@Override
 	public void markCompletedById(long id) {
-
 		Optional.ofNullable(todos.get(id)).map(TodoItem::markCompleted).ifPresent(this::save);
-
 	}
 
+	@Override
+	public void markActiveById(long id) {
+		Optional.ofNullable(todos.get(id)).map(TodoItem::markActive).ifPresent(this::save);
+	}
 }

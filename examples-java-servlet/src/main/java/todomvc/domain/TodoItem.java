@@ -8,31 +8,6 @@ public class TodoItem implements Identifiable<Long> {
 	private final Long id;
 	private final Status status;
 
-	public boolean isActive() {
-
-		return this.status == Status.ACTIVE;
-	}
-
-	public boolean isNew() {
-
-		return id == null;
-	}
-
-	public boolean isEditing() {
-
-		return status == Status.EDITING;
-	}
-
-	public boolean isNotEditing() {
-
-		return !isEditing();
-	}
-
-	public TodoItem markCompleted() {
-
-		return new TodoItem(this, Status.COMPLETED);
-	}
-
 	public enum Status {
 		ACTIVE, COMPLETED, EDITING;
 	}
@@ -74,13 +49,34 @@ public class TodoItem implements Identifiable<Long> {
 		return this.todo;
 	}
 
-	@Override
-	public String toString() {
-		return this.todo;
+	public boolean isActive() {
+
+		return this.status == Status.ACTIVE;
 	}
 
-	public Status getStatus() {
-		return this.status;
+	public boolean isNew() {
+
+		return id == null;
+	}
+
+	public boolean isEditing() {
+
+		return status == Status.EDITING;
+	}
+
+	public boolean isNotEditing() {
+
+		return !isEditing();
+	}
+
+	public TodoItem markCompleted() {
+
+		return new TodoItem(this, Status.COMPLETED);
+	}
+
+	public TodoItem markActive() {
+
+		return new TodoItem(this, Status.ACTIVE);
 	}
 
 	public static TodoItem from(String text) {

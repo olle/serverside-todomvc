@@ -11,6 +11,8 @@ public interface Repository<T extends Identifiable<ID>, ID extends Serializable>
 
 	void markCompletedById(long parseLong);
 
+	void markActiveById(long parseLong);
+
 	Collection<TodoItem> findAllActive();
 
 	Collection<TodoItem> findAllCompleted();
