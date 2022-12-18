@@ -30,6 +30,12 @@ public class TodoItem implements Identifiable<Long> {
 		this.status = other.status;
 	}
 
+	private TodoItem(TodoItem other, String todo) {
+		this.todo = todo;
+		this.id = other.id;
+		this.status = Status.ACTIVE;
+	}
+
 	public static TodoItem from(String todoText, long newId) {
 
 		return new TodoItem(todoText, newId);
@@ -87,6 +93,11 @@ public class TodoItem implements Identifiable<Long> {
 	public TodoItem copy() {
 
 		return new TodoItem(this);
+	}
+
+	public TodoItem update(String todoText) {
+
+		return new TodoItem(this, todoText);
 	}
 
 }

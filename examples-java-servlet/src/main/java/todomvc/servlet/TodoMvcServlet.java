@@ -76,7 +76,7 @@ public final class TodoMvcServlet extends HttpServlet {
 	}
 
 	private void updateTodoItem(String todoId, String todoText, String requestedSessionId) {
-		storage.forKey(requestedSessionId).updateTodoItem(Long.parseLong(todoId), todoText);		
+		storage.forKey(requestedSessionId).updateTodoItem(Long.parseLong(todoId), todoText);
 	}
 
 	private void markTodoAsEditing(String todoId, String requestedSessionId) {

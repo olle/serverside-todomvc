@@ -66,6 +66,6 @@ public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
 
 	@Override
 	public void updateTodoItem(long id, String todoText) {
-		Optional.ofNullable(todos.get(id)).map(TodoItem::markEditing).ifPresent(this::save);
+		Optional.ofNullable(todos.get(id)).map(todo -> todo.update(todoText)).ifPresent(this::save);
 	}
 }
