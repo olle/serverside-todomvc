@@ -1,7 +1,6 @@
 package todomvc.servlet;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -50,11 +49,15 @@ public final class TodoMvcServlet extends HttpServlet {
 			} else if (params.containsKey("revert")) {
 				var todoId = params.get("revert")[0];
 				markTodoItemAsActive(todoId, req.getRequestedSessionId());
+			} else if (params.containsKey("delete")) {
+				var todoId = params.get("delete")[0];
+				deleteTodo(todoId, req.getRequestedSessionId());
 			}
 		}
 
 		resp.sendRedirect("/index.do");
 	}
+
 
 
 	private void addNewTodoItem(String todoText, String sessionId) {
@@ -67,5 +70,9 @@ public final class TodoMvcServlet extends HttpServlet {
 
 	private void markTodoItemAsActive(String todoId, String sessionId) {
 		storage.forKey(sessionId).markActiveById(Long.parseLong(todoId));		
+	}
+	
+	private void deleteTodo(String todoId, String requestedSessionId) {
+		storage.forKey(requestedSessionId).deleteById(todoId);
 	}
 }

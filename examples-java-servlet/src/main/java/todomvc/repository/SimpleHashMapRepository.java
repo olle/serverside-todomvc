@@ -27,18 +27,23 @@ public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
 	}
 
 	@Override
-	public TodoItem save(TodoItem entity) {
+	public void save(TodoItem entity) {
 
 		final TodoItem copy;
 
 		if (entity.isNew()) {
-			long newId = System.currentTimeMillis() + (SEQ++);
-			copy = TodoItem.from(entity, newId);
+			copy = TodoItem.from(entity, System.currentTimeMillis() + (SEQ++));
 		} else {
 			copy = TodoItem.from(entity);
 		}
 
-		return todos.put(copy.getId(), copy);
+		todos.put(copy.getId(), copy);
+	}
+
+	@Override
+	public void deleteById(String todoId) {
+
+		todos.remove(Long.parseLong(todoId));
 	}
 
 	@Override

@@ -7,7 +7,9 @@ import todomvc.domain.TodoItem;
 
 public interface Repository<T extends Identifiable<ID>, ID extends Serializable> {
 
-	T save(T entity);
+	void save(T entity);
+
+	void deleteById(String todoId);
 
 	void markCompletedById(long parseLong);
 
@@ -16,5 +18,4 @@ public interface Repository<T extends Identifiable<ID>, ID extends Serializable>
 	Collection<TodoItem> findAllActive();
 
 	Collection<TodoItem> findAllCompleted();
-
 }
