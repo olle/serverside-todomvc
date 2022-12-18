@@ -20,13 +20,13 @@
         TODO: Replace {active-count} with the number of not yet completed
               todo items.
     -->
-    <h1>Todos <small title="{active-count} Active items">{active-count}</small></h1>
+    <h1>Todos <small title="${active.size()} Active items"><c:out value="${active.size()}" /></small></h1>
     <form action="controls" method="post">
       <!--
           TODO: Replace {completed-count} with the number of todo items marked
                 completed.
       -->
-      <button name="clear" value="completed" title="Clear {completed-count} completed">{completed-count} Completed • Clear</button>
+      <button name="clear" value="completed" title="Clear ${completed.size()} completed"><c:out value="${completed.size()}" /> Completed • Clear</button>
 
       <!--
           TODO: Render the hide/show button depending on the current state of
