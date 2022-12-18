@@ -38,11 +38,14 @@ public final class TodoMvcServlet extends HttpServlet {
 		System.err.println("POST " + uri + "  " + params);
 
 		if (uri.equals("/todos.do")) {
+			
 			if (params.containsKey("todo")) {
 				String todoText = params.get("todo")[0];
 				addNewTodoItem(todoText, req.getRequestedSessionId());
 			}
+			
 		} else if (uri.equals("/todo.do")) {
+			
 			if (params.containsKey("complete")) {
 				var todoId = params.get("complete")[0];
 				markTodoItemAsCompleted(todoId, req.getRequestedSessionId());
@@ -53,6 +56,12 @@ public final class TodoMvcServlet extends HttpServlet {
 				var todoId = params.get("delete")[0];
 				deleteTodo(todoId, req.getRequestedSessionId());
 			}
+			
+		} else if (uri.equals("/controls.do")) {
+			
+			if (params.containsKey("clear")) {
+				clearAllCompleted(req.getRequestedSessionId());
+			}
 		}
 
 		resp.sendRedirect("/index.do");
@@ -60,16 +69,20 @@ public final class TodoMvcServlet extends HttpServlet {
 
 
 
-	private void addNewTodoItem(String todoText, String sessionId) {
-		storage.forKey(sessionId).save(TodoItem.from(todoText));
+	private void clearAllCompleted(String requestedSessionId) {
+		storage.forKey(requestedSessionId).clearAllCompletedTodoItems();
 	}
 
-	private void markTodoItemAsCompleted(String todoId, String sessionId) {
-		storage.forKey(sessionId).markCompletedById(Long.parseLong(todoId));
+	private void addNewTodoItem(String todoText, String requestedSessionId) {
+		storage.forKey(requestedSessionId).save(TodoItem.from(todoText));
 	}
 
-	private void markTodoItemAsActive(String todoId, String sessionId) {
-		storage.forKey(sessionId).markActiveById(Long.parseLong(todoId));		
+	private void markTodoItemAsCompleted(String todoId, String requestedSessionId) {
+		storage.forKey(requestedSessionId).markCompletedById(Long.parseLong(todoId));
+	}
+
+	private void markTodoItemAsActive(String todoId, String requestedSessionId) {
+		storage.forKey(requestedSessionId).markActiveById(Long.parseLong(todoId));		
 	}
 	
 	private void deleteTodo(String todoId, String requestedSessionId) {

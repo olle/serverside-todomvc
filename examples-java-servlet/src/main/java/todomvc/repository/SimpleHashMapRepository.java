@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Predicate;
 
 import todomvc.domain.TodoItem;
 
@@ -16,14 +15,17 @@ public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
 
 	@Override
 	public Collection<TodoItem> findAllActive() {
-
 		return todos.values().stream().filter(TodoItem::isActive).toList();
 	}
 
 	@Override
 	public Collection<TodoItem> findAllCompleted() {
+		return todos.values().stream().filter(TodoItem::isCompleted).toList();
+	}
 
-		return todos.values().stream().filter(Predicate.not(TodoItem::isActive)).toList();
+	@Override
+	public void clearAllCompletedTodoItems() {
+		todos.entrySet().removeIf(e -> e.getValue().isCompleted());
 	}
 
 	@Override
@@ -42,7 +44,6 @@ public class SimpleHashMapRepository implements Repository<TodoItem, Long> {
 
 	@Override
 	public void deleteById(String todoId) {
-
 		todos.remove(Long.parseLong(todoId));
 	}
 

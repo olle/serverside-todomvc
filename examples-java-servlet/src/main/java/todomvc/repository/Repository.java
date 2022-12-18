@@ -18,4 +18,6 @@ public interface Repository<T extends Identifiable<ID>, ID extends Serializable>
 	Collection<TodoItem> findAllActive();
 
 	Collection<TodoItem> findAllCompleted();
+
+	void clearAllCompletedTodoItems();
 }

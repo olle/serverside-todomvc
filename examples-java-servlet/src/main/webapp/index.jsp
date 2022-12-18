@@ -15,19 +15,9 @@
 
 <body>
   <main>
-
-    <!--
-        TODO: Replace {active-count} with the number of not yet completed
-              todo items.
-    -->
     <h1>Todos <small title="${active.size()} Active items"><c:out value="${active.size()}" /></small></h1>
-    <form action="controls" method="post">
-      <!--
-          TODO: Replace {completed-count} with the number of todo items marked
-                completed.
-      -->
+    <form action="controls.do" method="post">
       <button name="clear" value="completed" title="Clear ${completed.size()} completed"><c:out value="${completed.size()}" /> Completed • Clear</button>
-
       <!--
           TODO: Render the hide/show button depending on the current state of
                 such a filter, to either show completed items or not.
@@ -36,11 +26,6 @@
       <button name="show" value="completed" title="Show completed todo items">Show</button>
     </form>
 
-
-    <!--
-        TODO: When this form is posted, a new todo item should be created and
-              added to the todo-list, as an active item.
-    -->
     <form action="todos.do" method="post">
       <label for="todo">Todo</label>
       <!--

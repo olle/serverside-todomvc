@@ -54,6 +54,11 @@ public class TodoItem implements Identifiable<Long> {
 		return this.status == Status.ACTIVE;
 	}
 
+	public boolean isCompleted() {
+
+		return this.status == Status.COMPLETED;
+	}
+
 	public boolean isNew() {
 
 		return id == null;
