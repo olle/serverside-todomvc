@@ -1,7 +1,5 @@
 package com.studiomediatech.todomvc;
 
-import com.google.common.base.Optional;
-
 import spark.ModelAndView;
 import spark.Spark;
 
@@ -27,78 +25,19 @@ public class TodoMVC {
         Spark.staticFiles.location("/public");
         port(8080);
 
-        handleGetIndex();
-        handleAddNewTodo();
-
-        handleToggleStatus();
-        handleDeleteTodo();
-        handleEditTodo();
-        handleUpdateTodo();
-        handleMarkAllCompleted();
-        handleClearAllCompleted();
+        handleIndexGET();
+        handleTodosPOST();
+        handleTodoPOST();
     }
 
 
-    private static void handleClearAllCompleted() {
+    private static void handleIndexGET() {
 
-        post("/clear-completed", (req, res) -> {
-                service.clearCompleted();
-                res.redirect("/");
-
-                return null;
-            });
+        get("/", (req, res) -> new ModelAndView(viewModel(), TEMPLATE), engine());
     }
 
 
-    private static void handleMarkAllCompleted() {
-
-        post("/toggle-all-completed", (req, res) -> {
-                service.markAllCompleted();
-                res.redirect("/");
-
-                return null;
-            });
-    }
-
-
-    private static void handleUpdateTodo() {
-
-        post("/update",
-            (req, res) -> {
-                service.updateTodo(req.queryParams("id"), req.queryParams("todo"));
-                res.redirect("/");
-
-                return null;
-            });
-    }
-
-
-    private static void handleEditTodo() {
-
-        get("/edit/:id",
-            (req, res) -> {
-                service.editTodo(req.params(":id"));
-
-                return new ModelAndView(viewModel(), TEMPLATE);
-            },
-            engine());
-    }
-
-
-    private static void handleGetIndex() {
-
-        get("/",
-            (req, res) -> {
-                String filter = Optional.fromNullable(req.queryParams("filter")).or("all");
-                service.setFilter(filter);
-
-                return new ModelAndView(viewModel(), TEMPLATE);
-            },
-            engine());
-    }
-
-
-    private static void handleAddNewTodo() {
+    private static void handleTodosPOST() {
 
         post("/todos", (req, res) -> {
                 service.addNewTodo(req.queryParams("todo"));
@@ -109,22 +48,14 @@ public class TodoMVC {
     }
 
 
-    private static void handleToggleStatus() {
+    private static void handleTodoPOST() {
 
-        post("/toggle-status",
+        post("/todo",
             (req, res) -> {
-                service.toggleStatus(req.queryParams("id"));
-                res.redirect("/");
+                if (req.params().containsKey("complete")) {
+                    service.completeTodoItem(req.queryParams("complete"));
+                }
 
-                return null;
-            });
-    }
-
-
-    private static void handleDeleteTodo() {
-
-        post("/delete", (req, res) -> {
-                service.deleteTodo(req.queryParams("id"));
                 res.redirect("/");
 
                 return null;
@@ -136,32 +67,13 @@ public class TodoMVC {
 
         Map<String, Object> viewModel = new HashMap<>();
 
-        List<Todo> ts = service.getTodos();
+        List<Todo> active = service.getActiveTodos();
+        viewModel.put("active", active);
+        viewModel.put("activeCount", active.size());
 
-        viewModel.put("active", ts);
-        viewModel.put("activeCount", ts.size());
-
-//        viewModel.put("hasTodos", service.hasTodos());
-//        viewModel.put("hasFilteredTodos", service.hasFilteredTodos());
-//        viewModel.put("todos", ts);
-//        viewModel.put("editing", ts.stream().anyMatch((t) -> t.isEditing()));
-//
-//        Map<String, Object> filter = new HashMap<>();
-//        filter.put("name", service.getFilter());
-//        filter.put("all", service.isFilter("all"));
-//        filter.put("active", service.isFilter("active"));
-//        filter.put("completed", service.isFilter("completed"));
-//        viewModel.put("filter", filter);
-//
-//        Map<String, Object> active = new HashMap<>();
-//        long count = ts.stream().filter((t) -> t.isActive()).count();
-//        active.put("count", count);
-//        active.put("label", count > 1 ? "items" : "item");
-//        viewModel.put("active", active);
-//
-//        Map<String, Object> completed = new HashMap<>();
-//        completed.put("count", ts.stream().filter((t) -> t.isCompleted()).count());
-//        viewModel.put("completed", completed);
+        List<Todo> completed = service.getCompletedTodos();
+        viewModel.put("completed", completed);
+        viewModel.put("completedCount", completed.size());
 
         return viewModel;
     }

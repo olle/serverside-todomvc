@@ -15,11 +15,7 @@
   <main>
     <h1>Todos <small title="{{activeCount}} Active items">{{activeCount}}</small></h1>
     <form action="controls" method="post">
-      <!--
-          TODO: Replace {completed-count} with the number of todo items marked
-                completed.
-      -->
-      <button name="clear" value="completed" title="Clear {completed-count} completed">{completed-count} Completed • Clear</button>
+      <button name="clear" value="completed" title="Clear {{completedCount}} completed">{{completedCount}} Completed • Clear</button>
 
       <!--
           TODO: Render the hide/show button depending on the current state of
