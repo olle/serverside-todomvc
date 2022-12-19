@@ -28,7 +28,8 @@ public class TodoMVC {
         port(8080);
 
         handleGetIndex();
-        handlePostNewTodo();
+        handleAddNewTodo();
+
         handleToggleStatus();
         handleDeleteTodo();
         handleEditTodo();
@@ -97,10 +98,9 @@ public class TodoMVC {
     }
 
 
-    private static void handlePostNewTodo() {
+    private static void handleAddNewTodo() {
 
-        post("/new-todo",
-            (req, res) -> {
+        post("/todos", (req, res) -> {
                 service.addNewTodo(req.queryParams("todo"));
                 res.redirect("/");
 
@@ -138,27 +138,30 @@ public class TodoMVC {
 
         List<Todo> ts = service.getTodos();
 
-        viewModel.put("hasTodos", service.hasTodos());
-        viewModel.put("hasFilteredTodos", service.hasFilteredTodos());
-        viewModel.put("todos", ts);
-        viewModel.put("editing", ts.stream().anyMatch((t) -> t.isEditing()));
+        viewModel.put("active", ts);
+        viewModel.put("activeCount", ts.size());
 
-        Map<String, Object> filter = new HashMap<>();
-        filter.put("name", service.getFilter());
-        filter.put("all", service.isFilter("all"));
-        filter.put("active", service.isFilter("active"));
-        filter.put("completed", service.isFilter("completed"));
-        viewModel.put("filter", filter);
-
-        Map<String, Object> active = new HashMap<>();
-        long count = ts.stream().filter((t) -> t.isActive()).count();
-        active.put("count", count);
-        active.put("label", count > 1 ? "items" : "item");
-        viewModel.put("active", active);
-
-        Map<String, Object> completed = new HashMap<>();
-        completed.put("count", ts.stream().filter((t) -> t.isCompleted()).count());
-        viewModel.put("completed", completed);
+//        viewModel.put("hasTodos", service.hasTodos());
+//        viewModel.put("hasFilteredTodos", service.hasFilteredTodos());
+//        viewModel.put("todos", ts);
+//        viewModel.put("editing", ts.stream().anyMatch((t) -> t.isEditing()));
+//
+//        Map<String, Object> filter = new HashMap<>();
+//        filter.put("name", service.getFilter());
+//        filter.put("all", service.isFilter("all"));
+//        filter.put("active", service.isFilter("active"));
+//        filter.put("completed", service.isFilter("completed"));
+//        viewModel.put("filter", filter);
+//
+//        Map<String, Object> active = new HashMap<>();
+//        long count = ts.stream().filter((t) -> t.isActive()).count();
+//        active.put("count", count);
+//        active.put("label", count > 1 ? "items" : "item");
+//        viewModel.put("active", active);
+//
+//        Map<String, Object> completed = new HashMap<>();
+//        completed.put("count", ts.stream().filter((t) -> t.isCompleted()).count());
+//        viewModel.put("completed", completed);
 
         return viewModel;
     }
