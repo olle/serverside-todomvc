@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Java Spark Mustache • Server-side TodoMVC</title>
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+  <body class="grey-plaid-bg modern-font">
+    <section id="serverside-todomvc">
+      <header>
+        <h1>todos</h1>
+        <h2 class="is-hidden">Create a new task</h2>
+        <form action="/new-todo" method="post" class="items-create-new">
+          <input type="text" name="todo" placeholder="What needs to be done?" {{^editing}}autofocus="autofocus"{{/editing}} autocomplete="off" class="text-input"/>
+          <button class="is-hidden"><span class="is-hidden">Create new todo</span></button>
+        </form>
+      </header>
+      {{#hasFilteredTodos}}
+      <section class="primary">
+        <h3 class="is-hidden">Mark as completed</h3>
+        <form action="/toggle-all-completed" method="post" class="items-mark-all-completed">
+          <button class="icon angle-double down"><span class="is-hidden">Mark all as completed</span></button>
+        </form>
+        <h2 class="is-hidden">List of {{filter.name}} tasks:</h2>
+        <ul class="items-list">
+          {{#todos}}
+          <li class="{{status}} clearfix">
+            {{#editing}}
+            <form action="/update" method="post" class="item-edit">
+              <input type="hidden" name="id" value="{{id}}" />
+              <input type="text" name="todo" value="{{todo}}" autofocus="autofocus" autocomplete="off" class="item-text" />
+            </form>
+            {{/editing}}
+            {{^editing}}
+            <form action="/toggle-status" method="post" class="item-toggle-completed">
+              <input type="hidden" name="id" value="{{id}}" />
+              <button class="icon check {{checked}}"><span class="is-hidden">Mark as {{inverse}}</span></button>
+            </form>
+            <a href="/edit/{{id}}" class="item-text">{{todo}}</a>
+            <form action="/delete" method="post" class="item-delete">
+              <input type="hidden" name="id" value="{{id}}" />
+              <button class="icon cross"><span class="is-hidden">Delete</span></button>
+            </form>
+            {{/editing}}
+          </li>
+          {{/todos}}
+        </ul>
+      </section>
+      {{/hasFilteredTodos}}
+      {{#hasTodos}}
+      <section class="secondary">
+        <h3 class="is-hidden">Current status</h3>
+        <p class="items-active-count"><strong>{{active.count}}</strong> {{active.label}} left</p>
+        <h3 class="is-hidden">Filter task list</h3>
+        <ul class="items-filter-selection">
+          <li><a href="/?filter=all"       {{#filter.all}}class="is-active"{{/filter.all}}>All</a></li>
+          <li><a href="/?filter=active"    {{#filter.active}}class="is-active"{{/filter.active}}>Active</a></li>
+          <li><a href="/?filter=completed" {{#filter.completed}}class="is-active"{{/filter.completed}}>Completed</a></li>
+        </ul>
+        <h3 class="is-hidden">Clear completed tasks</h3>
+        <form action="/clear-completed" method="post" class="items-clear-completed is-inline">
+          <button class="button embossed"><span>Clear completed ({{completed.count}})</span></button>
+        </form>
+      </section>
+      {{/hasTodos}}
+    </section>
+    <footer>
+      <h4 class="is-hidden">Help</h4>
+      <p>Click on the text to edit a todo.</p>
+      <h4 class="is-hidden">About the Server-side TodoMVC application</h4>
+      <p>Created by <a href="http://github.com/olle">Olle Törnström</a></p>
+      <p>Part of <a href="http://github.com/olle/serverside-todomvc">Server-side TodoMVC</a></p>
+    </footer>
+    <!-- Look ma no JavaScript! -->
+  </body>
+</html>
