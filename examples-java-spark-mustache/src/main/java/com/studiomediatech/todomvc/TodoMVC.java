@@ -62,6 +62,7 @@ public class TodoMVC {
 
                 with(req).caseOf("complete", service::completeTodoItem);
                 with(req).caseOf("revert", service::activateTodoItem);
+                with(req).caseOf("delete", service::deleteTodoItem);
 
                 res.redirect("/");
 

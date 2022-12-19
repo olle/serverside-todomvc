@@ -40,6 +40,12 @@ public final class TodoService {
     }
 
 
+    public void deleteTodoItem(String id) {
+
+        todos.remove(id);
+    }
+
+
     private void save(Todo todo) {
 
         todos.put(todo.getId(), todo);
