@@ -34,6 +34,12 @@ public final class TodoService {
     }
 
 
+    public void activateTodoItem(String id) {
+
+        Optional.ofNullable(todos.get(id)).map(Todo::markActive).ifPresent(this::save);
+    }
+
+
     private void save(Todo todo) {
 
         todos.put(todo.getId(), todo);

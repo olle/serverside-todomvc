@@ -57,6 +57,12 @@ public class Todo {
     }
 
 
+    public Todo markActive() {
+
+        return new Todo(this, Status.ACTIVE);
+    }
+
+
     public boolean isActive() {
 
         return this.status == Status.ACTIVE;

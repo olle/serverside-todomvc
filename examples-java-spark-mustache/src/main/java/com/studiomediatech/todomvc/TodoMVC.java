@@ -58,7 +58,11 @@ public class TodoMVC {
 
         post("/todo",
             (req, res) -> {
+                LOGGER.warn("POST with {}", req.queryParams());
+
                 with(req).caseOf("complete", service::completeTodoItem);
+                with(req).caseOf("revert", service::activateTodoItem);
+
                 res.redirect("/");
 
                 return null;
@@ -106,8 +110,6 @@ public class TodoMVC {
 
             if (this.req.queryMap().hasKey(key)) {
                 handler.accept(this.req.queryParams(key));
-            } else {
-                LOGGER.warn("Missed case for '{}', got {}", key, this.req.queryParams());
             }
         }
     }
