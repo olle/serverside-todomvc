@@ -1,6 +1,7 @@
 package com.studiomediatech.todomvc;
 
 import spark.ModelAndView;
+import spark.QueryParamsMap;
 import spark.Spark;
 
 import spark.template.mustache.MustacheTemplateEngine;
@@ -52,8 +53,8 @@ public class TodoMVC {
 
         post("/todo",
             (req, res) -> {
-                if (req.params().containsKey("complete")) {
-                    service.completeTodoItem(req.queryParams("complete"));
+                if (req.queryMap().hasKey("complete")) {
+                    service.completeTodoItem(req.queryMap().get("complete").value());
                 }
 
                 res.redirect("/");

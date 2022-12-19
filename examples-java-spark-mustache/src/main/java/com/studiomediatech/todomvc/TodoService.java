@@ -6,14 +6,13 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-public class TodoService {
+public final class TodoService {
 
     private static final Map<String, Todo> todos = new ConcurrentHashMap<>();
 
-    public void addNewTodo(String todo) {
+    public void addNewTodo(String text) {
 
-        Todo t = new Todo(todo);
-        todos.put(t.getId(), t);
+        this.save(Todo.valueOf(text));
     }
 
 
@@ -31,6 +30,12 @@ public class TodoService {
 
     public void completeTodoItem(String id) {
 
-        Optional.ofNullable(todos.get(id)).ifPresent(Todo::markCompleted);
+        Optional.ofNullable(todos.get(id)).map(Todo::markCompleted).ifPresent(this::save);
+    }
+
+
+    private void save(Todo todo) {
+
+        todos.put(todo.getId(), todo);
     }
 }

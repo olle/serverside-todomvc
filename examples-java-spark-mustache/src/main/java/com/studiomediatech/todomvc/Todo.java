@@ -1,66 +1,37 @@
 package com.studiomediatech.todomvc;
 
-import java.util.Objects;
 import java.util.UUID;
 
 
 public class Todo {
 
-    private static final String COMPLETED = "item completed";
-    private static final String NORMAL = "item";
+    protected enum Status {
 
-    private final String todo;
-    private final String status;
-    private final boolean editing;
+        ACTIVE,
+        COMPLETED;
+    }
+
     private final String id;
+    private final String todo;
+    private final Status status;
+    private final boolean editing;
 
-    public Todo(String todo) {
+    private Todo(String todo) {
 
         this.todo = todo;
-        this.status = NORMAL;
+        this.status = Status.ACTIVE;
         this.id = UUID.randomUUID().toString();
         this.editing = false;
     }
 
 
-    public Todo(Todo old) {
+    private Todo(Todo other, Status status) {
 
-        this.todo = old.todo;
-        this.status = old.status;
-        this.id = old.id;
-        this.editing = !old.editing;
-    }
-
-
-    public Todo(Todo old, String status) {
-
-        this(old, old.todo, status);
-    }
-
-
-    public Todo(Todo old, String todo, String status) {
-
-        this.todo = todo;
+        this.id = other.id;
+        this.todo = other.todo;
         this.status = status;
-        this.id = old.id;
-        this.editing = old.editing;
+        this.editing = other.editing;
     }
-
-    public String getTodo() {
-
-        return this.todo;
-    }
-
-
-    public String getStatus() {
-
-        if (this.editing) {
-            return "item editing";
-        }
-
-        return this.status;
-    }
-
 
     public String getId() {
 
@@ -68,67 +39,32 @@ public class Todo {
     }
 
 
-    public Todo toggleStatus() {
+    public String getTodo() {
 
-        if (this.status.equals(NORMAL)) {
-            return new Todo(this, this.todo, COMPLETED);
-        }
-
-        return new Todo(this, this.todo, NORMAL);
-    }
-
-
-    public Todo toggleEdit() {
-
-        return new Todo(this);
-    }
-
-
-    public Todo updateTodo(String todo) {
-
-        return new Todo(this, todo, this.status);
-    }
-
-
-    public String getChecked() {
-
-        return this.status.equals(NORMAL) ? "" : "is-active";
-    }
-
-
-    public String getInverse() {
-
-        return this.status.equals(NORMAL) ? "completed" : "active";
-    }
-
-
-    public boolean isEditing() {
-
-        return this.editing;
-    }
-
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(this.todo, this.status, this.id);
+        return this.todo;
     }
 
 
     public Todo markCompleted() {
 
-        return new Todo(this, COMPLETED);
+        return new Todo(this, Status.COMPLETED);
     }
 
 
     public boolean isActive() {
 
-        return this.status.equals(NORMAL);
+        return this.status == Status.ACTIVE;
     }
 
 
     public boolean isCompleted() {
 
-        return !isActive();
+        return this.status == Status.COMPLETED;
+    }
+
+
+    public static Todo valueOf(String todo) {
+
+        return new Todo(todo);
     }
 }
