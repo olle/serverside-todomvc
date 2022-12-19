@@ -1,7 +1,7 @@
 .PHONY: check build clean test run-test all
 
 SELF=examples-java-spark-mustache
-URL=http://localhost:4567/
+URL=http://localhost:8080/
 
 banner:
 	@echo '----------------------------------------------------------------------'
@@ -27,6 +27,5 @@ test: build
 	@./it.sh && echo '--> Testing ${SELF}  [DONE]'
 
 run-test:
-	@$(MAKE) URL=${URL} -C ../ run-test
-
+	@$(MAKE) URL=${URL} -C ../test run-test
 all: clean build test
