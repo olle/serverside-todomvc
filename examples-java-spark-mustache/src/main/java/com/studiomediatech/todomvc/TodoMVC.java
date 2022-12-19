@@ -13,6 +13,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 import static spark.Spark.get;
@@ -33,6 +34,7 @@ public class TodoMVC {
 
         handleIndexGET();
         handleTodosPOST();
+        handleTodosIdPOST();
         handleTodoPOST();
         handleControlsPOST();
     }
@@ -56,6 +58,18 @@ public class TodoMVC {
     }
 
 
+    private static void handleTodosIdPOST() {
+
+        post("/todos/:id",
+            (req, res) -> {
+                LOGGER.warn("POST /todos/:id with {}", req.queryParams());
+                handle(req).withParams("id", "update", service::updateTodo);
+
+                return redirect(res);
+            });
+    }
+
+
     private static void handleTodoPOST() {
 
         post("/todo",
@@ -64,6 +78,7 @@ public class TodoMVC {
                 handle(req).withParam("complete", service::completeTodoItem);
                 handle(req).withParam("revert", service::activateTodoItem);
                 handle(req).withParam("delete", service::deleteTodoItem);
+                handle(req).withParam("edit", service::editTodo);
 
                 return redirect(res);
             });
@@ -134,6 +149,14 @@ public class TodoMVC {
 
             if (this.req.queryMap().hasKey(key)) {
                 handler.accept(this.req.queryParams(key));
+            }
+        }
+
+
+        public void withParams(String first, String second, BiConsumer<String, String> biHandler) {
+
+            if (this.req.queryMap().hasKey(first) && this.req.queryMap().hasKey(second)) {
+                biHandler.accept(this.req.queryParams(first), this.req.queryParams(second));
             }
         }
     }

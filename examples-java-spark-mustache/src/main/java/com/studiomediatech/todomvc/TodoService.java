@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.UnaryOperator;
 
 
 public final class TodoService {
@@ -14,7 +15,8 @@ public final class TodoService {
 
     public void addNewTodo(String text) {
 
-        this.save(Todo.valueOf(text));
+        Todo todo = Todo.valueOf(text);
+        todos.put(todo.getId(), todo);
     }
 
 
@@ -30,27 +32,41 @@ public final class TodoService {
     }
 
 
+    public void editTodo(String id) {
+
+        updateTodoById(id, Todo::markAsBeingEdited);
+    }
+
+
+    public void updateTodo(String id, String update) {
+
+        updateTodoById(id, todo -> todo.updateTodo(update));
+    }
+
+
     public void completeTodoItem(String id) {
 
-        Optional.ofNullable(todos.get(id)).map(Todo::markCompleted).ifPresent(this::save);
+        updateTodoById(id, Todo::markCompleted);
     }
 
 
     public void activateTodoItem(String id) {
 
-        Optional.ofNullable(todos.get(id)).map(Todo::markActive).ifPresent(this::save);
+        updateTodoById(id, Todo::markActive);
+    }
+
+
+    private void updateTodoById(String id, UnaryOperator<Todo> operation) {
+
+        Optional.ofNullable(todos.get(id))
+            .map(operation)
+            .ifPresent(updated -> todos.put(updated.getId(), updated));
     }
 
 
     public void deleteTodoItem(String id) {
 
         todos.remove(id);
-    }
-
-
-    private void save(Todo todo) {
-
-        todos.put(todo.getId(), todo);
     }
 
 

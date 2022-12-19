@@ -33,6 +33,24 @@ public class Todo {
         this.editing = other.editing;
     }
 
+
+    private Todo(Todo other, boolean editing) {
+
+        this.id = other.id;
+        this.todo = other.todo;
+        this.status = other.status;
+        this.editing = editing;
+    }
+
+
+    private Todo(Todo other, String todo) {
+
+        this.id = other.id;
+        this.todo = todo;
+        this.status = other.status;
+        this.editing = false;
+    }
+
     public String getId() {
 
         return this.id;
@@ -63,6 +81,12 @@ public class Todo {
     }
 
 
+    public Todo markAsBeingEdited() {
+
+        return new Todo(this, true);
+    }
+
+
     public boolean isActive() {
 
         return this.status == Status.ACTIVE;
@@ -78,5 +102,11 @@ public class Todo {
     public static Todo valueOf(String todo) {
 
         return new Todo(todo);
+    }
+
+
+    public Todo updateTodo(String text) {
+
+        return new Todo(this, text);
     }
 }
