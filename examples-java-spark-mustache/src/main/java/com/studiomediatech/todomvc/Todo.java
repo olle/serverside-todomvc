@@ -45,6 +45,12 @@ public class Todo {
     }
 
 
+    public boolean isEditing() {
+
+        return this.editing;
+    }
+
+
     public Todo markCompleted() {
 
         return new Todo(this, Status.COMPLETED);

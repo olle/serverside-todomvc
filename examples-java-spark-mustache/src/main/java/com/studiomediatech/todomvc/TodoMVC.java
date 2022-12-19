@@ -1,7 +1,10 @@
 package com.studiomediatech.todomvc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import spark.ModelAndView;
-import spark.QueryParamsMap;
+import spark.Request;
 import spark.Spark;
 
 import spark.template.mustache.MustacheTemplateEngine;
@@ -9,6 +12,7 @@ import spark.template.mustache.MustacheTemplateEngine;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static spark.Spark.get;
 import static spark.Spark.port;
@@ -18,6 +22,7 @@ import static spark.Spark.post;
 public class TodoMVC {
 
     private static final String TEMPLATE = "index.mustache";
+    private static final Logger LOGGER = LoggerFactory.getLogger(TodoMVC.class);
 
     private static final TodoService service = new TodoService();
 
@@ -53,10 +58,7 @@ public class TodoMVC {
 
         post("/todo",
             (req, res) -> {
-                if (req.queryMap().hasKey("complete")) {
-                    service.completeTodoItem(req.queryMap().get("complete").value());
-                }
-
+                with(req).caseOf("complete", service::completeTodoItem);
                 res.redirect("/");
 
                 return null;
@@ -83,5 +85,30 @@ public class TodoMVC {
     private static MustacheTemplateEngine engine() {
 
         return new MustacheTemplateEngine();
+    }
+
+
+    private static CaseHandler with(Request req) {
+
+        return new CaseHandler(req);
+    }
+
+    static final class CaseHandler {
+
+        private final Request req;
+
+        public CaseHandler(Request req) {
+
+            this.req = req;
+        }
+
+        public void caseOf(String key, Consumer<String> handler) {
+
+            if (this.req.queryMap().hasKey(key)) {
+                handler.accept(this.req.queryParams(key));
+            } else {
+                LOGGER.warn("Missed case for '{}', got {}", key, this.req.queryParams());
+            }
+        }
     }
 }

@@ -35,27 +35,25 @@
       <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
     </form>
 
-
-    <!--
-        TODO: This form is posted with action/id pairs, an needs to be handled
-              for completing, re-activating, deleting and starting to edit a
-              todo item.
-    -->
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
       {{#active}}
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{{id}}" form="todo-item" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{{id}}">
-          <input type="hidden" name="id" value="{{id}}" />
-          <input name="update" value="{{todo}}" autofocus required autocomplete="off" />
-        </form>
-      </li>
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{{id}}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{{id}}" form="todo-item" title="Click to edit">{{todo}}</button>
-        <button name="delete" value="{{id}}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
+        {{#editing}}
+        <li>
+          <button name="complete" value="{{id}}" form="todo-item" title="Mark completed"></button>
+          <form class="inline" method="post" action="todos/{{id}}">
+            <input type="hidden" name="id" value="{{id}}" />
+            <input name="update" value="{{todo}}" autofocus required autocomplete="off" />
+          </form>
+        </li>
+        {{/editing}}
+        {{^editing}}
+        <li>
+          <button name="complete" value="{{id}}" form="todo-item" title="Mark completed"></button>
+          <button name="edit" value="{{id}}" form="todo-item" title="Click to edit">{{todo}}</button>
+          <button name="delete" value="{{id}}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        </li>
+        {{/editing}}
       {{/active}}
 
       <!--
