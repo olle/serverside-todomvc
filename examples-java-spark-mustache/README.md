@@ -1,7 +1,8 @@
 
+Server-Side TodoMVC with Java Spark, just ignites!
 To run this project, why don't you just:
 
-   > mvn package
-   > java -jar target/examples-java-spark-mustache.jar
+   mvn compile && mvn exec:java
 
-That's it.
+That's it. Available at http://localhost:8080
+
