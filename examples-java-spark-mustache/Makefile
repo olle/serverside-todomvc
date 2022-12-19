@@ -3,6 +3,10 @@
 SELF=examples-java-spark-mustache
 URL=http://localhost:8080/
 
+start:
+	@mvn compile
+	@mvn exec:java
+
 banner:
 	@echo '----------------------------------------------------------------------'
 	@echo '# ${SELF}'
@@ -28,4 +32,5 @@ test: build
 
 run-test:
 	@$(MAKE) URL=${URL} -C ../test run-test
+
 all: clean build test
