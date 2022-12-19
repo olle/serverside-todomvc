@@ -92,4 +92,10 @@ public final class TodoService {
 
         return hidden.get();
     }
+
+
+    public boolean isEditing() {
+
+        return todos.values().stream().anyMatch(Todo::isEditing);
+    }
 }

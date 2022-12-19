@@ -1,8 +1,5 @@
 package com.studiomediatech.todomvc;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -23,7 +20,7 @@ import static spark.Spark.post;
 
 public class TodoMVC {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TodoMVC.class);
+    private static final String TEMPLATE_NAME = "index.mustache";
 
     private static final TodoService service = new TodoService();
 
@@ -32,74 +29,69 @@ public class TodoMVC {
         Spark.staticFiles.location("/public");
         port(8080);
 
-        handleIndexGET();
-        handleTodosPOST();
-        handleTodosIdPOST();
-        handleTodoPOST();
-        handleControlsPOST();
+        mappingIndexGET();
+        mappingTodosPOST();
+        mappingTodosIdPOST();
+        mappingTodoPOST();
+        mappingControlsPOST();
     }
 
 
-    private static void handleIndexGET() {
+    static void mappingIndexGET() {
 
-        get("/", (req, res) -> new ModelAndView(viewModel(), "index.mustache"), engine());
+        get("/", (req, res) -> new ModelAndView(viewModel(), TEMPLATE_NAME), engine());
     }
 
 
-    private static void handleTodosPOST() {
+    static void mappingTodosPOST() {
 
-        post("/todos",
-            (req, res) -> {
-                LOGGER.warn("POST /todos with {}", req.queryParams());
+        post("/todos", (req, res) -> {
                 service.addNewTodo(req.queryParams("todo"));
 
-                return redirect(res);
+                return redirectRoot(res);
             });
     }
 
 
-    private static void handleTodosIdPOST() {
+    static void mappingTodosIdPOST() {
 
         post("/todos/:id",
             (req, res) -> {
-                LOGGER.warn("POST /todos/:id with {}", req.queryParams());
                 handle(req).withParams("id", "update", service::updateTodo);
 
-                return redirect(res);
+                return redirectRoot(res);
             });
     }
 
 
-    private static void handleTodoPOST() {
+    static void mappingTodoPOST() {
 
         post("/todo",
             (req, res) -> {
-                LOGGER.warn("POST /todo with {}", req.queryParams());
                 handle(req).withParam("complete", service::completeTodoItem);
                 handle(req).withParam("revert", service::activateTodoItem);
                 handle(req).withParam("delete", service::deleteTodoItem);
                 handle(req).withParam("edit", service::editTodo);
 
-                return redirect(res);
+                return redirectRoot(res);
             });
     }
 
 
-    private static void handleControlsPOST() {
+    static void mappingControlsPOST() {
 
         post("/controls",
             (req, res) -> {
-                LOGGER.warn("POST /controls with {}", req.queryParams());
                 handle(req).withParam("hide", service::hideCompleted);
                 handle(req).withParam("show", service::showCompleted);
                 handle(req).withParam("clear", service::clearCompleted);
 
-                return redirect(res);
+                return redirectRoot(res);
             });
     }
 
 
-    private static Object redirect(Response res) {
+    private static Object redirectRoot(Response res) {
 
         res.redirect("/");
 
@@ -120,6 +112,7 @@ public class TodoMVC {
         viewModel.put("completedCount", completed.size());
 
         viewModel.put("hidden", service.isHidden());
+        viewModel.put("editing", service.isEditing());
 
         return viewModel;
     }
