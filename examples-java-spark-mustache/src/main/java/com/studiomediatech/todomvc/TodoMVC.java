@@ -1,134 +1,156 @@
 package com.studiomediatech.todomvc;
 
-import static spark.Spark.get;
-import static spark.Spark.post;
+import spark.ModelAndView;
+import spark.Request;
+import spark.Response;
+import spark.Spark;
+
+import spark.template.mustache.MustacheTemplateEngine;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
-import spark.ModelAndView;
-import spark.Spark;
-import spark.template.mustache.MustacheTemplateEngine;
+import static spark.Spark.get;
+import static spark.Spark.port;
+import static spark.Spark.post;
 
-import com.google.common.base.Optional;
 
 public class TodoMVC {
 
-  private static final String TEMPLATE = "index.mustache";
+    private static final String TEMPLATE_NAME = "index.mustache";
 
-  private static final TodoService service = new TodoService();
+    private static final TodoService service = new TodoService();
 
-  public static void main(String[] args) {
-	  
-	Spark.staticFiles.location("/public");
+    public static void main(String[] args) {
 
-    handleGetIndex();
-    handlePostNewTodo();
-    handleToggleStatus();
-    handleDeleteTodo();
-    handleEditTodo();
-    handleUpdateTodo();
-    handleMarkAllCompleted();
-    handleClearAllCompleted();
-  }
+        Spark.staticFiles.location("/public");
+        port(8080);
 
-  private static void handleClearAllCompleted() {
-    post("/clear-completed", (req, res) -> {
-      service.clearCompleted();
-      res.redirect("/");
-      return null;
-    });
-  }
+        mappingIndexGET();
+        mappingTodosPOST();
+        mappingTodosIdPOST();
+        mappingTodoPOST();
+        mappingControlsPOST();
+    }
 
-  private static void handleMarkAllCompleted() {
-    post("/toggle-all-completed", (req, res) -> {
-      service.markAllCompleted();
-      res.redirect("/");
-      return null;
-    });
-  }
 
-  private static void handleUpdateTodo() {
-    post("/update", (req, res) -> {
-      service.updateTodo(req.queryParams("id"), req.queryParams("todo"));
-      res.redirect("/");
-      return null;
-    });
-  }
+    static void mappingIndexGET() {
 
-  private static void handleEditTodo() {
-    get("/edit/:id", (req, res) -> {
-      service.editTodo(req.params(":id"));
-      return new ModelAndView(viewModel(), TEMPLATE);
-    }, engine());
-  }
+        get("/", (req, res) -> new ModelAndView(viewModel(), TEMPLATE_NAME), engine());
+    }
 
-  private static void handleGetIndex() {
-    get("/", (req, res) -> {
-      String filter = Optional.fromNullable(req.queryParams("filter")).or("all");
-      service.setFilter(filter);
-      return new ModelAndView(viewModel(), TEMPLATE);
-    }, engine());
-  }
 
-  private static void handlePostNewTodo() {
-    post("/new-todo", (req, res) -> {
-      service.addNewTodo(req.queryParams("todo"));
-      res.redirect("/");
-      return null;
-    });
-  }
+    static void mappingTodosPOST() {
 
-  private static void handleToggleStatus() {
-    post("/toggle-status", (req, res) -> {
-      service.toggleStatus(req.queryParams("id"));
-      res.redirect("/");
-      return null;
-    });
-  }
+        post("/todos", (req, res) -> {
+                service.addNewTodo(req.queryParams("todo"));
 
-  private static void handleDeleteTodo() {
-    post("/delete", (req, res) -> {
-      service.deleteTodo(req.queryParams("id"));
-      res.redirect("/");
-      return null;
-    });
-  }
+                return redirectRoot(res);
+            });
+    }
 
-  private static Map<String, Object> viewModel() {
 
-    Map<String, Object> viewModel = new HashMap<>();
+    static void mappingTodosIdPOST() {
 
-    List<Todo> ts = service.getTodos();
+        post("/todos/:id",
+            (req, res) -> {
+                handle(req).withParams("id", "update", service::updateTodo);
 
-    viewModel.put("hasTodos", service.hasTodos());
-    viewModel.put("hasFilteredTodos", service.hasFilteredTodos());
-    viewModel.put("todos", ts);
-    viewModel.put("editing", ts.stream().anyMatch((t) -> t.isEditing()));
+                return redirectRoot(res);
+            });
+    }
 
-    Map<String, Object> filter = new HashMap<>();
-    filter.put("name", service.getFilter());
-    filter.put("all", service.isFilter("all"));
-    filter.put("active", service.isFilter("active"));
-    filter.put("completed", service.isFilter("completed"));
-    viewModel.put("filter", filter);
 
-    Map<String, Object> active = new HashMap<>();
-    long count = ts.stream().filter((t) -> t.isActive()).count();
-    active.put("count", count);
-    active.put("label", count > 1 ? "items" : "item");
-    viewModel.put("active", active);
+    static void mappingTodoPOST() {
 
-    Map<String, Object> completed = new HashMap<>();
-    completed.put("count", ts.stream().filter((t) -> t.isCompleted()).count());
-    viewModel.put("completed", completed);
+        post("/todo",
+            (req, res) -> {
+                handle(req).withParam("complete", service::completeTodoItem);
+                handle(req).withParam("revert", service::activateTodoItem);
+                handle(req).withParam("delete", service::deleteTodoItem);
+                handle(req).withParam("edit", service::editTodo);
 
-    return viewModel;
-  }
+                return redirectRoot(res);
+            });
+    }
 
-  private static MustacheTemplateEngine engine() {
-    return new MustacheTemplateEngine();
-  }
 
+    static void mappingControlsPOST() {
+
+        post("/controls",
+            (req, res) -> {
+                handle(req).withParam("hide", service::hideCompleted);
+                handle(req).withParam("show", service::showCompleted);
+                handle(req).withParam("clear", service::clearCompleted);
+
+                return redirectRoot(res);
+            });
+    }
+
+
+    private static Object redirectRoot(Response res) {
+
+        res.redirect("/");
+
+        return null;
+    }
+
+
+    private static Map<String, Object> viewModel() {
+
+        Map<String, Object> viewModel = new HashMap<>();
+
+        List<Todo> active = service.getActiveTodos();
+        viewModel.put("active", active);
+        viewModel.put("activeCount", active.size());
+
+        List<Todo> completed = service.getCompletedTodos();
+        viewModel.put("completed", completed);
+        viewModel.put("completedCount", completed.size());
+
+        viewModel.put("hidden", service.isHidden());
+        viewModel.put("editing", service.isEditing());
+
+        return viewModel;
+    }
+
+
+    private static MustacheTemplateEngine engine() {
+
+        return new MustacheTemplateEngine();
+    }
+
+
+    private static CaseHandler handle(Request req) {
+
+        return new CaseHandler(req);
+    }
+
+    static final class CaseHandler {
+
+        private final Request req;
+
+        public CaseHandler(Request req) {
+
+            this.req = req;
+        }
+
+        public void withParam(String key, Consumer<String> handler) {
+
+            if (this.req.queryMap().hasKey(key)) {
+                handler.accept(this.req.queryParams(key));
+            }
+        }
+
+
+        public void withParams(String first, String second, BiConsumer<String, String> biHandler) {
+
+            if (this.req.queryMap().hasKey(first) && this.req.queryMap().hasKey(second)) {
+                biHandler.accept(this.req.queryParams(first), this.req.queryParams(second));
+            }
+        }
+    }
 }
