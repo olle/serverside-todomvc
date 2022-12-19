@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import spark.ModelAndView;
 import spark.Request;
+import spark.Response;
 import spark.Spark;
 
 import spark.template.mustache.MustacheTemplateEngine;
@@ -21,7 +22,6 @@ import static spark.Spark.post;
 
 public class TodoMVC {
 
-    private static final String TEMPLATE = "index.mustache";
     private static final Logger LOGGER = LoggerFactory.getLogger(TodoMVC.class);
 
     private static final TodoService service = new TodoService();
@@ -34,22 +34,24 @@ public class TodoMVC {
         handleIndexGET();
         handleTodosPOST();
         handleTodoPOST();
+        handleControlsPOST();
     }
 
 
     private static void handleIndexGET() {
 
-        get("/", (req, res) -> new ModelAndView(viewModel(), TEMPLATE), engine());
+        get("/", (req, res) -> new ModelAndView(viewModel(), "index.mustache"), engine());
     }
 
 
     private static void handleTodosPOST() {
 
-        post("/todos", (req, res) -> {
+        post("/todos",
+            (req, res) -> {
+                LOGGER.warn("POST /todos with {}", req.queryParams());
                 service.addNewTodo(req.queryParams("todo"));
-                res.redirect("/");
 
-                return null;
+                return redirect(res);
             });
     }
 
@@ -58,16 +60,35 @@ public class TodoMVC {
 
         post("/todo",
             (req, res) -> {
-                LOGGER.warn("POST with {}", req.queryParams());
+                LOGGER.warn("POST /todo with {}", req.queryParams());
 
-                with(req).caseOf("complete", service::completeTodoItem);
-                with(req).caseOf("revert", service::activateTodoItem);
-                with(req).caseOf("delete", service::deleteTodoItem);
+                handle(req).withParam("complete", service::completeTodoItem);
+                handle(req).withParam("revert", service::activateTodoItem);
+                handle(req).withParam("delete", service::deleteTodoItem);
 
-                res.redirect("/");
-
-                return null;
+                return redirect(res);
             });
+    }
+
+
+    private static void handleControlsPOST() {
+
+        post("/controls",
+            (req, res) -> {
+                LOGGER.warn("POST /controls with {}", req.queryParams());
+                handle(req).withParam("hide", service::hideCompleted);
+                handle(req).withParam("show", service::showCompleted);
+
+                return redirect(res);
+            });
+    }
+
+
+    private static Object redirect(Response res) {
+
+        res.redirect("/");
+
+        return null;
     }
 
 
@@ -83,6 +104,8 @@ public class TodoMVC {
         viewModel.put("completed", completed);
         viewModel.put("completedCount", completed.size());
 
+        viewModel.put("hidden", service.isHidden());
+
         return viewModel;
     }
 
@@ -93,7 +116,7 @@ public class TodoMVC {
     }
 
 
-    private static CaseHandler with(Request req) {
+    private static CaseHandler handle(Request req) {
 
         return new CaseHandler(req);
     }
@@ -107,7 +130,7 @@ public class TodoMVC {
             this.req = req;
         }
 
-        public void caseOf(String key, Consumer<String> handler) {
+        public void withParam(String key, Consumer<String> handler) {
 
             if (this.req.queryMap().hasKey(key)) {
                 handler.accept(this.req.queryParams(key));

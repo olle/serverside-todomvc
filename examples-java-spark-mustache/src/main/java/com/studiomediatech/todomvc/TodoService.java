@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 public final class TodoService {
 
-    private static final Map<String, Todo> todos = new ConcurrentHashMap<>();
+    private final Map<String, Todo> todos = new ConcurrentHashMap<>();
+    private final AtomicBoolean hidden = new AtomicBoolean(false);
 
     public void addNewTodo(String text) {
 
@@ -49,5 +51,23 @@ public final class TodoService {
     private void save(Todo todo) {
 
         todos.put(todo.getId(), todo);
+    }
+
+
+    public void hideCompleted(String toggle) {
+
+        this.hidden.set(true);
+    }
+
+
+    public void showCompleted(String toggle) {
+
+        this.hidden.set(false);
+    }
+
+
+    public boolean isHidden() {
+
+        return hidden.get();
     }
 }
