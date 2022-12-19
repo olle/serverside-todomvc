@@ -66,6 +66,12 @@ public final class TodoService {
     }
 
 
+    public void clearCompleted(String clear) {
+
+        todos.entrySet().removeIf(e -> e.getValue().isCompleted());
+    }
+
+
     public boolean isHidden() {
 
         return hidden.get();

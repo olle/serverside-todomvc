@@ -61,7 +61,6 @@ public class TodoMVC {
         post("/todo",
             (req, res) -> {
                 LOGGER.warn("POST /todo with {}", req.queryParams());
-
                 handle(req).withParam("complete", service::completeTodoItem);
                 handle(req).withParam("revert", service::activateTodoItem);
                 handle(req).withParam("delete", service::deleteTodoItem);
@@ -78,6 +77,7 @@ public class TodoMVC {
                 LOGGER.warn("POST /controls with {}", req.queryParams());
                 handle(req).withParam("hide", service::hideCompleted);
                 handle(req).withParam("show", service::showCompleted);
+                handle(req).withParam("clear", service::clearCompleted);
 
                 return redirect(res);
             });
