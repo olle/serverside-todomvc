@@ -12,7 +12,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
-		<jetty.version>11.0.13</jetty.version>
+<!--		<jetty.version>11.0.13</jetty.version>-->
 	</properties>
 
 	<dependencies>
@@ -27,8 +27,8 @@
 		<!-- LOGGING DEPENDENCIES - LOG4J -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.4</version>
+			<artifactId>slf4j-reload4j</artifactId>
+			<version>2.0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -40,7 +40,7 @@
 		<dependency>
 			<groupId>com.sparkjava</groupId>
 			<artifactId>spark-template-mustache</artifactId>
-			<version>1.0.0</version>
+			<version>2.7.1</version>
 		</dependency>
 
 	</dependencies>
@@ -81,12 +81,11 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>3.10.1</version>
 				<configuration>
 					<source>${java.version}</source>
 					<target>${java.version}</target>
 					<optimize>true</optimize>
-					<debug>true</debug>
 				</configuration>
 			</plugin>
 		</plugins>
