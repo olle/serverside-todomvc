@@ -7,6 +7,7 @@ import todomvc.Todo.Status;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.UnaryOperator;
 
 
 @Service
@@ -39,19 +40,31 @@ public class TodoMvcService {
 
     public void completeTodo(String id) {
 
-        repo.findOneById(UUID.fromString(id)).map(Todo::markAsCompleted).ifPresent(repo::save);
+        updateWith(id, Todo::markAsCompleted);
+    }
+
+
+    public void activateTodo(String id) {
+
+        updateWith(id, Todo::markAsActive);
     }
 
 
     public void editTodo(String id) {
 
-        repo.findOneById(UUID.fromString(id)).map(Todo::markAsEditing).ifPresent(repo::save);
+        updateWith(id, Todo::markAsEditing);
     }
 
 
     public void updateTodo(String id, String update) {
 
-        repo.findOneById(UUID.fromString(id)).map(todo -> todo.update(update)).ifPresent(repo::save);
+        updateWith(id, todo -> todo.update(update));
+    }
+
+
+    private void updateWith(String id, UnaryOperator<Todo> mapper) {
+
+        repo.findOneById(UUID.fromString(id)).map(mapper).ifPresent(repo::save);
     }
 
 

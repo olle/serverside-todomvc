@@ -60,6 +60,15 @@ public class TodoMvcController {
     }
 
 
+    @PostMapping(path = "/todo", params = { "revert" })
+    public String activateTodo(String revert) {
+
+        service.activateTodo(revert);
+
+        return REDIRECT_ROOT;
+    }
+
+
     @PostMapping(path = "/todo", params = { "edit" })
     public String editTodo(String edit) {
 

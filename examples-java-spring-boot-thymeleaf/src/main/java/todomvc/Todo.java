@@ -102,6 +102,12 @@ public final class Todo {
     }
 
 
+    public Todo markAsActive() {
+
+        return new Todo(this, Status.ACTIVE);
+    }
+
+
     public Todo markAsEditing() {
 
         return new Todo(this, true);
