@@ -44,10 +44,8 @@ check build test clean:
 	@$(MAKE) -C examples-java-ninjaframework $@
 	@$(MAKE) -C examples-java-servlet $@
 	@$(MAKE) -C examples-java-spark-mustache $@
-	@$(MAKE) -C examples-java-spring-boot-2.x $@
 	@$(MAKE) -C examples-java-spring-boot-freemarker $@
 	@$(MAKE) -C examples-java-spring-boot-mustache $@
-	@$(MAKE) -C examples-java-spring-mvc-thymeleaf $@
 	@$(MAKE) -C examples-java-wicket $@
 	@$(MAKE) -C examples-kotlin-simple $@
 	@$(MAKE) -C examples-php-vanilla $@
