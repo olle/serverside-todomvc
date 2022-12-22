@@ -5,42 +5,8 @@
   <meta charset="utf-8">
   <meta name="description"
     content="Helping you remember or select a server-side MV* framework - Todo apps for Spring Boot, Flask, PHP and many more">
-  <!--
-    ****************************************************************************
-
-    Server-side TodoMVC - Example Template (v4)
-
-    This is the template that any Server-side TodoMVC example implementation may
-    use. It aims to be semantic and beautifully styled out-of-the-box, in order
-    to provide the same user experience in each Server-Side TodoMVC
-    implementation.
-
-    How to use:
-
-    It's easy. Make sure to serve this file from your server, as-is. You should
-    now be able to se the full logic-less TodoMVC web application.
-
-    Now your job is to read through this HTML-file and solve each of the TODO
-    assignments. It should be pretty straight forward.
-
-    Throughout the HTML there are {variable} placeholders. These may not
-    be the exact variables to interpolate, but rather hints at what type of
-    information that is required. Feel free to mess around and modify anything
-    to better suite your implementation. Also URL/URIs and form handlers will
-    need to be adapted.
-
-    And remember - no JavaScript!
-
-    Good luck and happy coding!
-
-    ****************************************************************************
-    -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--
-      TODO: Change the title placeholders to the appropriate language and framework
-            (or configuration) of your example.
-  -->
-  <title>{Language} {Framework} {Other} • Server-Side TodoMVC</title>
+  <title>Java Spring Boot Thymeleaf • Server-Side TodoMVC</title>
   <link rel="stylesheet" href="/style.css">
   <!-- Look mom, no JavaScript! -->
 </head>
@@ -94,28 +60,24 @@
           TODO: First render from a list of all active todo items.
       -->
 
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{todo-id}">
-          <input type="hidden" name="id" value="{todo-id}" />
-          <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
-        </form>
+      <li th:each="todo : ${active}"> <!-- TODO: If the todo item is being edited use this:  -->
+        <th:block th:unless="${todo.editing}">
+            <button name="complete" th:value="${todo.id}" form="todo-item" title="Mark completed"></button>
+            <button name="edit" th:value="${todo.id}" form="todo-item" title="Click to edit" th:text="${todo.todo}"></button>
+            <button name="delete" th:value="${todo.id}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        </th:block>
+        <th:block th:if="${todo.editing}">
+            <button name="complete" th:value="${todo.id}" form="todo-item" title="Mark completed"></button>
+            <form class="inline" method="post" action="todos/${todo.id}">
+              <input type="hidden" name="id" th:value="${todo.id}" />
+              <input name="update" th:value="${todo.todo}" autofocus required autocomplete="off" />
+            </form>
+        </th:block>
       </li>
-
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{todo-text}</button>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
-
-      <!--
-          TODO: Then render the list of todo items marked as completed, unless
-                the current filter is toggled to hide completed.
-      -->
-      <li>
-        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
-        <span>{todo-text}</span>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
+      <li th:unless="${hidden}" th:each="todo : ${completed}">
+        <button name="revert" th:value="${todo.id}" form="todo-item" title="Mark as active"></button>
+        <span th:text="${todo.todo}"></span>
+        <button name="delete" th:value="${todo.id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
     </ul>
   </main>
