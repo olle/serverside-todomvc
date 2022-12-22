@@ -4,10 +4,12 @@ import org.springframework.stereotype.Service;
 
 import todomvc.domain.Todo;
 
+import todomvc.domain.Todo.Status;
+
 import todomvc.repository.TodoMvcRepository;
 
-import java.util.Collection;
 import java.util.Map;
+import java.util.UUID;
 
 
 @Service
@@ -22,14 +24,22 @@ public class TodoMvcService {
 
     public Map<String, ?> showTodos() {
 
-        Collection<Todo> activeTodos = repo.findAllWhereActiveIsTrue();
-
-        return Map.of("active", activeTodos);
+        return Map.of( // NOSONAR
+                "active", repo.findAllByStatus(Status.ACTIVE), // NOSONAR
+                "completed", repo.findAllByStatus(Status.COMPLETED));
     }
 
 
     public void addNewTodo(String todo) {
 
         repo.save(Todo.newFrom(todo));
+    }
+
+
+    public void completeTodo(String uuid) {
+
+        repo.findOneById(UUID.fromString(uuid))
+            .map(Todo::markAsCompleted)
+            .ifPresent(repo::save);
     }
 }

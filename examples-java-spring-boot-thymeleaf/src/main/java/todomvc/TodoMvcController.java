@@ -37,4 +37,13 @@ public class TodoMvcController {
 
         return REDIRECT_ROOT;
     }
+
+
+    @PostMapping(path = "/todo", params = { "complete" })
+    public String completeTodo(String complete) {
+
+        service.completeTodo(complete);
+
+        return REDIRECT_ROOT;
+    }
 }
