@@ -42,6 +42,24 @@ public final class Todo {
         this.editing = other.editing;
     }
 
+
+    private Todo(Todo other, boolean editing) {
+
+        this.id = other.id;
+        this.todo = other.todo;
+        this.status = other.status;
+        this.editing = editing;
+    }
+
+
+    private Todo(Todo other, String update) {
+
+        this.id = other.id;
+        this.todo = update;
+        this.status = other.status;
+        this.editing = false;
+    }
+
     public static Todo newFrom(String todo) {
 
         return new Todo(todo);
@@ -81,5 +99,17 @@ public final class Todo {
     public Todo markAsCompleted() {
 
         return new Todo(this, Status.COMPLETED);
+    }
+
+
+    public Todo markAsEditing() {
+
+        return new Todo(this, true);
+    }
+
+
+    public Todo update(String update) {
+
+        return new Todo(this, update);
     }
 }

@@ -39,4 +39,10 @@ public final class TodoMvcRepository {
 
         todos.entrySet().removeIf(e -> e.getValue().getStatus() == status);
     }
+
+
+    public boolean existsWhereIsEditingIsTrue() {
+
+        return todos.values().stream().noneMatch(Todo::isEditing);
+    }
 }

@@ -5,7 +5,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -39,10 +41,29 @@ public class TodoMvcController {
     }
 
 
+    @PostMapping(path = "/todos/{id}", params = { "update" })
+    public String updateTodo(@PathVariable("id") String id,
+        @RequestParam("update") String update) {
+
+        service.updateTodo(id, update);
+
+        return REDIRECT_ROOT;
+    }
+
+
     @PostMapping(path = "/todo", params = { "complete" })
     public String completeTodo(String complete) {
 
         service.completeTodo(complete);
+
+        return REDIRECT_ROOT;
+    }
+
+
+    @PostMapping(path = "/todo", params = { "edit" })
+    public String editTodo(String edit) {
+
+        service.editTodo(edit);
 
         return REDIRECT_ROOT;
     }

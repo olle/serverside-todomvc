@@ -24,6 +24,7 @@ public class TodoMvcService {
     public Map<String, ?> showTodos() {
 
         return Map.of( // NOSONAR
+                "notEditing", repo.existsWhereIsEditingIsTrue(), // NOSONAR
                 "hidden", hidden.get(), // NOSONAR
                 "active", repo.findAllByStatus(Status.ACTIVE), // NOSONAR
                 "completed", repo.findAllByStatus(Status.COMPLETED));
@@ -39,6 +40,18 @@ public class TodoMvcService {
     public void completeTodo(String uuid) {
 
         repo.findOneById(UUID.fromString(uuid)).map(Todo::markAsCompleted).ifPresent(repo::save);
+    }
+
+
+    public void editTodo(String uuid) {
+
+        repo.findOneById(UUID.fromString(uuid)).map(Todo::markAsEditing).ifPresent(repo::save);
+    }
+
+
+    public void updateTodo(String id, String update) {
+
+        repo.findOneById(UUID.fromString(id)).map(todo -> todo.update(update)).ifPresent(repo::save);
     }
 
 
