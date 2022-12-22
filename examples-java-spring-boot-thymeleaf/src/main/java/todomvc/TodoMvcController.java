@@ -46,4 +46,22 @@ public class TodoMvcController {
 
         return REDIRECT_ROOT;
     }
+
+
+    @PostMapping(path = "/controls", params = { "hide" })
+    public String hideCompleted() {
+
+        service.hideCompleted();
+
+        return REDIRECT_ROOT;
+    }
+
+
+    @PostMapping(path = "/controls", params = { "show" })
+    public String showCompleted() {
+
+        service.showCompleted();
+
+        return REDIRECT_ROOT;
+    }
 }
