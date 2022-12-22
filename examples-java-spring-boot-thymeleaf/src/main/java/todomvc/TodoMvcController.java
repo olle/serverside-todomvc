@@ -64,4 +64,13 @@ public class TodoMvcController {
 
         return REDIRECT_ROOT;
     }
+
+
+    @PostMapping(path = "/controls", params = { "clear" })
+    public String clearCompleted() {
+
+        service.clearCompleted();
+
+        return REDIRECT_ROOT;
+    }
 }

@@ -35,4 +35,10 @@ public final class TodoMvcRepository {
 
         return todos.values().stream().filter(todo -> todo.getStatus() == status).toList();
     }
+
+
+    public void deleteByStatus(Status status) {
+
+        todos.entrySet().removeIf(e -> e.getValue().getStatus() == status);
+    }
 }

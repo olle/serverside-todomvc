@@ -56,4 +56,10 @@ public class TodoMvcService {
 
         hidden.set(false);
     }
+
+
+    public void clearCompleted() {
+
+        repo.deleteByStatus(Status.COMPLETED);
+    }
 }
