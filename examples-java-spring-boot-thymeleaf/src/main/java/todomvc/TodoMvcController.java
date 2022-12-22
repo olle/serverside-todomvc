@@ -69,6 +69,15 @@ public class TodoMvcController {
     }
 
 
+    @PostMapping(path = "/todo", params = { "delete" })
+    public String deleteTodo(String delete) {
+
+        service.deleteTodo(delete);
+
+        return REDIRECT_ROOT;
+    }
+
+
     @PostMapping(path = "/controls", params = { "hide" })
     public String hideCompleted() {
 

@@ -37,21 +37,27 @@ public class TodoMvcService {
     }
 
 
-    public void completeTodo(String uuid) {
+    public void completeTodo(String id) {
 
-        repo.findOneById(UUID.fromString(uuid)).map(Todo::markAsCompleted).ifPresent(repo::save);
+        repo.findOneById(UUID.fromString(id)).map(Todo::markAsCompleted).ifPresent(repo::save);
     }
 
 
-    public void editTodo(String uuid) {
+    public void editTodo(String id) {
 
-        repo.findOneById(UUID.fromString(uuid)).map(Todo::markAsEditing).ifPresent(repo::save);
+        repo.findOneById(UUID.fromString(id)).map(Todo::markAsEditing).ifPresent(repo::save);
     }
 
 
     public void updateTodo(String id, String update) {
 
         repo.findOneById(UUID.fromString(id)).map(todo -> todo.update(update)).ifPresent(repo::save);
+    }
+
+
+    public void deleteTodo(String id) {
+
+        repo.deleteById(UUID.fromString(id));
     }
 
 

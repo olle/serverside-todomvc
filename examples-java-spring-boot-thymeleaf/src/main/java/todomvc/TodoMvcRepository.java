@@ -45,4 +45,10 @@ public final class TodoMvcRepository {
 
         return todos.values().stream().noneMatch(Todo::isEditing);
     }
+
+
+    public void deleteById(UUID id) {
+
+        todos.entrySet().removeIf(e -> e.getKey().equals(id));
+    }
 }
