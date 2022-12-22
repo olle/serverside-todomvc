@@ -2,11 +2,7 @@ package todomvc;
 
 import org.springframework.stereotype.Service;
 
-import todomvc.domain.Todo;
-
-import todomvc.domain.Todo.Status;
-
-import todomvc.repository.TodoMvcRepository;
+import todomvc.Todo.Status;
 
 import java.util.Map;
 import java.util.UUID;

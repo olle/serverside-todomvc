@@ -1,4 +1,4 @@
-package todomvc.domain;
+package todomvc;
 
 import java.util.UUID;
 

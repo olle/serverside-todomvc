@@ -1,10 +1,8 @@
-package todomvc.repository;
+package todomvc;
 
 import org.springframework.stereotype.Repository;
 
-import todomvc.domain.Todo;
-
-import todomvc.domain.Todo.Status;
+import todomvc.Todo.Status;
 
 import java.util.Collection;
 import java.util.Map;
