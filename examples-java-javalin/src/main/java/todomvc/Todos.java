@@ -40,6 +40,8 @@ class Todos {
 
         if (hasParam(ctx, "complete")) {
             markAsCompleted(ctx);
+        } else if (hasParam(ctx, "revert")) {
+            markAsActive(ctx);
         }
 
         ctx.redirect("/");
@@ -87,6 +89,12 @@ class Todos {
     static void markAsCompleted(Context ctx) {
 
         updateWith(ctx.formParam("complete"), Todo::markAsCompleted);
+    }
+
+
+    static void markAsActive(Context ctx) {
+
+        updateWith(ctx.formParam("revert"), Todo::markAsActive);
     }
 
 

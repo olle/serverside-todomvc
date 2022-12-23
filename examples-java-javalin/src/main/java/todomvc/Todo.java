@@ -2,6 +2,7 @@ package todomvc;
 
 import java.util.UUID;
 
+
 public class Todo {
 
     enum Status {
@@ -62,6 +63,12 @@ public class Todo {
     public Todo markAsCompleted() {
 
         return new Todo(this, Status.COMPLETED);
+    }
+
+
+    public Todo markAsActive() {
+
+        return new Todo(this, Status.ACTIVE);
     }
 
 

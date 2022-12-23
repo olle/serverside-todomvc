@@ -3,7 +3,7 @@ import java.util.List;
 import todomvc.Todo;
 public final class JteindexGenerated {
 	public static final String JTE_NAME = "index.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,19,19,24,24,24,24,24,24,26,26,26,26,26,26,27,27,29,29,31,31,35,41,49,56,56,57,57,59,59,59,59,59,59,59,59,60,60,60,61,61,61,61,61,61,61,61,65,65,66,67,67,67,67,67,67,67,67,68,68,68,68,68,68,68,68,68,68,68,69,69,69,69,69,69,69,69,71,71,72,72,74,74,75,75,78,78,78,81,81,82,82,92,104};
+	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,19,19,24,24,24,24,24,24,26,26,26,26,26,26,27,27,29,29,31,31,35,41,49,56,56,57,57,59,59,59,59,59,59,59,59,60,60,60,61,61,61,61,61,61,61,61,65,65,66,67,67,67,67,67,67,67,67,68,68,68,68,68,68,68,68,68,68,68,69,69,69,69,69,69,69,69,71,71,72,72,74,74,75,75,77,77,77,77,77,77,77,77,78,78,78,79,79,79,79,79,79,79,79,81,81,82,82,92,104};
 	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, boolean hidden, List<Todo> active, List<Todo> completed, Long activeCount, Long completedCount) {
 		jteOutput.writeContent("\n<!doctype html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"description\"\n    content=\"Helping you remember or select a server-side MV* framework - Todo apps for Spring Boot, Flask, PHP and many more\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Java Javalin JTE • Server-Side TodoMVC</title>\n  <link rel=\"stylesheet\" href=\"/style.css\">\n  ");
 		jteOutput.writeContent("\n</head>\n\n<body>\n  <main>\n    <h1>Todos <small title=\"");
@@ -88,10 +88,26 @@ public final class JteindexGenerated {
 		if (!hidden) {
 			jteOutput.writeContent("\n        ");
 			for (Todo todo : completed) {
-				jteOutput.writeContent("\n          <li>\n            <button name=\"revert\" value=\"{todo.getId()}\" form=\"todo-item\" title=\"Mark as active\"></button>\n            <span>");
+				jteOutput.writeContent("\n          <li>\n            <button name=\"revert\"");
+				if (gg.jte.runtime.TemplateUtils.isAttributeRendered(todo.getId())) {
+					jteOutput.writeContent(" value=\"");
+					jteOutput.setContext("button", "value");
+					jteOutput.writeUserContent(todo.getId());
+					jteOutput.setContext("button", null);
+					jteOutput.writeContent("\"");
+				}
+				jteOutput.writeContent(" form=\"todo-item\" title=\"Mark as active\"></button>\n            <span>");
 				jteOutput.setContext("span", null);
 				jteOutput.writeUserContent(todo.getText());
-				jteOutput.writeContent("</span>\n            <button name=\"delete\" value=\"{todo.getId()}\" form=\"todo-item\" title=\"Delete todo item\">&#x2715;</button>\n          </li>\n        ");
+				jteOutput.writeContent("</span>\n            <button name=\"delete\"");
+				if (gg.jte.runtime.TemplateUtils.isAttributeRendered(todo.getId())) {
+					jteOutput.writeContent(" value=\"");
+					jteOutput.setContext("button", "value");
+					jteOutput.writeUserContent(todo.getId());
+					jteOutput.setContext("button", null);
+					jteOutput.writeContent("\"");
+				}
+				jteOutput.writeContent(" form=\"todo-item\" title=\"Delete todo item\">&#x2715;</button>\n          </li>\n        ");
 			}
 			jteOutput.writeContent("\n      ");
 		}

@@ -75,9 +75,9 @@
       @if(!hidden)
         @for(Todo todo : completed)
           <li>
-            <button name="revert" value="{todo.getId()}" form="todo-item" title="Mark as active"></button>
+            <button name="revert" value="${todo.getId()}" form="todo-item" title="Mark as active"></button>
             <span>${todo.getText()}</span>
-            <button name="delete" value="{todo.getId()}" form="todo-item" title="Delete todo item">&#x2715;</button>
+            <button name="delete" value="${todo.getId()}" form="todo-item" title="Delete todo item">&#x2715;</button>
           </li>
         @endfor
       @endif
