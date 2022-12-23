@@ -42,6 +42,7 @@
         TODO: When this form is posted, a new todo item should be created and
               added to the todo-list, as an active item.
     -->
+    <%= form_with url: "todos" do |form| %>
     <form action="todos" method="post">
       <label for="todo">Todo</label>
       <!--
@@ -50,6 +51,7 @@
       -->
       <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
     </form>
+    <% end %>
 
 
     <!--
