@@ -11,7 +11,6 @@
             (or configuration) of your example.
   -->
   <title>Ruby Rails • Server-Side TodoMVC</title>
-  <link rel="stylesheet" href="/style.css">
   <!-- Look mom, no JavaScript! -->
 </head>
 
@@ -64,6 +63,7 @@
           TODO: First render from a list of all active todo items.
       -->
 
+      <% @active.each do |todo| %>
       <li> <!-- TODO: If the todo item is being edited use this:  -->
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
         <form class="inline" method="post" action="todos/{todo-id}">
@@ -72,11 +72,12 @@
         </form>
       </li>
 
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
+      <li>
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{todo-text}</button>
+        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit"><%= todo.todo %></button>
         <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
+      <% end %>
 
       <!--
           TODO: Then render the list of todo items marked as completed, unless
