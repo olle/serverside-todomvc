@@ -20,5 +20,6 @@ public class TodoMVC {
 
         app.post("/todos", Todos::handleTodos);
         app.post("/todo", Todos::handleTodo);
+        app.post("/controls", Todos::handleControls);
     }
 }

@@ -1,12 +1,13 @@
 package todomvc;
 
+import io.javalin.http.Context;
+
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.UnaryOperator;
 
-import io.javalin.http.Context;
 
 class Todos {
 
@@ -24,24 +25,56 @@ class Todos {
 
     public static void handleTodos(Context ctx) {
 
-        if (ctx.formParamMap().containsKey("todo")) {
+        if (hasParam(ctx, "todo")) {
             addNewTodo(ctx);
         }
+
+        ctx.redirect("/");
     }
 
 
     public static void handleTodo(Context ctx) {
 
-        if (ctx.formParamMap().containsKey("complete")) {
+        if (hasParam(ctx, "complete")) {
             markAsCompleted(ctx);
         }
+
+        ctx.redirect("/");
     }
 
 
-    private static void markAsCompleted(Context ctx) {
+    public static void handleControls(Context ctx) {
+
+        if (hasParam(ctx, "clear")) {
+            clearCompleted(ctx);
+        }
+
+        ctx.redirect("/");
+    }
+
+
+    private static boolean hasParam(Context ctx, String key) {
+
+        return ctx.formParamMap().containsKey(key);
+    }
+
+
+    static void clearCompleted(Context ctx) {
+
+        todos.entrySet().removeIf(e -> e.getValue().isCompleted());
+    }
+
+
+    static void markAsCompleted(Context ctx) {
 
         updateWith(ctx.formParam("complete"), Todo::markAsCompleted);
-        ctx.redirect("/");
+    }
+
+
+    static void addNewTodo(Context ctx) {
+
+        Todo todo = Todo.createNew(ctx.formParam("todo"));
+        todos.put(todo.id, todo);
     }
 
 
@@ -53,13 +86,5 @@ class Todos {
                 var copy = todo.copy();
                 todos.put(copy.getUUID(), copy);
             });
-    }
-
-
-    private static void addNewTodo(Context ctx) {
-
-        Todo todo = Todo.createNew(ctx.formParam("todo"));
-        todos.put(todo.id, todo);
-        ctx.redirect("/");
     }
 }

@@ -1,5 +1,5 @@
 @import java.util.List
-@import todomvc.TodoMVC.Todo
+@import todomvc.Todo
 
 @param Long activeCount
 @param Long completedCount

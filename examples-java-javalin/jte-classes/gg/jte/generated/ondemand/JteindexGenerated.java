@@ -1,6 +1,6 @@
 package gg.jte.generated.ondemand;
 import java.util.List;
-import todomvc.TodoMVC.Todo;
+import todomvc.Todo;
 public final class JteindexGenerated {
 	public static final String JTE_NAME = "index.jte";
 	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,18,18,23,23,23,23,23,23,25,25,25,25,25,25,26,35,41,49,56,56,57,57,59,59,59,59,59,59,59,59,60,60,60,61,61,61,61,61,61,61,61,65,65,66,67,67,67,67,67,67,67,67,68,68,68,68,68,68,68,68,68,68,68,69,69,69,69,69,69,69,69,71,71,72,72,74,78,78,81,81,81,84,84,94,106};

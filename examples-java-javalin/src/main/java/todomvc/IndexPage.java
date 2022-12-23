@@ -2,6 +2,7 @@ package todomvc;
 
 import io.javalin.http.Context;
 
+
 class IndexPage {
 
     public static Context show(Context ctx) {
