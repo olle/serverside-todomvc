@@ -6,16 +6,19 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.UnaryOperator;
 
 
 class Todos {
 
     private static final Map<UUID, Todo> todos = new ConcurrentHashMap<>();
+    private static final AtomicBoolean hidden = new AtomicBoolean(false);
 
     public static Map<String, ? extends Object> asMap() {
 
         return Map.of( // NOSONAR
+                "hidden", hidden.get(), // NOSONAR
                 "active", todos.values().stream().filter(Todo::isActive).toList(), // NOSONAR
                 "completed", todos.values().stream().filter(Todo::isCompleted).toList(), // NOSONAR
                 "activeCount", todos.values().stream().filter(Todo::isActive).count(), // NOSONAR
@@ -47,9 +50,25 @@ class Todos {
 
         if (hasParam(ctx, "clear")) {
             clearCompleted(ctx);
+        } else if (hasParam(ctx, "hide")) {
+            hideCompleted();
+        } else if (hasParam(ctx, "show")) {
+            showCompleted();
         }
 
         ctx.redirect("/");
+    }
+
+
+    static void showCompleted() {
+
+        hidden.set(false);
+    }
+
+
+    static void hideCompleted() {
+
+        hidden.set(true);
     }
 
 
@@ -80,11 +99,9 @@ class Todos {
 
     private static void updateWith(String id, UnaryOperator<Todo> mapper) {
 
-        Optional.ofNullable(todos.get(UUID.fromString(id)))
-            .map(mapper)
-            .ifPresent(todo -> {
-                var copy = todo.copy();
-                todos.put(copy.getUUID(), copy);
-            });
+        Optional.ofNullable(todos.get(UUID.fromString(id))).map(mapper).ifPresent(todo -> {
+            var copy = todo.copy();
+            todos.put(copy.getUUID(), copy);
+        });
     }
 }

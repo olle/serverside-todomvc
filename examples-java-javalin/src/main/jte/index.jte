@@ -1,10 +1,11 @@
 @import java.util.List
 @import todomvc.Todo
 
-@param Long activeCount
-@param Long completedCount
+@param boolean hidden
 @param List<Todo> active
 @param List<Todo> completed
+@param Long activeCount
+@param Long completedCount
 
 <!doctype html>
 <html lang="en">
@@ -24,12 +25,11 @@
     <h1>Todos <small title="${activeCount} Active items">${activeCount}</small></h1>
     <form action="controls" method="post">
       <button name="clear" value="completed" title="Clear ${completedCount} completed">${completedCount} Completed • Clear</button>
-      <!--
-          TODO: Render the hide/show button depending on the current state of
-                such a filter, to either show completed items or not.
-      -->
+      @if(!hidden)
       <button name="hide" value="completed" title="Hide completed todo items">Hide</button>
+      @else
       <button name="show" value="completed" title="Show completed todo items">Show</button>
+      @endif
     </form>
 
 
@@ -72,17 +72,15 @@
         @endif
       @endfor
 
-      <!--
-          TODO: Then render the list of todo items marked as completed, unless
-                the current filter is toggled to hide completed.
-      -->
-      @for(Todo todo : completed)
-      <li>
-        <button name="revert" value="{todo.getId()}" form="todo-item" title="Mark as active"></button>
-        <span>${todo.getText()}</span>
-        <button name="delete" value="{todo.getId()}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
-      @endfor
+      @if(!hidden)
+        @for(Todo todo : completed)
+          <li>
+            <button name="revert" value="{todo.getId()}" form="todo-item" title="Mark as active"></button>
+            <span>${todo.getText()}</span>
+            <button name="delete" value="{todo.getId()}" form="todo-item" title="Delete todo item">&#x2715;</button>
+          </li>
+        @endfor
+      @endif
     </ul>
   </main>
   <footer>
