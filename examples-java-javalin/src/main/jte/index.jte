@@ -2,7 +2,9 @@
 @import todomvc.TodoMVC.Todo
 
 @param Long activeCount
+@param Long completedCount
 @param List<Todo> active
+@param List<Todo> completed
 
 <!doctype html>
 <html lang="en">
@@ -21,12 +23,7 @@
   <main>
     <h1>Todos <small title="${activeCount} Active items">${activeCount}</small></h1>
     <form action="controls" method="post">
-      <!--
-          TODO: Replace {completed-count} with the number of todo items marked
-                completed.
-      -->
-      <button name="clear" value="completed" title="Clear {completed-count} completed">{completed-count} Completed • Clear</button>
-
+      <button name="clear" value="completed" title="Clear ${completedCount} completed">${completedCount} Completed • Clear</button>
       <!--
           TODO: Render the hide/show button depending on the current state of
                 such a filter, to either show completed items or not.
@@ -79,11 +76,13 @@
           TODO: Then render the list of todo items marked as completed, unless
                 the current filter is toggled to hide completed.
       -->
+      @for(Todo todo : completed)
       <li>
         <button name="revert" value="{todo.getId()}" form="todo-item" title="Mark as active"></button>
-        <span>{todo-text}</span>
+        <span>${todo.getText()}</span>
         <button name="delete" value="{todo.getId()}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
+      @endfor
     </ul>
   </main>
   <footer>

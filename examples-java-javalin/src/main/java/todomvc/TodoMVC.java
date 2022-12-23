@@ -7,8 +7,10 @@ import io.javalin.http.Context;
 import io.javalin.rendering.template.JavalinJte;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.UnaryOperator;
 
 
 public class TodoMVC {
@@ -24,6 +26,7 @@ public class TodoMVC {
 
         app.get("/", IndexPage::show);
         app.post("/todos", Todos::handleTodos);
+        app.post("/todo", Todos::handleTodo);
     }
 
     static class IndexPage {
@@ -42,7 +45,9 @@ public class TodoMVC {
 
             return Map.of( // NOSONAR
                     "active", todos.values().stream().filter(Todo::isActive).toList(), // NOSONAR
-                    "activeCount", todos.values().stream().filter(Todo::isActive).count());
+                    "completed", todos.values().stream().filter(Todo::isCompleted).toList(), // NOSONAR
+                    "activeCount", todos.values().stream().filter(Todo::isActive).count(), // NOSONAR
+                    "completedCount", todos.values().stream().filter(Todo::isCompleted).count());
         }
 
 
@@ -51,8 +56,32 @@ public class TodoMVC {
             if (ctx.formParamMap().containsKey("todo")) {
                 addNewTodo(ctx);
             }
+        }
 
+
+        public static void handleTodo(Context ctx) {
+
+            if (ctx.formParamMap().containsKey("complete")) {
+                markAsCompleted(ctx);
+            }
+        }
+
+
+        private static void markAsCompleted(Context ctx) {
+
+            updateWith(ctx.formParam("complete"), Todo::markAsCompleted);
             ctx.redirect("/");
+        }
+
+
+        private static void updateWith(String id, UnaryOperator<Todo> mapper) {
+
+            Optional.ofNullable(todos.get(UUID.fromString(id)))
+                .map(mapper)
+                .ifPresent(todo -> {
+                    var copy = todo.copy();
+                    todos.put(copy.getUUID(), copy);
+                });
         }
 
 
@@ -60,6 +89,7 @@ public class TodoMVC {
 
             Todo todo = Todo.createNew(ctx.formParam("todo"));
             todos.put(todo.id, todo);
+            ctx.redirect("/");
         }
     }
 
@@ -84,15 +114,57 @@ public class TodoMVC {
             this.editing = false;
         }
 
+
+        private Todo(Todo other) {
+
+            this.id = other.id;
+            this.text = other.text;
+            this.status = other.status;
+            this.editing = other.editing;
+        }
+
+
+        public Todo(Todo other, Status status) {
+
+            this.id = other.id;
+            this.text = other.text;
+            this.status = status;
+            this.editing = other.editing;
+        }
+
+        protected UUID getUUID() {
+
+            return this.id;
+        }
+
+
+        public Todo copy() {
+
+            return new Todo(this);
+        }
+
+
         public static Todo createNew(String text) {
 
             return new Todo(text);
         }
 
 
+        public Todo markAsCompleted() {
+
+            return new Todo(this, Status.COMPLETED);
+        }
+
+
         public boolean isActive() {
 
             return status == Status.ACTIVE;
+        }
+
+
+        public boolean isCompleted() {
+
+            return status == Status.COMPLETED;
         }
 
 
