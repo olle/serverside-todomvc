@@ -1,6 +1,7 @@
 @import java.util.List
 @import todomvc.Todo
 
+@param boolean editing
 @param boolean hidden
 @param List<Todo> active
 @param List<Todo> completed
@@ -32,20 +33,10 @@
       @endif
     </form>
 
-
-    <!--
-        TODO: When this form is posted, a new todo item should be created and
-              added to the todo-list, as an active item.
-    -->
     <form action="todos" method="post">
       <label for="todo">Todo</label>
-      <!--
-          TODO: Take care to remove the `autofocus` attribute, if there is a
-                todo item currently being edited.
-      -->
-      <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
+      <input placeholder="What needs to be done?" required autocomplete="off" name="todo" id="todo" autofocus="${!editing}" />
     </form>
-
 
     <!--
         TODO: This form is posted with action/id pairs, an needs to be handled
@@ -60,7 +51,7 @@
             <button name="complete" value="${todo.getId()}" form="todo-item" title="Mark completed"></button>
             <form class="inline" method="post" action="todos/${todo.getId()}">
               <input type="hidden" name="id" value="${todo.getId()}" />
-              <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+              <input name="update" value="${todo.getText()}" autofocus required autocomplete="off" />
             </form>
           </li>
         @else

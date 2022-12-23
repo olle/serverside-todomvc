@@ -3,8 +3,8 @@ import java.util.List;
 import todomvc.Todo;
 public final class JteindexGenerated {
 	public static final String JTE_NAME = "index.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,19,19,24,24,24,24,24,24,26,26,26,26,26,26,27,27,29,29,31,31,35,41,49,56,56,57,57,59,59,59,59,59,59,59,59,60,60,60,61,61,61,61,61,61,61,61,65,65,66,67,67,67,67,67,67,67,67,68,68,68,68,68,68,68,68,68,68,68,69,69,69,69,69,69,69,69,71,71,72,72,74,74,75,75,77,77,77,77,77,77,77,77,78,78,78,79,79,79,79,79,79,79,79,81,81,82,82,101};
-	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, boolean hidden, List<Todo> active, List<Todo> completed, Long activeCount, Long completedCount) {
+	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,20,20,25,25,25,25,25,25,27,27,27,27,27,27,28,28,30,30,32,32,37,37,37,37,40,47,47,48,48,50,50,50,50,50,50,50,50,51,51,51,52,52,52,52,52,52,52,52,53,53,53,53,53,53,53,53,56,56,57,58,58,58,58,58,58,58,58,59,59,59,59,59,59,59,59,59,59,59,60,60,60,60,60,60,60,60,62,62,63,63,65,65,66,66,68,68,68,68,68,68,68,68,69,69,69,70,70,70,70,70,70,70,70,72,72,73,73,92};
+	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, boolean editing, boolean hidden, List<Todo> active, List<Todo> completed, Long activeCount, Long completedCount) {
 		jteOutput.writeContent("\n<!doctype html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"description\"\n    content=\"Helping you remember or select a server-side MV* framework - Todo apps for Spring Boot, Flask, PHP and many more\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Java Javalin JTE • Server-Side TodoMVC</title>\n  <link rel=\"stylesheet\" href=\"/style.css\">\n  ");
 		jteOutput.writeContent("\n</head>\n\n<body>\n  <main>\n    <h1>Todos <small title=\"");
 		jteOutput.setContext("small", "title");
@@ -24,9 +24,11 @@ public final class JteindexGenerated {
 		} else {
 			jteOutput.writeContent("\n      <button name=\"show\" value=\"completed\" title=\"Show completed todo items\">Show</button>\n      ");
 		}
-		jteOutput.writeContent("\n    </form>\n\n\n    ");
-		jteOutput.writeContent("\n    <form action=\"todos\" method=\"post\">\n      <label for=\"todo\">Todo</label>\n      ");
-		jteOutput.writeContent("\n      <input placeholder=\"What needs to be done?\" autofocus required autocomplete=\"off\" name=\"todo\" id=\"todo\" />\n    </form>\n\n\n    ");
+		jteOutput.writeContent("\n    </form>\n\n    <form action=\"todos\" method=\"post\">\n      <label for=\"todo\">Todo</label>\n      <input placeholder=\"What needs to be done?\" required autocomplete=\"off\" name=\"todo\" id=\"todo\"");
+		if (!editing) {
+		jteOutput.writeContent(" autofocus");
+		}
+		jteOutput.writeContent(" />\n    </form>\n\n    ");
 		jteOutput.writeContent("\n    <form id=\"todo-item\" method=\"post\" action=\"todo\"></form>\n    <ul>\n      ");
 		for (Todo todo : active) {
 			jteOutput.writeContent("\n        ");
@@ -50,7 +52,15 @@ public final class JteindexGenerated {
 					jteOutput.setContext("input", null);
 					jteOutput.writeContent("\"");
 				}
-				jteOutput.writeContent(" />\n              <input name=\"update\" value=\"{todo-text}\" autofocus required autocomplete=\"off\" />\n            </form>\n          </li>\n        ");
+				jteOutput.writeContent(" />\n              <input name=\"update\"");
+				if (gg.jte.runtime.TemplateUtils.isAttributeRendered(todo.getText())) {
+					jteOutput.writeContent(" value=\"");
+					jteOutput.setContext("input", "value");
+					jteOutput.writeUserContent(todo.getText());
+					jteOutput.setContext("input", null);
+					jteOutput.writeContent("\"");
+				}
+				jteOutput.writeContent(" autofocus required autocomplete=\"off\" />\n            </form>\n          </li>\n        ");
 			} else {
 				jteOutput.writeContent("\n          <li> ");
 				jteOutput.writeContent("\n            <button name=\"complete\"");
@@ -114,11 +124,12 @@ public final class JteindexGenerated {
 		jteOutput.writeContent("\n    </ul>\n  </main>\n  <footer>\n    <em>Click on the text to edit a todo.</em>\n    <p>\n      Template by <a href=\"https://github.com/olle\">Olle Törnström</a>,\n      inspired by the original <a href=\"https://todomvc.com\">TodoMVC</a> from\n      <a href=\"http://github.com/sindresorhus\">Sindre Sorhus</a>.\n    </p>\n    <p>\n      Created by <a href=\"http://github.com/olle\">Olle Törnström</a>.\n    </p>\n    <p>\n      Part of <a href=\"http://github.com/olle/serverside-todomvc\">Server-Side TodoMVC</a>\n    </p>\n  </footer>\n</body>\n\n</html>");
 	}
 	public static void renderMap(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, java.util.Map<String, Object> params) {
+		boolean editing = (boolean)params.get("editing");
 		boolean hidden = (boolean)params.get("hidden");
 		List<Todo> active = (List<Todo>)params.get("active");
 		List<Todo> completed = (List<Todo>)params.get("completed");
 		Long activeCount = (Long)params.get("activeCount");
 		Long completedCount = (Long)params.get("completedCount");
-		render(jteOutput, jteHtmlInterceptor, hidden, active, completed, activeCount, completedCount);
+		render(jteOutput, jteHtmlInterceptor, editing, hidden, active, completed, activeCount, completedCount);
 	}
 }

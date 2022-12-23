@@ -42,6 +42,24 @@ public class Todo {
         this.editing = other.editing;
     }
 
+
+    public Todo(Todo other, boolean editing) {
+
+        this.id = other.id;
+        this.text = other.text;
+        this.status = other.status;
+        this.editing = editing;
+    }
+
+
+    public Todo(Todo other, String text) {
+
+        this.id = other.id;
+        this.text = text;
+        this.status = other.status;
+        this.editing = false;
+    }
+
     protected UUID getUUID() {
 
         return this.id;
@@ -72,6 +90,12 @@ public class Todo {
     }
 
 
+    public Todo markAsEditing() {
+
+        return new Todo(this, true);
+    }
+
+
     public boolean isActive() {
 
         return status == Status.ACTIVE;
@@ -99,5 +123,11 @@ public class Todo {
     public String getText() {
 
         return text;
+    }
+
+
+    public Todo updateTodo(String text) {
+
+        return new Todo(this, text);
     }
 }

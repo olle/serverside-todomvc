@@ -18,6 +18,7 @@ class Todos {
     public static Map<String, ? extends Object> asMap() {
 
         return Map.of( // NOSONAR
+                "editing", todos.values().stream().anyMatch(Todo::isEditing), // NOSONAR
                 "hidden", hidden.get(), // NOSONAR
                 "active", todos.values().stream().filter(Todo::isActive).toList(), // NOSONAR
                 "completed", todos.values().stream().filter(Todo::isCompleted).toList(), // NOSONAR
@@ -44,6 +45,10 @@ class Todos {
             markAsActive(ctx);
         } else if (hasParam(ctx, "delete")) {
             clearTodo(ctx);
+        } else if (hasParam(ctx, "edit")) {
+            markAsEditing(ctx);
+        } else if (hasParam(ctx, "update")) {
+            updateTodo(ctx);
         }
 
         ctx.redirect("/");
@@ -97,6 +102,18 @@ class Todos {
     static void markAsActive(Context ctx) {
 
         updateWith(ctx.formParam("revert"), Todo::markAsActive);
+    }
+
+
+    static void markAsEditing(Context ctx) {
+
+        updateWith(ctx.formParam("edit"), Todo::markAsEditing);
+    }
+
+
+    static void updateTodo(Context ctx) {
+
+        updateWith(ctx.formParam("id"), todo -> todo.updateTodo(ctx.formParam("update")));
     }
 
 
