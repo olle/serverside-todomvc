@@ -3,7 +3,7 @@ import java.util.List;
 import todomvc.Todo;
 public final class JteindexGenerated {
 	public static final String JTE_NAME = "index.jte";
-	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,19,19,24,24,24,24,24,24,26,26,26,26,26,26,27,27,29,29,31,31,35,41,49,56,56,57,57,59,59,59,59,59,59,59,59,60,60,60,61,61,61,61,61,61,61,61,65,65,66,67,67,67,67,67,67,67,67,68,68,68,68,68,68,68,68,68,68,68,69,69,69,69,69,69,69,69,71,71,72,72,74,74,75,75,77,77,77,77,77,77,77,77,78,78,78,79,79,79,79,79,79,79,79,81,81,82,82,92,104};
+	public static final int[] JTE_LINE_INFO = {0,0,1,3,3,3,19,19,24,24,24,24,24,24,26,26,26,26,26,26,27,27,29,29,31,31,35,41,49,56,56,57,57,59,59,59,59,59,59,59,59,60,60,60,61,61,61,61,61,61,61,61,65,65,66,67,67,67,67,67,67,67,67,68,68,68,68,68,68,68,68,68,68,68,69,69,69,69,69,69,69,69,71,71,72,72,74,74,75,75,77,77,77,77,77,77,77,77,78,78,78,79,79,79,79,79,79,79,79,81,81,82,82,101};
 	public static void render(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, boolean hidden, List<Todo> active, List<Todo> completed, Long activeCount, Long completedCount) {
 		jteOutput.writeContent("\n<!doctype html>\n<html lang=\"en\">\n\n<head>\n  <meta charset=\"utf-8\">\n  <meta name=\"description\"\n    content=\"Helping you remember or select a server-side MV* framework - Todo apps for Spring Boot, Flask, PHP and many more\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n  <title>Java Javalin JTE • Server-Side TodoMVC</title>\n  <link rel=\"stylesheet\" href=\"/style.css\">\n  ");
 		jteOutput.writeContent("\n</head>\n\n<body>\n  <main>\n    <h1>Todos <small title=\"");
@@ -111,8 +111,7 @@ public final class JteindexGenerated {
 			}
 			jteOutput.writeContent("\n      ");
 		}
-		jteOutput.writeContent("\n    </ul>\n  </main>\n  <footer>\n    <em>Click on the text to edit a todo.</em>\n    <p>\n      Template by <a href=\"https://github.com/olle\">Olle Törnström</a>,\n      inspired by the original <a href=\"https://todomvc.com\">TodoMVC</a> from\n      <a href=\"http://github.com/sindresorhus\">Sindre Sorhus</a>.\n    </p>\n    ");
-		jteOutput.writeContent("\n    <p>\n      Created by <a href=\"http://todomvc.com\">you</a>.\n    </p>\n    <p>\n      Part of <a href=\"http://github.com/olle/serverside-todomvc\">Server-Side TodoMVC</a>\n    </p>\n  </footer>\n</body>\n\n</html>");
+		jteOutput.writeContent("\n    </ul>\n  </main>\n  <footer>\n    <em>Click on the text to edit a todo.</em>\n    <p>\n      Template by <a href=\"https://github.com/olle\">Olle Törnström</a>,\n      inspired by the original <a href=\"https://todomvc.com\">TodoMVC</a> from\n      <a href=\"http://github.com/sindresorhus\">Sindre Sorhus</a>.\n    </p>\n    <p>\n      Created by <a href=\"http://github.com/olle\">Olle Törnström</a>.\n    </p>\n    <p>\n      Part of <a href=\"http://github.com/olle/serverside-todomvc\">Server-Side TodoMVC</a>\n    </p>\n  </footer>\n</body>\n\n</html>");
 	}
 	public static void renderMap(gg.jte.html.HtmlTemplateOutput jteOutput, gg.jte.html.HtmlInterceptor jteHtmlInterceptor, java.util.Map<String, Object> params) {
 		boolean hidden = (boolean)params.get("hidden");

@@ -42,6 +42,8 @@ class Todos {
             markAsCompleted(ctx);
         } else if (hasParam(ctx, "revert")) {
             markAsActive(ctx);
+        } else if (hasParam(ctx, "delete")) {
+            clearTodo(ctx);
         }
 
         ctx.redirect("/");
@@ -98,9 +100,17 @@ class Todos {
     }
 
 
+    static void clearTodo(Context ctx) {
+
+        String id = ctx.formParam("delete");
+        todos.entrySet().removeIf(e -> e.getKey().toString().equals(id));
+    }
+
+
     static void addNewTodo(Context ctx) {
 
-        Todo todo = Todo.createNew(ctx.formParam("todo"));
+        String text = ctx.formParam("todo");
+        Todo todo = Todo.createNew(text);
         todos.put(todo.id, todo);
     }
 
