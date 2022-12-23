@@ -1,5 +1,5 @@
 .PHONY: start
 
 start:
-	@mvn compile
-	@mvn exec:java
+	@mvn package
+	@java -jar target/examples-java-javalin-1.0.0-SNAPSHOT.jar
