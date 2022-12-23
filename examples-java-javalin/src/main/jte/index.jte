@@ -1,3 +1,9 @@
+@import java.util.List
+@import todomvc.TodoMVC.Todo
+
+@param Long activeCount
+@param List<Todo> active
+
 <!doctype html>
 <html lang="en">
 
@@ -13,12 +19,7 @@
 
 <body>
   <main>
-
-    <!--
-        TODO: Replace {active-count} with the number of not yet completed
-              todo items.
-    -->
-    <h1>Todos <small title="{active-count} Active items">{active-count}</small></h1>
+    <h1>Todos <small title="${activeCount} Active items">${activeCount}</small></h1>
     <form action="controls" method="post">
       <!--
           TODO: Replace {completed-count} with the number of todo items marked
@@ -56,32 +57,32 @@
     -->
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
-      <!--
-          TODO: First render from a list of all active todo items.
-      -->
-
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{todo-id}">
-          <input type="hidden" name="id" value="{todo-id}" />
-          <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
-        </form>
-      </li>
-
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{todo-text}</button>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
+      @for(Todo todo : active)
+        @if(todo.isEditing())
+          <li>
+            <button name="complete" value="${todo.getId()}" form="todo-item" title="Mark completed"></button>
+            <form class="inline" method="post" action="todos/${todo.getId()}">
+              <input type="hidden" name="id" value="${todo.getId()}" />
+              <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+            </form>
+          </li>
+        @else
+          <li> <!-- TODO: Otherwise render the todo item like this: -->
+            <button name="complete" value="${todo.getId()}" form="todo-item" title="Mark completed"></button>
+            <button name="edit" value="${todo.getId()}" form="todo-item" title="Click to edit">${todo.getText()}</button>
+            <button name="delete" value="${todo.getId()}" form="todo-item" title="Delete todo item">&#x2715;</button>
+          </li>
+        @endif
+      @endfor
 
       <!--
           TODO: Then render the list of todo items marked as completed, unless
                 the current filter is toggled to hide completed.
       -->
       <li>
-        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
+        <button name="revert" value="{todo.getId()}" form="todo-item" title="Mark as active"></button>
         <span>{todo-text}</span>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        <button name="delete" value="{todo.getId()}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
     </ul>
   </main>
