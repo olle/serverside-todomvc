@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+	"strconv"
 	"time"
 
 	"github.com/kataras/iris/v12"
@@ -27,10 +29,28 @@ var seq = time.Now().UnixMilli()
 
 var data = Data{false, []Todo{}}
 
+func toInt(s string) int64 {
+	n, err := strconv.ParseInt(s, 10, 64)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return n
+}
+
 func addNewTodo(Text string) {
 	seq = seq + 1
 	var NewTodo = Todo{seq, Active, Text, false}
 	data.Todos = append(data.Todos, NewTodo)
+}
+
+func markTodoCompleted(Id string) {
+	id := toInt(Id)
+	for i := 0; i < len(data.Todos); i++ {
+		if data.Todos[i].Id == id {
+			data.Todos[i].Status = Completed
+			break
+		}
+	}
 }
 
 func count(Status int) int {
@@ -63,8 +83,17 @@ func main() {
 
 	app.Get("/", showIndex)
 	app.Post("/todos", createTodo)
+	app.Post("/todo", handleTodo)
 
 	app.Listen(":8080")
+}
+
+func handleTodo(ctx iris.Context) {
+	complete := ctx.PostValue("complete")
+	if complete != "" {
+		markTodoCompleted(complete)
+	}
+	ctx.Redirect("/", iris.StatusMovedPermanently)
 }
 
 func createTodo(ctx iris.Context) {
