@@ -29,12 +29,6 @@
       </form>
     <% end %>
 
-
-    <!--
-        TODO: This form is posted with action/id pairs, an needs to be handled
-              for completing, re-activating, deleting and starting to edit a
-              todo item.
-    -->
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
       <% @active.each do |todo| %>
