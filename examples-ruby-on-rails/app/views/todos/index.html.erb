@@ -6,22 +6,13 @@
   <meta name="description"
     content="Helping you remember or select a server-side MV* framework - Todo apps for Spring Boot, Flask, PHP and many more">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!--
-      TODO: Change the title placeholders to the appropriate language and framework
-            (or configuration) of your example.
-  -->
   <title>Ruby Rails • Server-Side TodoMVC</title>
   <!-- Look mom, no JavaScript! -->
 </head>
 
 <body>
   <main>
-
-    <!--
-        TODO: Replace {active-count} with the number of not yet completed
-              todo items.
-    -->
-    <h1>Todos <small title="{active-count} Active items">{active-count}</small></h1>
+    <h1>Todos <small title="<%= @active.size %> Active items"><%= @active.size %></small></h1>
     <form action="controls" method="post">
       <!--
           TODO: Replace {completed-count} with the number of todo items marked
