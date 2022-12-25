@@ -10,4 +10,14 @@ class TodosController < ApplicationController
       redirect_to root_path
     end
   end
+
+  def handle
+    if params[:complete]
+      @todo = Todo.find(params[:complete])
+      @todo.completed!
+      if @todo.save
+        redirect_to root_path
+      end
+    end
+  end
 end

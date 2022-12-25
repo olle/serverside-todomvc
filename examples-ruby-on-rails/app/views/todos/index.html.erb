@@ -59,26 +59,26 @@
       <% @active.each do |todo| %>
         <% if todo.editing %>
         <li>
-          <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-          <form class="inline" method="post" action="todos/{todo-id}">
-            <input type="hidden" name="id" value="{todo-id}" />
+          <button name="complete" value="<%= todo.id %>" form="todo-item" title="Mark completed"></button>
+          <form class="inline" method="post" action="todos/<%= todo.id %>">
+            <input type="hidden" name="id" value="<%= todo.id %>" />
             <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
           </form>
         </li>
         <% else %>
         <li>
-          <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-          <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit"><%= todo.todo %></button>
-          <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
+          <button name="complete" value="<%= todo.id %>" form="todo-item" title="Mark completed"></button>
+          <button name="edit" value="<%= todo.id %>" form="todo-item" title="Click to edit"><%= todo.todo %></button>
+          <button name="delete" value="<%= todo.id %>" form="todo-item" title="Delete todo item">&#x2715;</button>
         </li>
         <% end %>
       <% end %>
 
       <% @completed.each do |todo| %>
       <li>
-        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
+        <button name="revert" value="<%= todo.id %>" form="todo-item" title="Mark as active"></button>
         <span><%= todo.todo %></span>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        <button name="delete" value="<%= todo.id %>" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
       <% end %>
     </ul>
