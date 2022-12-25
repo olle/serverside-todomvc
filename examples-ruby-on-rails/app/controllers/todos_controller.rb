@@ -5,14 +5,14 @@ class TodosController < ApplicationController
     @hidden = session[:hidden] || false
   end
 
-  def create
+  def createTodo
     @todo = Todo.new(todo: params[:todo])
     if @todo.save
       redirect_to root_path
     end
   end
 
-  def handle
+  def handleTodo
     if params[:complete]
       Todo.find(params[:complete]).completed!
     end
@@ -24,7 +24,7 @@ class TodosController < ApplicationController
     redirect_to root_path
   end
 
-  def controls
+  def handleControls
     if params[:clear]
       Todo.where(status: :completed).delete_all
     end
