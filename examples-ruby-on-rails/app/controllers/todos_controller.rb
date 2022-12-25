@@ -19,5 +19,10 @@ class TodosController < ApplicationController
         redirect_to root_path
       end
     end
+
+    if params[:delete]
+      Todo.delete(params[:delete])
+      redirect_to root_path
+    end
   end
 end
