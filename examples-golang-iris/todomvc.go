@@ -63,6 +63,17 @@ func markTodoActive(Id string) {
 	}
 }
 
+func deleteTodo(Id string) {
+	id := toInt(Id)
+	NewTodos := []Todo{}
+	for i := 0; i < len(data.Todos); i++ {
+		if data.Todos[i].Id != id {
+			NewTodos = append(NewTodos, data.Todos[i])
+		}
+	}
+	data.Todos = NewTodos
+}
+
 func count(Status int) int {
 	cnt := 0
 	for i := 0; i < len(data.Todos); i++ {
@@ -106,6 +117,11 @@ func handleTodo(ctx iris.Context) {
 	revert := ctx.PostValue("revert")
 	if revert != "" {
 		markTodoActive(revert)
+	}
+
+	delete := ctx.PostValue("delete")
+	if delete != "" {
+		deleteTodo(delete)
 	}
 
 	ctx.Redirect("/", iris.StatusMovedPermanently)
