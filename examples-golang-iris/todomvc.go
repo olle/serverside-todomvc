@@ -43,6 +43,16 @@ func count(Status int) int {
 	return cnt
 }
 
+func todos(Status int) []Todo {
+	results := []Todo{}
+	for i := 0; i < len(data.Todos); i++ {
+		if data.Todos[i].Status == Status {
+			results = append(results, data.Todos[i])
+		}
+	}
+	return results
+}
+
 func main() {
 	app := iris.New()
 
@@ -65,9 +75,10 @@ func createTodo(ctx iris.Context) {
 }
 
 func showIndex(ctx iris.Context) {
+	ctx.ViewData("Active", todos(Active))
+	ctx.ViewData("Completed", todos(Completed))
 	ctx.ViewData("ActiveCount", count(Active))
 	ctx.ViewData("CompletedCount", count(Completed))
-
 	if err := ctx.View("index.html"); err != nil {
 		ctx.HTML("<h3>%s</h3>", err.Error())
 		return

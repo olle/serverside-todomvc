@@ -18,13 +18,11 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
     <h1>Todos <small title="{{ .ActiveCount }} Active items">{{ .ActiveCount }}</small></h1>
     <form action="controls" method="post">
       <button name="clear" value="completed" title="Clear {{ .CompletedCount }} completed">{{ .CompletedCount }} Completed • Clear</button>
-
-      <!--
-          TODO: Render the hide/show button depending on the current state of
-                such a filter, to either show completed items or not.
-      -->
-      <button name="hide" value="completed" title="Hide completed todo items">Hide</button>
+      {{ if .Hidden }}
       <button name="show" value="completed" title="Show completed todo items">Show</button>
+      {{ else }}
+      <button name="hide" value="completed" title="Hide completed todo items">Hide</button>
+      {{ end }}
     </form>
 
 
@@ -49,33 +47,33 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
     -->
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
-      <!--
-          TODO: First render from a list of all active todo items.
-      -->
+      {{ range .Active }}
+        {{ if .Editing }}
+        <li>
+          <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
+          <form class="inline" method="post" action="todos/{todo-id}">
+            <input type="hidden" name="id" value="{todo-id}" />
+            <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+          </form>
+        </li>
+        {{ else }}
+        <li>
+          <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
+          <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{{ .Text }}</button>
+          <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        </li>
+        {{ end }}
+      {{ end }}
 
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{todo-id}">
-          <input type="hidden" name="id" value="{todo-id}" />
-          <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
-        </form>
-      </li>
-
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{todo-text}</button>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
-
-      <!--
-          TODO: Then render the list of todo items marked as completed, unless
-                the current filter is toggled to hide completed.
-      -->
-      <li>
-        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
-        <span>{todo-text}</span>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
+      {{ if not .Hidden }}
+        {{ range .Completed }}
+        <li>
+          <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
+          <span>{todo-text}</span>
+          <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        </li>
+        {{ end }}
+      {{ end }}
     </ul>
   </main>
   <footer>
@@ -85,11 +83,8 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
       inspired by the original <a href="https://todomvc.com">TodoMVC</a> from
       <a href="http://github.com/sindresorhus">Sindre Sorhus</a>.
     </p>
-    <!--
-      TODO: Replace the paragraph below with a link to you or your
-            homepage, person, repository or organization. -->
     <p>
-      Created by <a href="http://todomvc.com">you</a>.
+      Created by <a href="http://github.com/olle">Olle Törnström</a>.
     </p>
     <p>
       Part of <a href="http://github.com/olle/serverside-todomvc">Server-Side TodoMVC</a>
