@@ -18,7 +18,7 @@
           TODO: Replace {completed-count} with the number of todo items marked
                 completed.
       -->
-      <button name="clear" value="completed" title="Clear {completed-count} completed">{completed-count} Completed • Clear</button>
+      <button name="clear" value="completed" title="Clear <%= @completed.size %> completed"><%= @completed.size %> Completed • Clear</button>
 
       <!--
           TODO: Render the hide/show button depending on the current state of
@@ -57,30 +57,30 @@
       -->
 
       <% @active.each do |todo| %>
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{todo-id}">
-          <input type="hidden" name="id" value="{todo-id}" />
-          <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
-        </form>
-      </li>
+        <% if todo.editing %>
+        <li>
+          <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
+          <form class="inline" method="post" action="todos/{todo-id}">
+            <input type="hidden" name="id" value="{todo-id}" />
+            <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+          </form>
+        </li>
+        <% else %>
+        <li>
+          <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
+          <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit"><%= todo.todo %></button>
+          <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        </li>
+        <% end %>
+      <% end %>
 
+      <% @completed.each do |todo| %>
       <li>
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit"><%= todo.todo %></button>
+        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
+        <span><%= todo.todo %></span>
         <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
       <% end %>
-
-      <!--
-          TODO: Then render the list of todo items marked as completed, unless
-                the current filter is toggled to hide completed.
-      -->
-      <li>
-        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
-        <span>{todo-text}</span>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
     </ul>
   </main>
   <footer>
