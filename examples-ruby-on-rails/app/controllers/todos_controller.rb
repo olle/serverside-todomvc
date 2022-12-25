@@ -2,6 +2,7 @@ class TodosController < ApplicationController
   def index
     @active = Todo.active
     @completed = Todo.completed
+    @hidden = session[:hidden] || false
   end
 
   def create
@@ -27,6 +28,15 @@ class TodosController < ApplicationController
     if params[:clear]
       Todo.where(status: :completed).delete_all
     end
+
+    if params[:hide]
+      session[:hidden] = true
+    end
+
+    if params[:show]
+      session[:hidden] = false
+    end
+
     redirect_to root_path
   end
 end

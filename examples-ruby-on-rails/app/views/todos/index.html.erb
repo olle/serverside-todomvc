@@ -24,8 +24,11 @@
           TODO: Render the hide/show button depending on the current state of
                 such a filter, to either show completed items or not.
       -->
+      <% if @hidden == false %>
       <button name="hide" value="completed" title="Hide completed todo items">Hide</button>
+      <% else %>
       <button name="show" value="completed" title="Show completed todo items">Show</button>
+      <% end %>
     </form>
 
 
@@ -74,12 +77,14 @@
         <% end %>
       <% end %>
 
-      <% @completed.each do |todo| %>
-      <li>
-        <button name="revert" value="<%= todo.id %>" form="todo-item" title="Mark as active"></button>
-        <span><%= todo.todo %></span>
-        <button name="delete" value="<%= todo.id %>" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
+      <% unless @hidden %>
+        <% @completed.each do |todo| %>
+        <li>
+          <button name="revert" value="<%= todo.id %>" form="todo-item" title="Mark as active"></button>
+          <span><%= todo.todo %></span>
+          <button name="delete" value="<%= todo.id %>" form="todo-item" title="Delete todo item">&#x2715;</button>
+        </li>
+        <% end %>
       <% end %>
     </ul>
   </main>
