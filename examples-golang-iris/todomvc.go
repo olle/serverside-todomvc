@@ -74,6 +74,16 @@ func deleteTodo(Id string) {
 	data.Todos = NewTodos
 }
 
+func clearCompletedTodos() {
+	NewTodos := []Todo{}
+	for i := 0; i < len(data.Todos); i++ {
+		if data.Todos[i].Status == Active {
+			NewTodos = append(NewTodos, data.Todos[i])
+		}
+	}
+	data.Todos = NewTodos
+}
+
 func toggleHidden(Hidden bool) {
 	data.Hidden = Hidden
 }
@@ -121,6 +131,10 @@ func handleControls(ctx iris.Context) {
 	hide := ctx.PostValue("hide")
 	if hide != "" {
 		toggleHidden(true)
+	}
+	clear := ctx.PostValue("clear")
+	if clear != "" {
+		clearCompletedTodos()
 	}
 	ctx.Redirect("/", iris.StatusMovedPermanently)
 }
