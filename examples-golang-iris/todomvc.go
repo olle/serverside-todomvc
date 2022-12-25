@@ -53,6 +53,16 @@ func markTodoCompleted(Id string) {
 	}
 }
 
+func markTodoActive(Id string) {
+	id := toInt(Id)
+	for i := 0; i < len(data.Todos); i++ {
+		if data.Todos[i].Id == id {
+			data.Todos[i].Status = Active
+			break
+		}
+	}
+}
+
 func count(Status int) int {
 	cnt := 0
 	for i := 0; i < len(data.Todos); i++ {
@@ -78,7 +88,6 @@ func main() {
 
 	tmpl := iris.HTML("./templates", ".html")
 	tmpl.Reload(true) // reload templates on each request (development mode)
-
 	app.RegisterView(tmpl)
 
 	app.Get("/", showIndex)
@@ -93,6 +102,12 @@ func handleTodo(ctx iris.Context) {
 	if complete != "" {
 		markTodoCompleted(complete)
 	}
+
+	revert := ctx.PostValue("revert")
+	if revert != "" {
+		markTodoActive(revert)
+	}
+
 	ctx.Redirect("/", iris.StatusMovedPermanently)
 }
 
