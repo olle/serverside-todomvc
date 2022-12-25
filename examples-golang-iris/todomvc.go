@@ -1,37 +1,73 @@
 package main
 
 import (
+	"time"
+
 	"github.com/kataras/iris/v12"
 )
 
+const (
+	Active    int = 0
+	Completed     = 1
+)
+
+type Todo struct {
+	Id      int64
+	Status  int
+	Text    string
+	Editing bool
+}
+
+type Data struct {
+	Hidden bool
+	Todos  []Todo
+}
+
+var seq = time.Now().UnixMilli()
+
+var data = Data{false, []Todo{}}
+
+func addNewTodo(Text string) {
+	seq = seq + 1
+	var NewTodo = Todo{seq, Active, Text, false}
+	data.Todos = append(data.Todos, NewTodo)
+}
+
+func count(Status int) int {
+	cnt := 0
+	for i := 0; i < len(data.Todos); i++ {
+		if data.Todos[i].Status == Status {
+			cnt++
+		}
+	}
+	return cnt
+}
+
 func main() {
-	app := iris.New() // defaults to these
+	app := iris.New()
 
 	tmpl := iris.HTML("./templates", ".html")
 	tmpl.Reload(true) // reload templates on each request (development mode)
-	// default template funcs are:
-	//
-	// - {{ urlpath "mynamedroute" "pathParameter_ifneeded" }}
-	// - {{ render "header.html" . }}
-	// - {{ render_r "header.html" . }} // partial relative path to current page
-	// - {{ yield . }}
-	// - {{ current . }}
-	tmpl.AddFunc("greet", func(s string) string {
-		return "Greetings " + s + "!"
-	})
+
 	app.RegisterView(tmpl)
 
-	app.Get("/", hi)
+	app.Get("/", showIndex)
+	app.Post("/todos", createTodo)
 
-	// http://localhost:8080
-	//app.Listen(":8080", iris.WithCharset("utf-8"))
 	app.Listen(":8080")
 }
 
-func hi(ctx iris.Context) {
-	ctx.ViewData("Title", "Hi Page")
-	ctx.ViewData("Name", "iris") // {{.Name}} will render: iris
-	// ctx.ViewData("", myCcustomStruct{})
+func createTodo(ctx iris.Context) {
+	todo := ctx.PostValue("todo")
+	addNewTodo(todo)
+
+	ctx.Redirect("/", iris.StatusMovedPermanently)
+}
+
+func showIndex(ctx iris.Context) {
+	ctx.ViewData("ActiveCount", count(Active))
+	ctx.ViewData("CompletedCount", count(Completed))
+
 	if err := ctx.View("index.html"); err != nil {
 		ctx.HTML("<h3>%s</h3>", err.Error())
 		return
