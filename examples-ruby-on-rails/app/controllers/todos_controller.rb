@@ -3,6 +3,7 @@ class TodosController < ApplicationController
     @active = Todo.active
     @completed = Todo.completed
     @hidden = session[:hidden] || false
+    @editing = Todo.exists?(:editing => true)
   end
 
   def createTodo
