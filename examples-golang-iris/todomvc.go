@@ -74,6 +74,10 @@ func deleteTodo(Id string) {
 	data.Todos = NewTodos
 }
 
+func toggleHidden(Hidden bool) {
+	data.Hidden = Hidden
+}
+
 func count(Status int) int {
 	cnt := 0
 	for i := 0; i < len(data.Todos); i++ {
@@ -104,8 +108,21 @@ func main() {
 	app.Get("/", showIndex)
 	app.Post("/todos", createTodo)
 	app.Post("/todo", handleTodo)
+	app.Post("/controls", handleControls)
 
 	app.Listen(":8080")
+}
+
+func handleControls(ctx iris.Context) {
+	show := ctx.PostValue("show")
+	if show != "" {
+		toggleHidden(false)
+	}
+	hide := ctx.PostValue("hide")
+	if hide != "" {
+		toggleHidden(true)
+	}
+	ctx.Redirect("/", iris.StatusMovedPermanently)
 }
 
 func handleTodo(ctx iris.Context) {
@@ -113,17 +130,14 @@ func handleTodo(ctx iris.Context) {
 	if complete != "" {
 		markTodoCompleted(complete)
 	}
-
 	revert := ctx.PostValue("revert")
 	if revert != "" {
 		markTodoActive(revert)
 	}
-
 	delete := ctx.PostValue("delete")
 	if delete != "" {
 		deleteTodo(delete)
 	}
-
 	ctx.Redirect("/", iris.StatusMovedPermanently)
 }
 
@@ -135,6 +149,7 @@ func createTodo(ctx iris.Context) {
 }
 
 func showIndex(ctx iris.Context) {
+	ctx.ViewData("Hidden", data.Hidden)
 	ctx.ViewData("Active", todos(Active))
 	ctx.ViewData("Completed", todos(Completed))
 	ctx.ViewData("ActiveCount", count(Active))
