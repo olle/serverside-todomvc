@@ -27,11 +27,7 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
 
     <form action="todos" method="post">
       <label for="todo">Todo</label>
-      <!--
-          TODO: Take care to remove the `autofocus` attribute, if there is a
-                todo item currently being edited.
-      -->
-      <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
+      <input placeholder="What needs to be done?" {{ if not .IsEditing }}autofocus{{ end }} required autocomplete="off" name="todo" id="todo" />
     </form>
 
     <form id="todo-item" method="post" action="todo"></form>
@@ -42,7 +38,7 @@ body,li{display:flex}form[action=controls],form[action=todos]>input,li,main>h1{m
           <button name="complete" value="{{ .Id }}" form="todo-item" title="Mark completed"></button>
           <form class="inline" method="post" action="todos/{{ .Id }}">
             <input type="hidden" name="id" value="{{ .Id }}" />
-            <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+            <input name="update" value="{{ .Text }}" autofocus required autocomplete="off" />
           </form>
         </li>
         {{ else }}

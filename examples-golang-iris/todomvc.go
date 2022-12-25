@@ -21,13 +21,14 @@ type Todo struct {
 }
 
 type Data struct {
-	Hidden bool
-	Todos  []Todo
+	Hidden  bool
+	Editing bool
+	Todos   []Todo
 }
 
 var seq = time.Now().UnixMilli()
 
-var data = Data{false, []Todo{}}
+var data = Data{false, false, []Todo{}}
 
 func toInt(s string) int64 {
 	n, err := strconv.ParseInt(s, 10, 64)
@@ -58,6 +59,29 @@ func markTodoActive(Id string) {
 	for i := 0; i < len(data.Todos); i++ {
 		if data.Todos[i].Id == id {
 			data.Todos[i].Status = Active
+			break
+		}
+	}
+}
+
+func markTodoAsEditing(Id string) {
+	id := toInt(Id)
+	for i := 0; i < len(data.Todos); i++ {
+		if data.Todos[i].Id == id {
+			data.Todos[i].Editing = true
+			data.Editing = true
+			break
+		}
+	}
+}
+
+func updateTodoItem(Id string, Text string) {
+	id := toInt(Id)
+	for i := 0; i < len(data.Todos); i++ {
+		if data.Todos[i].Id == id {
+			data.Todos[i].Text = Text
+			data.Todos[i].Editing = false
+			data.Editing = false
 			break
 		}
 	}
@@ -108,21 +132,6 @@ func todos(Status int) []Todo {
 	return results
 }
 
-func main() {
-	app := iris.New()
-
-	tmpl := iris.HTML("./templates", ".html")
-	tmpl.Reload(true) // reload templates on each request (development mode)
-	app.RegisterView(tmpl)
-
-	app.Get("/", showIndex)
-	app.Post("/todos", createTodo)
-	app.Post("/todo", handleTodo)
-	app.Post("/controls", handleControls)
-
-	app.Listen(":8080")
-}
-
 func handleControls(ctx iris.Context) {
 	show := ctx.PostValue("show")
 	if show != "" {
@@ -152,17 +161,28 @@ func handleTodo(ctx iris.Context) {
 	if delete != "" {
 		deleteTodo(delete)
 	}
+	edit := ctx.PostValue("edit")
+	if edit != "" {
+		markTodoAsEditing(edit)
+	}
 	ctx.Redirect("/", iris.StatusMovedPermanently)
 }
 
 func createTodo(ctx iris.Context) {
 	todo := ctx.PostValue("todo")
 	addNewTodo(todo)
+	ctx.Redirect("/", iris.StatusMovedPermanently)
+}
 
+func updateTodo(ctx iris.Context) {
+	id := ctx.PostValue("id")
+	update := ctx.PostValue("update")
+	updateTodoItem(id, update)
 	ctx.Redirect("/", iris.StatusMovedPermanently)
 }
 
 func showIndex(ctx iris.Context) {
+	ctx.ViewData("IsEditing", data.Editing)
 	ctx.ViewData("Hidden", data.Hidden)
 	ctx.ViewData("Active", todos(Active))
 	ctx.ViewData("Completed", todos(Completed))
@@ -172,4 +192,20 @@ func showIndex(ctx iris.Context) {
 		ctx.HTML("<h3>%s</h3>", err.Error())
 		return
 	}
+}
+
+func main() {
+	app := iris.New()
+
+	tmpl := iris.HTML("./templates", ".html")
+	tmpl.Reload(true) // reload templates on each request (development mode)
+	app.RegisterView(tmpl)
+
+	app.Get("/", showIndex)
+	app.Post("/todos", createTodo)
+	app.Post("/todos/:id", updateTodo)
+	app.Post("/todo", handleTodo)
+	app.Post("/controls", handleControls)
+
+	app.Listen(":8080")
 }
