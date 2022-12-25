@@ -13,16 +13,20 @@ class TodosController < ApplicationController
 
   def handle
     if params[:complete]
-      @todo = Todo.find(params[:complete])
-      @todo.completed!
-      if @todo.save
-        redirect_to root_path
-      end
+      Todo.find(params[:complete]).completed!
     end
 
     if params[:delete]
       Todo.delete(params[:delete])
-      redirect_to root_path
     end
+
+    redirect_to root_path
+  end
+
+  def controls
+    if params[:clear]
+      Todo.where(status: :completed).delete_all
+    end
+    redirect_to root_path
   end
 end

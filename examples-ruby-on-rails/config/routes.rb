@@ -3,4 +3,5 @@ Rails.application.routes.draw do
   root "todos#index"
   post "/todos", to: "todos#create"
   post "/todo", to: "todos#handle"
+  post "/controls", to: "todos#controls"
 end
