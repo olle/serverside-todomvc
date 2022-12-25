@@ -7,9 +7,16 @@ class TodosController < ApplicationController
 
   def createTodo
     @todo = Todo.new(todo: params[:todo])
-    if @todo.save
-      redirect_to root_path
-    end
+    @todo.save
+    redirect_to root_path
+  end
+
+  def updateTodo
+    @todo = Todo.find(params[:id])
+    @todo.todo = params[:update]
+    @todo.editing = false
+    @todo.save
+    redirect_to root_path
   end
 
   def handleTodo
@@ -19,6 +26,12 @@ class TodosController < ApplicationController
 
     if params[:delete]
       Todo.delete(params[:delete])
+    end
+
+    if params[:edit]
+      @todo = Todo.find(params[:edit])
+      @todo.editing = true
+      @todo.save
     end
 
     redirect_to root_path
