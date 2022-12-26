@@ -7,11 +7,38 @@ $meta = & $db['meta'];
 $items = & $db['items'];
 
 
-function createNewTodo($todo)
+function createNewTodo($text)
 {
   global $items, $db;
-  $items[] = $todo;
+  $newTodo = array();
+  $newTodo['id'] = uniqid();
+  $newTodo['status'] = 'active';
+  $newTodo['editing'] = false;
+  $newTodo['todo'] = $text;
+  $items[] = $newTodo;
   saveDb($db);
+}
+
+function markTodoCompleted($id)
+{
+  $todo = findById($id);
+  $todo['status'] = 'completed';
+  updateTodo($todo);
+}
+function markTodoActive($id)
+{
+  $todo = findById($id);
+  $todo['status'] = 'active';
+  updateTodo($todo);
+}
+
+function markTodoEditing($id)
+{
+  global $meta;
+  $todo = findById($id);
+  $todo['editing'] = true;
+  $meta['editing'] = true;
+  updateTodo($todo);
 }
 
 function updateTodo($todo)
@@ -24,6 +51,15 @@ function updateTodo($todo)
     }
   }
   saveDb($db);
+}
+
+function updateTodoText($id, $text) {
+  global $meta;
+  $todo = findById($id);
+  $todo['todo'] = $text;
+  $todo['editing'] = false;
+  $meta['editing'] = false;
+  updateTodo($todo);
 }
 
 function deleteById($id)
@@ -72,36 +108,29 @@ function showCompleted()
 if ($_POST) {
   $path = $_SERVER['PATH_INFO'] ?? '';
 
-  if ($path == '/todos') {
-
-    $newTodo = array();
-    $newTodo['id'] = uniqid();
-    $newTodo['status'] = 'active';
-    $newTodo['todo'] = $_POST['todo'];
-    $newTodo['editing'] = false;
-    createNewTodo($newTodo);
+  if ($path == '/todos' && $_POST['todo']) {
+    createNewTodo($_POST['todo']);
     header('Location: /');
-
-  } else if ($path == '/todo' && $_POST['complete']) {
-
-    $todo = findById($_POST['complete']);
-    $todo['status'] = 'completed';
-    updateTodo($todo);
+  } else if (str_starts_with($path, '/todos/') && $_POST['id'] && $_POST['update']) {
+    updateTodoText($_POST['id'], $_POST['update']);
     header('Location: /');
+  }
 
+  if ($path == '/todo' && $_POST['complete']) {
+    markTodoCompleted($_POST['complete']);
+    header('Location: /');
   } else if ($path == '/todo' && $_POST['revert']) {
-
-    $todo = findById($_POST['revert']);
-    $todo['status'] = 'active';
-    updateTodo($todo);
+    markTodoActive($_POST['revert']);
     header('Location: /');
-
   } else if ($path == '/todo' && $_POST['delete']) {
-
     deleteById($_POST['delete']);
     header('Location: /');
+  } else if ($path == '/todo' && $_POST['edit']) {
+    markTodoEditing($_POST['edit']);
+    header('Location: /');
+  }
 
-  } else if ($path == '/controls' && $_POST['hide']) {
+  if ($path == '/controls' && $_POST['hide']) {
     hideCompleted();
     header('Location: /');
   } else if ($path == '/controls' && $_POST['show']) {
@@ -126,6 +155,7 @@ $_completed = array_filter($items, function ($todo) {
 });
 
 $_showing = $meta['showing'] ?? true;
+$_editing = $meta['editing'] ?? false;
 
 ?>
 <!doctype html>
@@ -154,26 +184,12 @@ $_showing = $meta['showing'] ?? true;
       <?php } ?>
     </form>
 
-
-    <!--
-        TODO: When this form is posted, a new todo item should be created and
-              added to the todo-list, as an active item.
-    -->
     <form action="todos" method="post">
       <label for="todo">Todo</label>
-      <!--
-          TODO: Take care to remove the `autofocus` attribute, if there is a
-                todo item currently being edited.
-      -->
-      <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
+      <input placeholder="What needs to be done?" <?php if (!$_editing) { ?>autofocus<?php } ?> required
+        autocomplete="off" name="todo" id="todo" />
     </form>
 
-
-    <!--
-        TODO: This form is posted with action/id pairs, an needs to be handled
-              for completing, re-activating, deleting and starting to edit a
-              todo item.
-    -->
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
       <?php
