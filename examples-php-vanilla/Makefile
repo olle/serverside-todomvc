@@ -1,7 +1,10 @@
-.PHONY: check build clean test run-test all
+.PHONY: run check build clean test run-test all
 
 SELF=examples-php-vanilla
 URL=http://127.0.0.1:8080
+
+run:
+	@php -S localhost:8080
 
 banner:
 	@echo '----------------------------------------------------------------------'
