@@ -5,6 +5,20 @@ $db = loadDb();
 $meta = & $db['meta'];
 $items = & $db['items'];
 
+$_active = array_filter($items, function ($todo) {
+  if ($todo->status == 'active') {
+    return $todo;
+  }
+});
+
+$_completed = array_filter($items, function ($todo) {
+  if ($todo->status == 'completed') {
+    return $todo;
+  }
+});
+
+$_showing = $meta['showing'] ?? true;
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -21,26 +35,15 @@ $items = & $db['items'];
 
 <body>
   <main>
-
-    <!--
-        TODO: Replace {active-count} with the number of not yet completed
-              todo items.
-    -->
-    <h1>Todos <small title="{active-count} Active items">{active-count}</small></h1>
+    <h1>Todos <small title="<?= sizeof($_active) ?> Active items"><?= sizeof($_active) ?></small></h1>
     <form action="controls" method="post">
-      <!--
-          TODO: Replace {completed-count} with the number of todo items marked
-                completed.
-      -->
-      <button name="clear" value="completed" title="Clear {completed-count} completed">{completed-count} Completed •
+      <button name="clear" value="completed" title="Clear <?= sizeof($_completed) ?> completed"><?= sizeof($_completed) ?> Completed •
         Clear</button>
-
-      <!--
-          TODO: Render the hide/show button depending on the current state of
-                such a filter, to either show completed items or not.
-      -->
+      <?php if ($_showing) { ?>
       <button name="hide" value="completed" title="Hide completed todo items">Hide</button>
+      <?php } else { ?>
       <button name="show" value="completed" title="Show completed todo items">Show</button>
+      <?php } ?>
     </form>
 
 
@@ -65,10 +68,7 @@ $items = & $db['items'];
     -->
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
-      <!--
-          TODO: First render from a list of all active todo items.
-      -->
-
+      <?php foreach ($_active as $todo) { ?>
       <li> <!-- TODO: If the todo item is being edited use this:  -->
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
         <form class="inline" method="post" action="todos/{todo-id}">
@@ -76,22 +76,22 @@ $items = & $db['items'];
           <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
         </form>
       </li>
-
       <li> <!-- TODO: Otherwise render the todo item like this: -->
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
         <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{todo-text}</button>
         <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
+      <?php } ?>
 
-      <!--
-          TODO: Then render the list of todo items marked as completed, unless
-                the current filter is toggled to hide completed.
-      -->
+      <?php if ($_showing) { ?>
+      <?php foreach ($_completed as $todo) { ?>
       <li>
         <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
         <span>{todo-text}</span>
         <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
+      <?php } ?>
+      <?php } ?>
     </ul>
   </main>
   <footer>
@@ -101,11 +101,8 @@ $items = & $db['items'];
       inspired by the original <a href="https://todomvc.com">TodoMVC</a> from
       <a href="http://github.com/sindresorhus">Sindre Sorhus</a>.
     </p>
-    <!--
-      TODO: Replace the paragraph below with a link to you or your
-            homepage, person, repository or organization. -->
     <p>
-      Created by <a href="http://todomvc.com">you</a>.
+      Created by <a href="http://github.com/olle">Olle Törnström</a>.
     </p>
     <p>
       Part of <a href="http://github.com/olle/serverside-todomvc">Server-Side TodoMVC</a>
