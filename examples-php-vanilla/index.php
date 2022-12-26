@@ -26,6 +26,23 @@ function updateTodo($todo)
   saveDb($db);
 }
 
+function deleteById($id)
+{
+  global $items, $db;
+  if (sizeof($items) == 1) {
+    $items = array();
+  } else {
+    for ($i = 0; $i < sizeof($items); $i++) {
+      if ($items[$i]['id'] == $id) {
+        unset($items[$i]);
+        break;
+      }
+    }
+  }
+
+  saveDb($db);
+}
+
 function findById($id)
 {
   global $items;
@@ -63,6 +80,11 @@ if ($_POST) {
     $todo = findById($_POST['revert']);
     $todo['status'] = 'active';
     updateTodo($todo);
+    header('Location: /');
+
+  } else if ($path == '/todo' && $_POST['delete']) {
+
+    deleteById($_POST['delete']);
     header('Location: /');
 
   }
