@@ -1,18 +1,35 @@
 <?php
 
 require_once('php/db.php');
+
 $db = loadDb();
 $meta = & $db['meta'];
 $items = & $db['items'];
 
+if ($_POST) {
+  $path = $_SERVER['PATH_INFO'] ?? '';
+
+  if ($path == '/todos') {
+    $newTodo = array();
+    $newTodo['id'] = uniqid();
+    $newTodo['status'] = 'active';
+    $newTodo['todo'] = $_POST['todo'];
+    $newTodo['editing'] = false;
+    $items[] = $newTodo;
+    saveDb($db);
+  }
+
+  header('Location: /');
+}
+
 $_active = array_filter($items, function ($todo) {
-  if ($todo->status == 'active') {
+  if ($todo['status'] == 'active') {
     return $todo;
   }
 });
 
 $_completed = array_filter($items, function ($todo) {
-  if ($todo->status == 'completed') {
+  if ($todo['status'] == 'completed') {
     return $todo;
   }
 });
@@ -68,30 +85,41 @@ $_showing = $meta['showing'] ?? true;
     -->
     <form id="todo-item" method="post" action="todo"></form>
     <ul>
-      <?php foreach ($_active as $todo) { ?>
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{todo-id}">
-          <input type="hidden" name="id" value="{todo-id}" />
-          <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
+      <?php
+      foreach ($_active as $todo) {
+        if ($todo['editing']) {
+      ?>
+      <li>
+        <button name="complete" value="<?= $todo['id'] ?>" form="todo-item" title="Mark completed"></button>
+        <form class="inline" method="post" action="todos/<?= $todo['id'] ?>">
+          <input type="hidden" name="id" value="<?= $todo['id'] ?>" />
+          <input name="update" value="<?= $todo['todo'] ?>" autofocus required autocomplete="off" />
         </form>
       </li>
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{todo-text}</button>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
-      <?php } ?>
-
-      <?php if ($_showing) { ?>
-      <?php foreach ($_completed as $todo) { ?>
+      <?php } else { ?>
       <li>
-        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
-        <span>{todo-text}</span>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
+        <button name="complete" value="<?= $todo['id'] ?>" form="todo-item" title="Mark completed"></button>
+        <button name="edit" value="<?= $todo['id'] ?>" form="todo-item" title="Click to edit"><?= $todo['todo'] ?></button>
+        <button name="delete" value="<?= $todo['id'] ?>" form="todo-item" title="Delete todo item">&#x2715;</button>
       </li>
-      <?php } ?>
-      <?php } ?>
+      <?php
+        }
+      }
+      ?>
+
+      <?php
+      if ($_showing) {
+        foreach ($_completed as $todo) {
+      ?>
+      <li>
+        <button name="revert" value="<?= $todo['id'] ?>" form="todo-item" title="Mark as active"></button>
+        <span><?= $todo['todo'] ?></span>
+        <button name="delete" value="<?= $todo['id'] ?>" form="todo-item" title="Delete todo item">&#x2715;</button>
+      </li>
+      <?php
+        }
+      }
+      ?>
     </ul>
   </main>
   <footer>
