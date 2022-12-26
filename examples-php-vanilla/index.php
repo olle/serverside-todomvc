@@ -54,6 +54,20 @@ function findById($id)
   throw new Exception('Todo item not found.');
 }
 
+function hideCompleted()
+{
+  global $meta, $db;
+  $meta['showing'] = false;
+  saveDb($db);
+}
+
+function showCompleted()
+{
+  global $meta, $db;
+  $meta['showing'] = true;
+  saveDb($db);
+}
+
 
 if ($_POST) {
   $path = $_SERVER['PATH_INFO'] ?? '';
@@ -87,6 +101,12 @@ if ($_POST) {
     deleteById($_POST['delete']);
     header('Location: /');
 
+  } else if ($path == '/controls' && $_POST['hide']) {
+    hideCompleted();
+    header('Location: /');
+  } else if ($path == '/controls' && $_POST['show']) {
+    showCompleted();
+    header('Location: /');
   }
 
   print_r($path);
