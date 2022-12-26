@@ -44,16 +44,20 @@ function markTodoEditing($id)
 function updateTodo($todo)
 {
   global $items, $db;
+  $nextTodos = array();
   for ($i = 0; $i < sizeof($items); $i++) {
     if ($items[$i]['id'] == $todo['id']) {
-      $items[$i] = $todo;
-      break;
+      $nextTodos[] = $todo;
+    } else {
+      $nextTodos[] = $items[$i];
     }
   }
+  $db['items'] = $nextTodos;
   saveDb($db);
 }
 
-function updateTodoText($id, $text) {
+function updateTodoText($id, $text)
+{
   global $meta;
   $todo = findById($id);
   $todo['todo'] = $text;
@@ -65,17 +69,13 @@ function updateTodoText($id, $text) {
 function deleteById($id)
 {
   global $items, $db;
-  if (sizeof($items) == 1) {
-    $items = array();
-  } else {
-    for ($i = 0; $i < sizeof($items); $i++) {
-      if ($items[$i]['id'] == $id) {
-        unset($items[$i]);
-        break;
-      }
+  $newItems = array();
+  for ($i = 0; $i < sizeof($items); $i++) {
+    if ($items[$i]['id'] != $id) {
+      $newItems[] = $items[$i];
     }
   }
-
+  $db['items'] = $newItems;
   saveDb($db);
 }
 
@@ -101,6 +101,19 @@ function showCompleted()
 {
   global $meta, $db;
   $meta['showing'] = true;
+  saveDb($db);
+}
+
+function clearCompleted()
+{
+  global $items, $db;
+  $newItems = array();
+  for ($i = 0; $i < sizeof($items); $i++) {
+    if ($items[$i]['status'] != 'completed') {
+      $newItems[] = $items[$i];
+    }
+  }
+  $db['items'] = $newItems;
   saveDb($db);
 }
 
@@ -135,6 +148,9 @@ if ($_POST) {
     header('Location: /');
   } else if ($path == '/controls' && $_POST['show']) {
     showCompleted();
+    header('Location: /');
+  } else if ($path == '/controls' && $_POST['clear']) {
+    clearCompleted();
     header('Location: /');
   }
 
