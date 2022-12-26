@@ -6,20 +6,69 @@ $db = loadDb();
 $meta = & $db['meta'];
 $items = & $db['items'];
 
+
+function createNewTodo($todo)
+{
+  global $items, $db;
+  $items[] = $todo;
+  saveDb($db);
+}
+
+function updateTodo($todo)
+{
+  global $items, $db;
+  for ($i = 0; $i < sizeof($items); $i++) {
+    if ($items[$i]['id'] == $todo['id']) {
+      $items[$i] = $todo;
+      break;
+    }
+  }
+  saveDb($db);
+}
+
+function findById($id)
+{
+  global $items;
+  for ($i = 0; $i < sizeof($items); $i++) {
+    if ($items[$i]['id'] == $id) {
+      return $items[$i];
+    }
+  }
+  throw new Exception('Todo item not found.');
+}
+
+
 if ($_POST) {
   $path = $_SERVER['PATH_INFO'] ?? '';
 
   if ($path == '/todos') {
+
     $newTodo = array();
     $newTodo['id'] = uniqid();
     $newTodo['status'] = 'active';
     $newTodo['todo'] = $_POST['todo'];
     $newTodo['editing'] = false;
-    $items[] = $newTodo;
-    saveDb($db);
+    createNewTodo($newTodo);
+    header('Location: /');
+
+  } else if ($path == '/todo' && $_POST['complete']) {
+
+    $todo = findById($_POST['complete']);
+    $todo['status'] = 'completed';
+    updateTodo($todo);
+    header('Location: /');
+
+  } else if ($path == '/todo' && $_POST['revert']) {
+
+    $todo = findById($_POST['revert']);
+    $todo['status'] = 'active';
+    updateTodo($todo);
+    header('Location: /');
+
   }
 
-  header('Location: /');
+  print_r($path);
+  print_r($_POST);
 }
 
 $_active = array_filter($items, function ($todo) {
