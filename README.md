@@ -1,4 +1,4 @@
-# Server-side TodoMVC
+# Server-Side TodoMVC
 
 ## Helping you to select an MVC server-side framework.
 
