@@ -5,14 +5,19 @@ use utf8;
 # use Cwd;
 #use MIME::Base64;
 use URI::Encode;
-my $uri = URI::Encode->new( { encode_reserved => 0 } );
+my $uri = URI::Encode->new( { encode_reserved => 1 } );
 
 my $REQUEST_BODY;
 read(STDIN, $REQUEST_BODY, $ENV{'CONTENT_LENGTH'});
+print STDERR "RAW_BODY: $REQUEST_BODY\n";
+$REQUEST_BODY =~ s/\+/ /g;
 $REQUEST_BODY = $uri->decode($REQUEST_BODY);
 print STDERR "REQUEST_BODY: $REQUEST_BODY\n";
 print STDERR "REQUEST_URI: $ENV{'REQUEST_URI'}\n";
 print STDERR "QUERY_STRING: $ENV{'QUERY_STRING'}\n";
+
+my @x = split(/\=/, $REQUEST_BODY);
+print STDERR "FORM_VALUE: $x[0] --> $x[1]\n";
 
 # my $PWD = getcwd();
 # print STDERR "PWD: $PWD\n";
