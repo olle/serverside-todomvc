@@ -6,3 +6,5 @@ services:
       - 8080:80
     volumes:
       - ./htdocs:/usr/local/apache2/htdocs
+      - ./cgi-bin:/usr/local/apache2/cgi-bin
+
