@@ -2,10 +2,10 @@
 use strict;
 use warnings;
 use utf8;
-# use Cwd;
-#use MIME::Base64;
+use Cwd;
+use MIME::Base64;
 use URI::Encode;
-my $uri = URI::Encode->new( { encode_reserved => 1 } );
+my $uri = URI::Encode->new( { encode_reserved => 0 } );
 
 my $REQUEST_BODY;
 read(STDIN, $REQUEST_BODY, $ENV{'CONTENT_LENGTH'});
@@ -16,10 +16,16 @@ print STDERR "REQUEST_BODY: $REQUEST_BODY\n";
 print STDERR "REQUEST_URI: $ENV{'REQUEST_URI'}\n";
 print STDERR "QUERY_STRING: $ENV{'QUERY_STRING'}\n";
 
-my @x = split(/\=/, $REQUEST_BODY);
-print STDERR "FORM_VALUE: $x[0] --> $x[1]\n";
 
-# my $PWD = getcwd();
+my ($key, $value) = split(/\=/, $REQUEST_BODY);
+print STDERR "FORM_VALUE: $key --> $value\n";
+
+my $output = encode_base64($value);
+my $PWD = getcwd();
+open(OUT, '>>', "$PWD/todos.dat") or die $!;
+print OUT "$output";
+close(OUT);
+
 # print STDERR "PWD: $PWD\n";
 # foreach my $key (keys %ENV) {
 #     print STDERR "$key --> $ENV{$key}\n";

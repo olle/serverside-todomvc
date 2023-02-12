@@ -15,7 +15,7 @@
   <main>
 
     <code>
-      <!--#include virtual="/cgi-bin/hello.pl" --><br />
+      
       Timestamp: <!--#echo var="DATE_LOCAL" --><br />
       Modified: <!--#echo var="LAST_MODIFIED" -->
     </code>
@@ -66,6 +66,8 @@
           TODO: First render from a list of all active todo items.
       -->
 
+      <!--#include virtual="/cgi-bin/todo-list.pl" -->
+
       <li> <!-- TODO: If the todo item is being edited use this:  -->
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
         <form class="inline" method="post" action="todos/{todo-id}">
@@ -73,9 +75,6 @@
           <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
         </form>
       </li>
-
-
-
       
       <li> <!-- TODO: Otherwise render the todo item like this: -->
         <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
