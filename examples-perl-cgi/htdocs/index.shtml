@@ -13,13 +13,6 @@
 
 <body>
   <main>
-
-    <code>
-      
-      Timestamp: <!--#echo var="DATE_LOCAL" --><br />
-      Modified: <!--#echo var="LAST_MODIFIED" -->
-    </code>
-
     <!--
         TODO: Replace {active-count} with the number of not yet completed
               todo items.
@@ -40,11 +33,6 @@
       <button name="show" value="completed" title="Show completed todo items">Show</button>
     </form>
 
-
-    <!--
-        TODO: When this form is posted, a new todo item should be created and
-              added to the todo-list, as an active item.
-    -->
     <form action="cgi-bin/todos.pl" method="post">
       <label for="todo">Todo</label>
       <!--
@@ -60,37 +48,10 @@
               for completing, re-activating, deleting and starting to edit a
               todo item.
     -->
-    <form id="todo-item" method="post" action="todo"></form>
+    <form id="todo-item" method="post" action="cgi-bin/todo.pl"></form>
     <ul>
-      <!--
-          TODO: First render from a list of all active todo items.
-      -->
-
-      <!--#include virtual="/cgi-bin/todo-list.pl" -->
-
-      <li> <!-- TODO: If the todo item is being edited use this:  -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <form class="inline" method="post" action="todos/{todo-id}">
-          <input type="hidden" name="id" value="{todo-id}" />
-          <input name="update" value="{todo-text}" autofocus required autocomplete="off" />
-        </form>
-      </li>
-      
-      <li> <!-- TODO: Otherwise render the todo item like this: -->
-        <button name="complete" value="{todo-id}" form="todo-item" title="Mark completed"></button>
-        <button name="edit" value="{todo-id}" form="todo-item" title="Click to edit">{todo-text}</button>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
-
-      <!--
-          TODO: Then render the list of todo items marked as completed, unless
-                the current filter is toggled to hide completed.
-      -->
-      <li>
-        <button name="revert" value="{todo-id}" form="todo-item" title="Mark as active"></button>
-        <span>{todo-text}</span>
-        <button name="delete" value="{todo-id}" form="todo-item" title="Delete todo item">&#x2715;</button>
-      </li>
+      <!--#include virtual="/cgi-bin/active-todo-list.pl" -->
+      <!--#include virtual="/cgi-bin/completed-todo-list.pl" -->
     </ul>
   </main>
   <!--#include virtual="/footer.html" -->
