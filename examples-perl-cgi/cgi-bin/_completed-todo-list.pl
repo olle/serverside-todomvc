@@ -10,6 +10,11 @@ require Request;
 
 Request->response();
 
+my ( $__, $___, $____, $hideCompleted ) = Todos->metadata();
+if ($hideCompleted) {
+    return;
+}
+
 foreach my $todo ( Todos->completed() ) {
     my ( $id, $text ) = ( $todo->getId(), $todo->getText() );
     my $fragment = <<"END_FRAGMENT";

@@ -101,6 +101,9 @@ sub __read {
     open( IN, '<', $FILE ) or die $!;
     my @todos;
     while (<IN>) {
+
+        # skip filter line
+        next if ( $_ =~ /^#/ );
         push( @todos, Todo->parseLine($_) );
     }
     close IN;
@@ -109,7 +112,11 @@ sub __read {
 
 sub __write {
     my (@todos) = @_;
+    open( IN, '<', $FILE ) or die $!;
+    my $filter = <IN>;
+    close(IN);
     open( OUT, '>', $FILE ) or die $!;
+    print OUT $filter;
     foreach my $todo (@todos) {
         print OUT $todo->toLine();
     }
@@ -120,6 +127,25 @@ sub __writeOne {
     my ($todo) = @_;
     open( OUT, '>>', $FILE ) or die $!;
     print OUT $todo->toLine();
+    close(OUT);
+}
+
+sub __readFilter {
+    open( IN, '<', $FILE ) or die $!;
+    my $filterLine = <IN>;
+    close(IN);
+    my ( $__, $filter ) = split( /:/, $filterLine );
+    return $filter;
+}
+
+sub __writeFilter {
+    my ($filter) = @_;
+    my @todos = __read();
+    open( OUT, '>', $FILE ) or die $!;
+    print OUT "#filter:$filter\n";
+    foreach my $todo (@todos) {
+        print OUT $todo->toLine();
+    }
     close(OUT);
 }
 
@@ -183,7 +209,7 @@ sub delete {
     __write(@newTodos);
 }
 
-sub clear {
+sub clearCompleted {
     my @oldTodos = __read();
     my @newTodos;
     foreach my $todo (@oldTodos) {
@@ -191,6 +217,14 @@ sub clear {
         push( @newTodos, $todo );
     }
     __write(@newTodos);
+}
+
+sub hideCompleted {
+    __writeFilter(1);
+}
+
+sub showCompleted {
+    __writeFilter(0);
 }
 
 sub edit {
@@ -220,7 +254,8 @@ sub update {
 }
 
 sub metadata {
-    my @todos = __read();
+    my $hideCompleted = __readFilter();
+    my @todos         = __read();
     my ( $activeCount, $completedCount, $isEditing ) = ( 0, 0, 0 );
     foreach my $todo (@todos) {
         if ( $todo->isEditing() ) {
@@ -233,7 +268,7 @@ sub metadata {
             $activeCount++;
         }
     }
-    return ( $activeCount, $completedCount, $isEditing );
+    return ( $activeCount, $completedCount, $isEditing, $hideCompleted == 1 );
 }
 
 1;

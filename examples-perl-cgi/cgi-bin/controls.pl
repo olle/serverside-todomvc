@@ -11,7 +11,13 @@ my ( $action, $id ) = Request->params();
 print STDERR "######### HANDLING $action --> $id\n";
 
 if ( $action =~ /clear/ ) {
-    Todos->clear();
+    Todos->clearCompleted();
+}
+elsif ( $action =~ /hide/ ) {
+    Todos->hideCompleted();
+}
+elsif ( $action =~ /show/ ) {
+    Todos->showCompleted();
 }
 
 Request->redirect("/");
