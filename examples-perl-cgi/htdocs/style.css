@@ -84,12 +84,12 @@ main > h1 > small {
 
 /* Clear, filter and control form */
 
-form[action="controls"] {
+form[action="cgi-bin/controls.pl"] {
   max-width: var(--max-width);
   margin-bottom: 1rem;
   display: flex;
 }
-form[action="controls"] > button {
+form[action="cgi-bin/controls.pl"] > button {
   cursor: pointer;
   opacity: 0.8;
   border: none;
@@ -98,10 +98,10 @@ form[action="controls"] > button {
   border-radius: 0.6rem;
   padding: 0.29rem 0.7rem;
 }
-form[action="controls"] > button:hover {
+form[action="cgi-bin/controls.pl"] > button:hover {
   color: var(--link);
 }
-form[action="controls"] > button:first-child {
+form[action="cgi-bin/controls.pl"] > button:first-child {
   margin-right: auto;
 }
 

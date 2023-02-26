@@ -10,10 +10,10 @@ require Request;
 
 Request->response();
 
-my ( $activeCount, $completedCount ) = Todos->metadata();
+my ( $activeCount, $completedCount, $isEditing ) = Todos->metadata();
 my $fragment = <<"END_FRAGMENT";
 <h1>Todos <small title="${activeCount} Active items">${activeCount}</small></h1>
-<form action="controls" method="post">
+<form action="cgi-bin/controls.pl" method="post">
     <button name="clear" value="completed" title="Clear ${completedCount} completed">${completedCount} Completed • Clear</button>
     <!--
         TODO: Render the hide/show button depending on the current state of

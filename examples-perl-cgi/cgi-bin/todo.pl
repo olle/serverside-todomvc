@@ -8,7 +8,6 @@ require Todos;
 require Request;
 
 my ( $action, $id ) = Request->params();
-print STDERR "###### HANDLING: $action --> $id\n";
 
 if ( $action =~ /complete/ ) {
     Todos->complete($id);
@@ -18,6 +17,9 @@ elsif ( $action =~ /delete/ ) {
 }
 elsif ( $action =~ /revert/ ) {
     Todos->activate($id);
+}
+elsif ( $action =~ /edit/ ) {
+    Todos->edit($id);
 }
 
 Request->redirect("/");
