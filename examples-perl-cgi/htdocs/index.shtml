@@ -13,26 +13,7 @@
 
 <body>
   <main>
-    <!--
-        TODO: Replace {active-count} with the number of not yet completed
-              todo items.
-    -->
-    <h1>Todos <small title="{active-count} Active items">{active-count}</small></h1>
-    <form action="controls" method="post">
-      <!--
-          TODO: Replace {completed-count} with the number of todo items marked
-                completed.
-      -->
-      <button name="clear" value="completed" title="Clear {completed-count} completed">{completed-count} Completed • Clear</button>
-
-      <!--
-          TODO: Render the hide/show button depending on the current state of
-                such a filter, to either show completed items or not.
-      -->
-      <button name="hide" value="completed" title="Hide completed todo items">Hide</button>
-      <button name="show" value="completed" title="Show completed todo items">Show</button>
-    </form>
-
+    <!--#include virtual="/cgi-bin/todo-controls.pl" -->
     <form action="cgi-bin/todos.pl" method="post">
       <label for="todo">Todo</label>
       <!--
@@ -41,8 +22,6 @@
       -->
       <input placeholder="What needs to be done?" autofocus required autocomplete="off" name="todo" id="todo" />
     </form>
-
-
     <!--
         TODO: This form is posted with action/id pairs, an needs to be handled
               for completing, re-activating, deleting and starting to edit a

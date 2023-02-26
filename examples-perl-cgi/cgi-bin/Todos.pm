@@ -3,6 +3,70 @@
 # -----------------------------------------------------------------------------
 package Todo;
 
+use strict;
+use warnings;
+use utf8;
+use Cwd;
+use MIME::Base64;
+use Time::HiRes qw(gettimeofday);
+
+sub new {
+    my ( $class, $id, $status, $text ) = @_;
+    my $self = {
+        _id     => $id,
+        _status => $status,
+        _text   => $text,
+    };
+    bless $self, $class;
+    return $self;
+}
+
+sub create {
+    my ( $__, $text ) = @_;
+    my ( $s,  $ms )   = gettimeofday();
+    return new Todo( "$s$ms", 0, $text );
+}
+
+sub getId {
+    my $self = shift;
+    return $self->{_id};
+}
+
+sub getText {
+    my $self = shift;
+    my $text = $self->{_text};
+    $text =~ s/</&lt;/g;
+    return $text;
+}
+
+sub isCompleted {
+    my $self = shift;
+    return $self->{_status} == 1;
+}
+
+sub isActive {
+    my $self = shift;
+    return $self->{_status} == 0;
+}
+
+sub setStatus {
+    my ( $self, $status ) = @_;
+    $self->{_status} = $status;
+}
+
+sub toLine() {
+    my $self = shift;
+    my $data = encode_base64( $self->{_text} );
+    return "$self->{_id}|$self->{_status}|$data";
+}
+
+sub parseLine {
+    my ( $__, $line ) = @_;
+    my ( $id, $status, $data ) = split( /\|/, $line );
+    my $text = decode_base64($data);
+    return new Todo( $id, $status, $text );
+}
+
 # -----------------------------------------------------------------------------
 package Todos;
 
@@ -18,27 +82,36 @@ my $FILE = "$PWD/todos.dat";
 
 sub __read {
     open( IN, '<', $FILE ) or die $!;
-    chomp( my @inputLines = <IN> );
+    my @todos;
+    while (<IN>) {
+        push( @todos, Todo->parseLine($_) );
+    }
     close IN;
-    return @inputLines;
+    return @todos;
 }
 
 sub __write {
-    my (@outputLines) = @_;
+    my (@todos) = @_;
     open( OUT, '>', $FILE ) or die $!;
-    foreach (@outputLines) {
-        print OUT "$_\n";
+    foreach my $todo (@todos) {
+        print OUT $todo->toLine();
     }
+    close(OUT);
+}
+
+sub __writeOne {
+    my ($todo) = @_;
+    open( OUT, '>>', $FILE ) or die $!;
+    print OUT $todo->toLine();
     close(OUT);
 }
 
 sub active {
     my @allTodos = __read();
     my @activeTodos;
-    foreach (@allTodos) {
-        my ( $id, $status, $data ) = split( /\|/, $_ );
-        next if ( $status == 1 );
-        push( @activeTodos, $_ );
+    foreach my $todo (@allTodos) {
+        next if ( $todo->isCompleted() );
+        push( @activeTodos, $todo );
     }
     return @activeTodos;
 }
@@ -46,37 +119,28 @@ sub active {
 sub completed {
     my @allTodos = __read();
     my @completedTodos;
-    foreach (@allTodos) {
-        my ( $id, $status, $data ) = split( /\|/, $_ );
-        next if ( $status == 0 );
-        push( @completedTodos, $_ );
+    foreach my $todo (@allTodos) {
+        next if ( $todo->isActive() );
+        push( @completedTodos, $todo );
     }
     return @completedTodos;
 }
 
 sub add {
     my ( $__, $text ) = @_;
-    my ( $s, $ms )    = gettimeofday();
-    my $id     = "$s$ms";
-    my $status = 0;
-    my $data   = encode_base64($text);
-    open( OUT, '>>', $FILE ) or die $!;
-    print OUT "$id|$status|$data";
-    close(OUT);
+    my $todo = Todo->create($text);
+    __writeOne($todo);
 }
 
 sub __updateStatus {
     my ( $todoId, $newStatus ) = @_;
     my @oldTodos = __read();
     my @newTodos;
-    foreach (@oldTodos) {
-        my ( $id, $status, $data ) = split( /\|/, $_ );
-        if ( $id == $todoId ) {
-            push( @newTodos, "$id|$newStatus|$data" );
+    foreach my $todo (@oldTodos) {
+        if ( $todo->getId() == $todoId ) {
+            $todo->setStatus($newStatus);
         }
-        else {
-            push( @newTodos, "$id|$status|$data" );
-        }
+        push( @newTodos, $todo );
     }
     __write(@newTodos);
 }
@@ -95,12 +159,25 @@ sub delete {
     my ( $__, $todoId ) = @_;
     my @oldTodos = __read();
     my @newTodos;
-    foreach (@oldTodos) {
-        my ( $id, $status, $data ) = split( /\|/, $_ );
-        next if ( $id == $todoId );
-        push( @newTodos, "$id|$status|$data" );
+    foreach my $todo (@oldTodos) {
+        next if ( $todo->getId() == $todoId );
+        push( @newTodos, $todo );
     }
     __write(@newTodos);
+}
+
+sub metadata {
+    my @todos = __read();
+    my ( $activeCount, $completedCount ) = ( 0, 0 );
+    foreach my $todo (@todos) {
+        if ( $todo->isCompleted() ) {
+            $completedCount++;
+        }
+        else {
+            $activeCount++;
+        }
+    }
+    return ( $activeCount, $completedCount );
 }
 
 1;
