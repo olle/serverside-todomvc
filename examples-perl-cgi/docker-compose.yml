@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  apache:
+    image: my-httpd:latest
+    ports:
+      - 8080:80
+    volumes:
+      - ./htdocs:/usr/local/apache2/htdocs
+      - ./cgi-bin:/usr/local/apache2/cgi-bin
+

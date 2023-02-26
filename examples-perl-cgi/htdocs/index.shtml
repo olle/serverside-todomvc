@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+    content="Helping you remember or select a server-side MV* framework - Todo apps for Spring Boot, Flask, PHP and many more">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Perl CGI • Server-Side TodoMVC</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Look mom, no JavaScript! -->
+</head>
+
+<body>
+  <main>
+    <!--#include virtual="/cgi-bin/_todo-controls.pl" -->
+    <!--#include virtual="/cgi-bin/_todo-form.pl" -->   
+    <form id="todo-item" method="post" action="cgi-bin/todo.pl"></form>
+    <ul>
+      <!--#include virtual="/cgi-bin/_active-todo-list.pl" -->
+      <!--#include virtual="/cgi-bin/_completed-todo-list.pl" -->
+    </ul>
+  </main>
+  <!--#include virtual="/footer.html" -->
+</body>
+
+</html>
