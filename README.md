@@ -2,25 +2,21 @@
 
 ## Helping you to select an MVC server-side framework.
 
-**INCUBATING PROJECT:** Currently mostly structure, but templates and couple of
-first implementations are on the way. I'm leaving this open here, in case anyone
-cares to join in.
-
 <img align="right" src="http://todomvc.com/site-assets/logo-icon.png" />
 
 There is without a doubt an almost frightening amount of options for developers
-to choose from, when selecting a framework for MV\* types of applications.
+to choose from, when selecting a framework for development of web applications.
 
-With the increasing popularity of client-side or JavaScript-based solutions,
-it's easy to forget the merits of good old server-side solutions. Don't they
-deserve a place to be cataloged, preserved and provide their legacy to the
-after-web?
+With the immense popularity of client-side or JavaScript-based solutions,
+it's easy to forget about the merits of good old server-side solutions. They
+deserve to be remembered, recorded and preserved and in order to provide their
+legacy to the after-web.
 
 In an answer to this question, and as an answer to a calling - we're doing just
-that! We have cloned the immensely popular [TodoMVC](http://todomvc.com)
-project, to re-build it in an old and familiar way.
+that! We have cloned the popular [TodoMVC](http://todomvc.com) project, to
+re-build it in an old and familiar way.
 
-**But this time, it's server-side!**
+**This time, server-side only!**
 
 ## Our goal with this project
 
