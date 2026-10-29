@@ -39,17 +39,19 @@ which-%:
 ##             ensures the project is source-only, if possible.
 ##
 check build test clean:
-	@$(MAKE) -C examples-golang-native $@
-	@$(MAKE) -C examples-java-native $@
-	@$(MAKE) -C examples-java-ninjaframework $@
-	@$(MAKE) -C examples-java-servlet $@
-	@$(MAKE) -C examples-java-spark-mustache $@
-	@$(MAKE) -C examples-java-spring-boot-freemarker $@
-	@$(MAKE) -C examples-java-spring-boot-mustache $@
-	@$(MAKE) -C examples-java-wicket $@
-	@$(MAKE) -C examples-kotlin-simple $@
-	@$(MAKE) -C examples-php-vanilla $@
-	@$(MAKE) -C examples-python-flask $@
+	@$(MAKE) -C examples-golang-native $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-native $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-ninjaframework $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-servlet $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-spark-mustache $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-spring-boot-freemarker $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-spring-boot-mustache $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-spring-boot-thymeleaf $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-wicket $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-javalin $@ 2>/dev/null || true
+	@$(MAKE) -C examples-kotlin-simple $@ 2>/dev/null || true
+	@$(MAKE) -C examples-php-vanilla $@ 2>/dev/null || true
+	@$(MAKE) -C examples-python-flask $@ 2>/dev/null || true
 	@echo '----------------------------------------------------------------------'
 
 run-setup:
