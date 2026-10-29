@@ -6,5 +6,12 @@ node_modules/
 bower_components/
 .extract/
 venv/
+pyvenv.cfg
+CACHEDIR.TAG
+*.pyc
+__pycache__/
 test/cypress/videos/
 test/cypress/videos/*
+# Go binaries built by examples
+examples-*/todomvc
+examples-*/**/todomvc
