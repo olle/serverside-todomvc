@@ -12,7 +12,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>17</java.version>
-		<javalin.version>5.2.0</javalin.version>
+		<javalin.version>6.7.0</javalin.version>
 	</properties>
 
 	<dependencies>
@@ -22,14 +22,9 @@
 			<version>${javalin.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.javalin</groupId>
-			<artifactId>javalin-rendering</artifactId>
-			<version>${javalin.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>gg.jte</groupId>
 			<artifactId>jte</artifactId>
-			<version>2.2.1</version>
+			<version>3.2.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>

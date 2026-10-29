@@ -10,8 +10,8 @@
 	<name>Server-Side TodoMVC Example - Ninja Framework</name>
 
     <properties>
-        <ninja.version>5.8.0</ninja.version>
-        <jetty.version>9.2.3.v20140905</jetty.version>
+        <ninja.version>7.0.0</ninja.version>
+        <jetty.version>9.4.58.v20250814</jetty.version>
     </properties>
 
     <build>

@@ -11,8 +11,8 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jetty.version>11.0.14</jetty.version>
-		<glassfish.el.version>3.0.1-b08</glassfish.el.version>
+		<jetty.version>11.0.26</jetty.version>
+		<glassfish.el.version>3.0.1-b12</glassfish.el.version>
 		<java.version>17</java.version>
 	</properties>
 

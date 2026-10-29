@@ -41,7 +41,7 @@
 
         <h2 class="is-hidden">List of ${current-filter} tasks:</h2>
         <ul class="items-list">
-        {% for id, item in tasks.iteritems() %}
+        {% for id, item in tasks.items() %}
           <li class="item {{item.status}} clearfix">
             <form method="post" action="toggle" class="item-toggle-completed">
               <input type="hidden" name="id" value="{{id}}" />
