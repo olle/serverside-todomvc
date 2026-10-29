@@ -13,10 +13,33 @@
 
 ## Helper target that displays some information.
 help:
-	@echo "\n Hi, I'm make! I'll make things for you.\n"
-	@echo "    'make setup' will help you install the tools you need for development."
-	@echo "    'make all' will build and test all the examples in the project."
-	@echo "\n Bye, happy hacking!\n"
+	@echo ""
+	@echo " Server-Side TodoMVC - Makefile targets"
+	@echo " ======================================="
+	@echo ""
+	@echo " Top-level targets:"
+	@echo "   setup      Install/check required tools for development"
+	@echo "   all        Build all examples (equivalent to 'make build')"
+	@echo "   build      Build all examples"
+	@echo "   test       Run acceptance tests against built examples (requires running instances)"
+	@echo "   clean      Clean build artifacts for all examples"
+	@echo "   check      Check required tools for all examples"
+	@echo "   run-test   Run tests from root (sets up test harness)"
+	@echo "   help       Show this help message"
+	@echo ""
+	@echo " Per-example targets (run from example directory):"
+	@echo "   make build - Compile/package the example"
+	@echo "   make test  - Start app, run E2E tests, stop app"
+	@echo "   make clean - Remove build artifacts"
+	@echo "   make check - Check required tools"
+	@echo ""
+	@echo " Examples:"
+	@echo "   make build                    # Build everything"
+	@echo "   make -C examples-java-servlet build"
+	@echo "   make -C examples-python-flask test"
+	@echo ""
+	@echo " Happy hacking!"
+	@echo ""
 
 ## Setup target, helping out with the installation of some tools.
 setup: which-node which-npm check run-setup
