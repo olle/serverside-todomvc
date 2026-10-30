@@ -1,18 +1,18 @@
 .PHONY: start check build clean test run-test all
 
-SELF=examples-java-spring-mvc-thymeleaf
-URL=http://localhost:8080/${SELF}
+SELF=examples-java-native
+URL=http://localhost:8080/
 
 start:
-	./mvnw clean package
-	java -jar target/examples-java-native.jar
+	@mvn compile
+	@mvn exec:java
 
 banner:
 	@echo '----------------------------------------------------------------------'
 	@echo '# ${SELF}'
 	@echo '----------------------------------------------------------------------'
 
-check: banner check-java
+check: banner check-java check-mvn
 
 check-%:
 	@echo -n '--> Checking if $* is installed... '
@@ -20,17 +20,17 @@ check-%:
 
 build:
 	@echo -n '--> Building ${SELF} '
-	@./mvnw verify -q > /dev/null 2>&1 && echo ' [DONE]'
+	@mvn package -q > /dev/null 2>&1 && echo ' [DONE]'
 
 clean:
 	@echo -n '--> Cleaning ${SELF} '
-	@./mvnw clean -q > /dev/null 2>&1 && echo ' [DONE]'
+	@mvn clean -q > /dev/null 2>&1 && echo ' [DONE]'
 
 test:
 	@echo '--> Running tests against ${URL} ...'
-	@./mvnw -Pit -q 2> /dev/null && echo '--> Testing ${SELF}  [DONE]'
+	@./it.sh && echo '--> Testing ${SELF}  [DONE]'
 
 run-test:
-	@$(MAKE) URL=${URL} -C ../ run-test
+	@$(MAKE) URL=${URL} -C ../test run-test
 
 all: clean build test

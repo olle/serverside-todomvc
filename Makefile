@@ -91,4 +91,4 @@ all: build
 
 ## Executes the acceptance tests, assuming a correct ${URL} is set
 run-test:
-	@npm test -s
+	@$(MAKE) -C test run-test

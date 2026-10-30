@@ -22,11 +22,11 @@ clean:
 	@echo -n '--> Cleaning ${SELF} '
 	@mvn clean -q > /dev/null 2>&1 && echo ' [DONE]'
 
-test: build
+test:
 	@echo '--> Running tests against ${URL} ...'
 	@./it.sh && echo '--> Testing ${SELF}  [DONE]'
 
 run-test:
-	@$(MAKE) URL=${URL} -C ../ run-test
+	@$(MAKE) URL=${URL} -C ../test run-test
 
 all: clean build test

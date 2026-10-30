@@ -1,7 +1,7 @@
 .PHONY: check build clean test run-test all
 
 SELF=examples-java-wicket
-URL=http://localhost:8080/${SELF}
+URL=http://localhost:8080/examples-java-wicket
 
 banner:
 	@echo '----------------------------------------------------------------------'
@@ -24,9 +24,9 @@ clean:
 
 test:
 	@echo '--> Running tests against ${URL} ...'
-	@mvn -Pit -q 2> /dev/null && echo '--> Testing ${SELF}  [DONE]'
+	@./it.sh && echo '--> Testing ${SELF}  [DONE]'
 
 run-test:
-	@$(MAKE) URL=${URL} -C ../ run-test
+	@$(MAKE) URL=${URL} -C ../test run-test
 
 all: clean build test

@@ -197,10 +197,10 @@
               </arguments>
             </configuration>
           </plugin>
-          <plugin>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty-maven-plugin</artifactId>
-            <version>${jetty.version}</version>
+        <plugin>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-maven-plugin</artifactId>
+          <version>9.4.58.v20250814</version>
             <configuration>
               <scanIntervalSeconds>10</scanIntervalSeconds>
               <stopPort>8005</stopPort>

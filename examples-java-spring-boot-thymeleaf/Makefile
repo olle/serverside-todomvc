@@ -24,9 +24,9 @@ clean:
 
 test:
 	@echo '--> Running tests against ${URL} ...'
-	@mvn -Pit -q 2> /dev/null && echo '--> Testing ${SELF}  [DONE]'
+	@./it.sh && echo '--> Testing ${SELF}  [DONE]'
 
 run-test:
-	@$(MAKE) URL=${URL} -C ../ run-test
+	@$(MAKE) URL=${URL} -C ../test run-test
 
 all: clean build test
