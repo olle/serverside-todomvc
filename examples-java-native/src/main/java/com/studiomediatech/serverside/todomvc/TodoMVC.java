@@ -83,7 +83,7 @@ public class TodoMVC {
 
 	private static Request parseRequest(InputStream in) throws IOException {
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(in), 64);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 		String line = reader.readLine();
 
 		if (Objects.isNull(line)) {
@@ -104,19 +104,19 @@ public class TodoMVC {
 
 			while ((nextLine = reader.readLine()) != null) {
 
-				if (nextLine.startsWith("Content-Length:")) {
+				if (nextLine.toLowerCase().startsWith("content-length:")) {
 					length = Integer.parseInt(nextLine.split(":")[1].trim());
 				}
 
-				if ("".equals(nextLine.trim())) {
+				if ("".equals(nextLine.trim()) || nextLine.equals("\r")) {
 
 					if (length <= 0) {
 						break;
 					}
 
 					char[] body = new char[length];
-					reader.read(body, 0, length);
-					request.body = new String(body);
+					int read = reader.read(body, 0, length);
+					request.body = new String(body, 0, read >= 0 ? read : 0);
 					break;
 				}
 			}
@@ -305,11 +305,12 @@ public class TodoMVC {
 		private final String path;
 		private final String query;
 
-		protected String body;
+		protected String body = "";
 
 		public Request() {
 
 			this("GET", "/");
+			this.body = "";
 		}
 
 		public String getParam(String param) {
@@ -356,6 +357,7 @@ public class TodoMVC {
 
 			this.method = method;
 			this.path = path;
+			this.body = "";
 
 			if (path.indexOf('?') > -1) {
 				String q = "";
@@ -396,7 +398,7 @@ public class TodoMVC {
 
 	static final class Response {
 
-		public static final Response REDIRECT_ROOT = new Response("HTTP/1.1 301 Moved Permanently\nLocation: /\n\n");
+		public static final Response REDIRECT_ROOT = new Response("HTTP/1.1 302 Found\nLocation: /\n\n");
 		public static final Response NOT_FOUND = new Response("HTTP/1.1 404 Not Found\n");
 		public static final Response NOT_IMPLEMENTED = new Response("HTTP/1.1 501 Not Implemented\n");
 

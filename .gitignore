@@ -12,6 +12,12 @@ CACHEDIR.TAG
 __pycache__/
 test/cypress/videos/
 test/cypress/videos/*
+test/cypress/screenshots/
+test/cypress/screenshots/*
+test/cypress/downloads/
+test/cypress/reports/
+*.xml
+*.log
 # Go binaries built by examples
 examples-*/todomvc
 examples-*/**/todomvc

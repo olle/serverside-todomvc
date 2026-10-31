@@ -25,6 +25,6 @@ test:
 	@./it.sh && echo '--> Testing ${SELF}  [DONE]'
 
 run-test:
-	@$(MAKE) URL=${URL} -C ../ run-test
+	@$(MAKE) URL=${URL} -C ../test run-test
 
 all: banner clean build test

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+if [ -z "$1" ]; then
+  echo "Running tests for all examples..."
+  cd "$SCRIPT_DIR" && make test
+else
+  EXAMPLE="$1"
+  if [ -d "$SCRIPT_DIR/examples-$EXAMPLE" ]; then
+    EXAMPLE_DIR="examples-$EXAMPLE"
+  elif [ -d "$SCRIPT_DIR/$EXAMPLE" ]; then
+    EXAMPLE_DIR="$EXAMPLE"
+  else
+    echo "Error: Example '$EXAMPLE' not found"
+    echo "Available examples:"
+    ls -d "$SCRIPT_DIR"/examples-* 2>/dev/null | xargs -n1 basename | sed 's/examples-//'
+    exit 1
+  fi
+  echo "Running tests for $EXAMPLE_DIR..."
+  cd "$SCRIPT_DIR" && make -C "$EXAMPLE_DIR" test
+fi

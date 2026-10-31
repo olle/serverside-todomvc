@@ -1,7 +1,7 @@
 .PHONY: start check build clean test run-test all
 
 SELF=examples-java-native
-URL=http://localhost:8080/
+URL=http://localhost:8989/
 
 start:
 	@mvn compile
