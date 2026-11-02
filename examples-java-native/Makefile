@@ -1,18 +1,23 @@
-.PHONY: start check build clean test run-test all
+.PHONY: setup start check build clean test run-test all
 
 SELF=examples-java-native
 URL=http://localhost:8989/
+MISE_EXEC=mise exec --
+
+setup:
+	@echo '--> Installing tooling...'
+	@mise install
 
 start:
-	@mvn compile
-	@mvn exec:java
+	@$(MISE_EXEC) mvn package -q
+	@$(MISE_EXEC) java -jar target/examples-java-native.jar
 
 banner:
 	@echo '----------------------------------------------------------------------'
 	@echo '# ${SELF}'
 	@echo '----------------------------------------------------------------------'
 
-check: banner check-java check-mvn
+check: banner check-mise
 
 check-%:
 	@echo -n '--> Checking if $* is installed... '
@@ -20,15 +25,15 @@ check-%:
 
 build:
 	@echo -n '--> Building ${SELF} '
-	@mvn package -q > /dev/null 2>&1 && echo ' [DONE]'
+	@$(MISE_EXEC) mvn package -q > /dev/null 2>&1 && echo ' [DONE]'
 
 clean:
 	@echo -n '--> Cleaning ${SELF} '
-	@mvn clean -q > /dev/null 2>&1 && echo ' [DONE]'
+	@$(MISE_EXEC) mvn clean -q > /dev/null 2>&1 && echo ' [DONE]'
 
 test:
 	@echo '--> Running tests against ${URL} ...'
-	@./it.sh && echo '--> Testing ${SELF}  [DONE]'
+	@$(MISE_EXEC) ./it.sh && echo '--> Testing ${SELF}  [DONE]'
 
 run-test:
 	@$(MAKE) URL=${URL} -C ../test run-test
