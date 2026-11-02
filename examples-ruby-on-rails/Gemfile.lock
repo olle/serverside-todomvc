@@ -210,7 +210,7 @@ GEM
     regexp_parser (2.13.1)
     reline (0.7.0)
       io-console (~> 0.5)
-    rexml (3.2.5)
+    rexml (3.4.4)
     rubyzip (2.4.1)
     securerandom (0.4.1)
     selenium-webdriver (4.10.0)
