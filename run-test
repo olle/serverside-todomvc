@@ -4,7 +4,14 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ -z "$1" ]; then
   echo "Running tests for all examples..."
-  cd "$SCRIPT_DIR" && make test
+  STATUS=0
+  for EXAMPLE_DIR in "$SCRIPT_DIR"/examples-*; do
+    [ -f "$EXAMPLE_DIR/Makefile" ] || continue
+    grep -q '^test:' "$EXAMPLE_DIR/Makefile" || continue
+    echo "Running tests for $(basename "$EXAMPLE_DIR")..."
+    make -C "$EXAMPLE_DIR" test || STATUS=1
+  done
+  exit $STATUS
 else
   EXAMPLE="$1"
   if [ -d "$SCRIPT_DIR/examples-$EXAMPLE" ]; then
