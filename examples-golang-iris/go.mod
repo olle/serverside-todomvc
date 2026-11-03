@@ -1,6 +1,6 @@
 module todomvc
 
-go 1.25.0
+go 1.27.3
 
 require github.com/kataras/iris/v12 v12.2.0-beta7
 
@@ -41,8 +41,8 @@ require (
 	github.com/vmihailenco/msgpack/v5 v5.3.5 // indirect
 	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
 	github.com/yosssi/ace v0.0.5 // indirect
-	golang.org/x/crypto v0.58.0 // indirect
-	golang.org/x/net v0.60.0 // indirect
+	golang.org/x/crypto v0.58.1-0.20261103070834-3d426ad4de97 // indirect
+	golang.org/x/net v0.62.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
 	golang.org/x/text v0.43.0 // indirect
 	golang.org/x/time v0.3.0 // indirect
