@@ -65,7 +65,7 @@ check build clean:
 	@$(MAKE) -C examples-java-native $@ 2>/dev/null || true
 	@$(MAKE) -C examples-java-ninjaframework $@ 2>/dev/null || true
 	@$(MAKE) -C examples-java-servlet $@ 2>/dev/null || true
-	@$(MAKE) -C examples-java-spark-mustache $@ 2>/dev/null || true
+	@$(MAKE) -C examples-java-jetty-mustache $@ 2>/dev/null || true
 	@$(MAKE) -C examples-java-spring-boot-freemarker $@ 2>/dev/null || true
 	@$(MAKE) -C examples-java-spring-boot-mustache $@ 2>/dev/null || true
 	@$(MAKE) -C examples-java-spring-boot-thymeleaf $@ 2>/dev/null || true

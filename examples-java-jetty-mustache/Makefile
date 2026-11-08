@@ -1,6 +1,6 @@
 .PHONY: check build clean test run-test all
 
-SELF=examples-java-spark-mustache
+SELF=examples-java-jetty-mustache
 URL=http://localhost:8080/
 
 start:

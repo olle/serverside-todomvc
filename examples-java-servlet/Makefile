@@ -1,7 +1,7 @@
 .PHONY: check build clean test run-test all
 
 SELF=examples-java-servlet
-URL=http://localhost:8080/examples-java-servlet
+URL=http://localhost:8080/
 
 banner:
 	@echo '----------------------------------------------------------------------'
